@@ -27,9 +27,16 @@ const CATEGORY_ACCENT: Record<string, string> = {
   operations: 'border-l-rose-400',
 };
 
+function toInches(size: { w: number; h: number; unit: 'in' | 'cm' | 'ft' }) {
+  const f = size.unit === 'ft' ? 12 : size.unit === 'cm' ? 0.394 : 1;
+  return Math.max(size.w * f, size.h * f);
+}
+
 export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardProps) {
   const hasThumbnail = !!asset.printFile?.thumbnailUrl;
-  const isContent = !hasThumbnail && (asset.category === 'content' || asset.category === 'operations');
+  const maxDimIn = asset.physicalSize ? toInches(asset.physicalSize) : null;
+  const isTiny = maxDimIn !== null && maxDimIn <= 2.5;
+  const isContent = !hasThumbnail && !isTiny && (asset.category === 'content' || asset.category === 'operations');
   const [w, h] = asset.aspectRatio.split('/').map(Number);
   const paddingPercent = h && w ? `${((h / w) * 100).toFixed(2)}%` : '66.67%';
   const ContentIcon = CONTENT_ICONS[asset.type] ?? FileText;
@@ -47,7 +54,21 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
         onClick && 'cursor-pointer hover:shadow-md hover:-translate-y-0.5'
       )}
     >
-      {isContent ? (
+      {isTiny ? (
+        /* Tiny physical item — show small centered to convey actual scale */
+        <div className="relative w-full flex items-center justify-center bg-muted/40" style={{ height: '180px' }}>
+          <div className="relative flex items-center justify-center" style={{ width: '32%', aspectRatio: asset.aspectRatio }}>
+            {asset.printFile?.thumbnailUrl ? (
+              <img src={asset.printFile.thumbnailUrl} alt={asset.title} className="w-full h-full object-contain rounded" />
+            ) : (
+              <div className={cn('w-full h-full rounded', asset.previewColor)} />
+            )}
+          </div>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 flex items-center justify-center">
+            <span className="text-foreground text-base font-medium">View</span>
+          </div>
+        </div>
+      ) : isContent ? (
         /* Document-style preview for content/operations assets */
         <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>
           <div className={cn('absolute inset-0 flex flex-col justify-between p-4', asset.previewColor + '/15', 'bg-muted/60')}>
@@ -103,6 +124,11 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
         </div>
         <div className="mt-1.5 flex items-center gap-2 flex-wrap">
           <span className="text-base text-muted-foreground">{assetTypeLabel(asset.type)}</span>
+          {asset.physicalSize && (
+            <span className="text-base text-muted-foreground">
+              · {asset.physicalSize.w}×{asset.physicalSize.h} {asset.physicalSize.unit}
+            </span>
+          )}
           {asset.printFile && (
             <span className="flex items-center gap-1 text-base text-emerald-600 dark:text-emerald-400 font-medium">
               <Paperclip className="size-3" />

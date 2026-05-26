@@ -26,6 +26,7 @@ export interface Asset {
   exportDate?: string;
   relatedAssets?: string[];
   mapPosition?: { x: number; y: number };
+  physicalSize?: { w: number; h: number; unit: 'in' | 'cm' | 'ft' };
 }
 
 export interface EventDeadline {
