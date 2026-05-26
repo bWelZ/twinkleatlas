@@ -68,7 +68,7 @@ export default function GalleryPage() {
         onClose={() => setLightboxAsset(null)}
       />
 
-      <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 pb-16">
+      <main className="flex-1 w-full px-4 sm:px-6 lg:px-10 xl:px-14 pb-16">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
