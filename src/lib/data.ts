@@ -589,38 +589,61 @@ Primary goals:
         },
       },
 
-      // ── BOOTH (QR codes) ─────────────────────────────────────
+      // ── BOOTH (final print deliverables) ─────────────────────
+      {
+        id: 'a-g-b5', title: 'Postcard',
+        type: 'postcard', category: 'booth',
+        previewColor: 'bg-emerald-600', aspectRatio: '3/2', status: 'in-design',
+        notes: 'Printed postcard for conference distribution — includes QR code linking to play.prek.club',
+        tags: ['booth', 'postcard', 'print'],
+        relatedAssets: ['a-g-b6'],
+        mapPosition: { x: 330, y: 590 },
+      },
+      {
+        id: 'a-g-b7', title: 'SafetyPlug Print',
+        type: 'swag', category: 'booth',
+        previewColor: 'bg-purple-600', aspectRatio: '1/1', status: 'approved',
+        notes: '1.25×1.25 in safety plug sticker with QR code — print-ready PDF for demo stations',
+        tags: ['booth', 'safetyplug', 'print', 'swag'],
+        relatedAssets: ['a-g-d6'],
+        mapPosition: { x: 500, y: 590 },
+        printFile: {
+          url: '/prints/grow-lead-succeed-2026/PreKClub_Conference_Safety_Plug_QR_PRINT_1.25x1.25_V4.pdf',
+          filename: 'GLS2026_PreKClub_SafetyPlug_1.25x1.25_Print_V4.pdf',
+          size: '1.25×1.25 in',
+          thumbnailUrl: '/prints/grow-lead-succeed-2026/PreKClub_Conference_Safety_Plug_QR_PRINT_1.25x1.25_V4_Thumb.jpg',
+        },
+      },
+
+      // ── OPERATIONS (QR source files) ──────────────────────────
       {
         id: 'a-g-b6', title: 'QR Code — Postcard',
-        type: 'qr', category: 'booth',
-        previewColor: 'bg-emerald-700', aspectRatio: '1/1', status: 'pending',
-        notes: 'QR code printed on the postcard — links to landing page or demo booking form',
-        tags: ['booth', 'qr', 'postcard', 'print'],
-        mapPosition: { x: 415, y: 590 },
+        type: 'qr', category: 'operations',
+        previewColor: 'bg-emerald-800', aspectRatio: '1/1', status: 'approved',
+        notes: 'QR code source file for the postcard — links to play.prek.club with UTM tracking',
+        tags: ['operations', 'qr', 'postcard', 'source'],
+        relatedAssets: ['a-g-b5'],
+        mapPosition: { x: 1325, y: 550 },
         printFile: {
           url: '/prints/grow-lead-succeed-2026/play.prek.club_utm_source_postcard_utm_medium_qr.svg',
           filename: 'GLS2026_PreKClub_QR_Postcard.svg',
           thumbnailUrl: '/prints/grow-lead-succeed-2026/play.prek.club_utm_source_postcard_utm_medium_qr.svg',
         },
       },
-
-      // ── DIGITAL (QR SafetyPlug) ──────────────────────────────
       {
-        id: 'a-g-d6', title: 'QR Code — SafetyPlug Demo',
-        type: 'qr', category: 'digital',
-        previewColor: 'bg-purple-700', aspectRatio: '1/1', status: 'approved',
-        notes: 'QR code for SafetyPlug demo station — direct link to SafetyPlug product or demo page',
-        tags: ['digital', 'qr', 'safetyplug', 'demo'],
-        mapPosition: { x: 1025, y: 240 },
+        id: 'a-g-d6', title: 'QR Code — SafetyPlug',
+        type: 'qr', category: 'operations',
+        previewColor: 'bg-purple-800', aspectRatio: '1/1', status: 'approved',
+        notes: 'QR code source file for the SafetyPlug sticker — links to play.prek.club with UTM tracking',
+        tags: ['operations', 'qr', 'safetyplug', 'source'],
+        relatedAssets: ['a-g-b7'],
+        mapPosition: { x: 1410, y: 550 },
         printFile: {
-          url: '/prints/grow-lead-succeed-2026/PreKClub_Conference_Safety_Plug_QR_PRINT_1.25x1.25_V4.pdf',
-          filename: 'GLS2026_PreKClub_QR_SafetyPlug_1.25x1.25_Print_V4.pdf',
-          size: '1.25×1.25 in',
-          thumbnailUrl: '/prints/grow-lead-succeed-2026/PreKClub_Conference_Safety_Plug_QR_PRINT_1.25x1.25_V4_Thumb.jpg',
+          url: '/prints/grow-lead-succeed-2026/play.prek.club_utm_source_safetyplug_utm_medium_qr.svg',
+          filename: 'GLS2026_PreKClub_QR_SafetyPlug.svg',
+          thumbnailUrl: '/prints/grow-lead-succeed-2026/play.prek.club_utm_source_safetyplug_utm_medium_qr.svg',
         },
       },
-
-      // ── OPERATIONS ───────────────────────────────────────────
       {
         id: 'a-g-o1', title: 'Lead Collection Workflow',
         type: 'workflow', category: 'operations',
