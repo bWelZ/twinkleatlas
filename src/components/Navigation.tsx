@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Sparkles, LayoutDashboard, Images, CalendarDays, Moon, Sun, Search } from 'lucide-react';
+import { Sparkles, Moon, Sun, Search } from 'lucide-react';
+import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
 import { useTheme } from '@/components/ThemeProvider';
 import { cn } from '@/lib/utils';
 
@@ -12,10 +13,10 @@ interface NavigationProps {
   onOpenCommandPalette?: () => void;
 }
 
-const navLinks = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/gallery', label: 'Gallery', icon: Images },
-  { href: '/timeline', label: 'Timeline', icon: CalendarDays },
+const navLinks: { href: string; label: string; icon: TwinkleIconName }[] = [
+  { href: '/', label: 'Dashboard', icon: 'display-board' },
+  { href: '/gallery', label: 'Gallery', icon: 'image' },
+  { href: '/timeline', label: 'Timeline', icon: 'calendar' },
 ];
 
 export function Navigation({ onOpenCommandPalette }: NavigationProps) {
@@ -41,7 +42,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
           : 'border-transparent bg-background/60 backdrop-blur-sm'
       )}
     >
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6">
+      <div className="flex h-14 w-full items-center gap-4 px-4 sm:px-6 lg:px-10 xl:px-14">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 shrink-0">
           <motion.div
@@ -58,7 +59,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
 
         {/* Nav links */}
         <nav className="flex items-center gap-1 ml-2">
-          {navLinks.map(({ href, label, icon: Icon }) => {
+          {navLinks.map(({ href, label, icon }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
             return (
               <Link key={href} href={href}>
@@ -72,7 +73,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                   )}
                 >
-                  <Icon className="size-3.5" />
+                  <TwinkleIcon name={icon} size="14px" />
                   <span className="hidden sm:block">{label}</span>
                 </motion.div>
               </Link>

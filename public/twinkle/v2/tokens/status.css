@@ -1,0 +1,111 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Status Tokens — v1.2.0 (promoted from twinkle-colors)
+   ============================================================
+   Status colors are palette-independent — they stay consistent
+   across all themes and brands. Do not override per-palette.
+   ============================================================ */
+
+@layer tokens {
+
+:root {
+
+    /* ── Error / Danger / Critical ───────────────────────── */
+    --tw-status-color-red:       #fc6161;
+    --tw-status-color-red-light: #fbe7e4;
+    --tw-status-color-red-dark:  #670715;
+
+    /* ── Warning ─────────────────────────────────────────── */
+    --tw-status-color-yellow:       #ffd138;
+    --tw-status-color-yellow-light: #fff6d6;
+    --tw-status-color-yellow-dark:  #664e00;
+
+    /* ── Success ─────────────────────────────────────────── */
+    --tw-status-color-green:       #1be181;
+    --tw-status-color-green-light: #acfcd3;
+    --tw-status-color-green-dark:  #003b25;
+
+    /* ── Info ────────────────────────────────────────────── */
+    --tw-status-color-blue:       #629ffc;
+    --tw-status-color-blue-light: #e6ebfb;
+    --tw-status-color-blue-dark:  #083462;
+
+    /* ── Neutral / Draft ─────────────────────────────────── */
+    --tw-status-color-gray:       #cccccc;
+    --tw-status-color-gray-light: #ebebeb;
+    --tw-status-color-gray-dark:  #323232;
+
+    /* ── Intermediate / Processing ───────────────────────── */
+    --tw-status-color-amber:       #ffa31a;
+    --tw-status-color-amber-light: #ffe7c2;
+    --tw-status-color-amber-dark:  #523100;
+
+    /* ── Experimental / Pre-release ──────────────────────── */
+    --tw-status-color-purple:       #9b6cff;
+    --tw-status-color-purple-light: #efe8ff;
+    --tw-status-color-purple-dark:  #3d1b7a;
+
+    /* ── Semantic Aliases (use these in components) ──────── */
+    --tw-status-success:      var(--tw-status-color-green);
+    --tw-status-warning:      var(--tw-status-color-yellow);
+    --tw-status-error:        var(--tw-status-color-red);
+    --tw-status-danger:       var(--tw-status-color-red);
+    --tw-status-critical:     var(--tw-status-color-red);
+    --tw-status-info:         var(--tw-status-color-blue);
+    --tw-status-neutral:      var(--tw-status-color-gray);
+    --tw-status-intermediate: var(--tw-status-color-amber);
+    --tw-status-experimental: var(--tw-status-color-purple);
+
+    --tw-status-success-light:      var(--tw-status-color-green-light);
+    --tw-status-warning-light:      var(--tw-status-color-yellow-light);
+    --tw-status-error-light:        var(--tw-status-color-red-light);
+    --tw-status-info-light:         var(--tw-status-color-blue-light);
+    --tw-status-neutral-light:      var(--tw-status-color-gray-light);
+    --tw-status-intermediate-light: var(--tw-status-color-amber-light);
+    --tw-status-experimental-light: var(--tw-status-color-purple-light);
+
+    --tw-status-success-dark:      var(--tw-status-color-green-dark);
+    --tw-status-warning-dark:      var(--tw-status-color-yellow-dark);
+    --tw-status-error-dark:        var(--tw-status-color-red-dark);
+    --tw-status-info-dark:         var(--tw-status-color-blue-dark);
+    --tw-status-neutral-dark:      var(--tw-status-color-gray-dark);
+    --tw-status-intermediate-dark: var(--tw-status-color-amber-dark);
+    --tw-status-experimental-dark: var(--tw-status-color-purple-dark);
+
+    /* ── Role-based aliases: bg / border / fg ───────────────
+       Used by alert, toast, badge, stepper, and other
+       status-aware components.
+         -bg     → subtle fill   (light tint)
+         -border → ring/outline  (base color)
+         -fg     → text / icon   (dark for contrast)
+    ─────────────────────────────────────────────────────── */
+    --tw-status-color-red-bg:      var(--tw-status-color-red-light);
+    --tw-status-color-red-border:  var(--tw-status-color-red);
+    --tw-status-color-red-fg:      var(--tw-status-color-red-dark);
+
+    --tw-status-color-blue-bg:     var(--tw-status-color-blue-light);
+    --tw-status-color-blue-border: var(--tw-status-color-blue);
+    --tw-status-color-blue-fg:     var(--tw-status-color-blue-dark);
+
+    --tw-status-color-green-bg:     var(--tw-status-color-green-light);
+    --tw-status-color-green-border: var(--tw-status-color-green);
+    --tw-status-color-green-fg:     var(--tw-status-color-green-dark);
+
+    --tw-status-color-amber-bg:     var(--tw-status-color-amber-light);
+    --tw-status-color-amber-border: var(--tw-status-color-amber);
+    --tw-status-color-amber-fg:     var(--tw-status-color-amber-dark);
+
+    --tw-status-color-yellow-bg:     var(--tw-status-color-yellow-light);
+    --tw-status-color-yellow-border: var(--tw-status-color-yellow);
+    --tw-status-color-yellow-fg:     var(--tw-status-color-yellow-dark);
+
+    --tw-status-color-gray-bg:     var(--tw-status-color-gray-light);
+    --tw-status-color-gray-border: var(--tw-status-color-gray);
+    --tw-status-color-gray-fg:     var(--tw-status-color-gray-dark);
+
+    --tw-status-color-purple-bg:     var(--tw-status-color-purple-light);
+    --tw-status-color-purple-border: var(--tw-status-color-purple);
+    --tw-status-color-purple-fg:     var(--tw-status-color-purple-dark);
+}
+
+} /* end @layer tokens */

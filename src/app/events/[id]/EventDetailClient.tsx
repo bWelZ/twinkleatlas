@@ -104,7 +104,7 @@ export function EventDetailClient({ id }: { id: string }) {
       {/* Hero */}
       <div className={cn('bg-gradient-to-r relative', event.coverGradient)}>
         <div className="absolute inset-0 bg-black/25" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-10">
+        <div className="relative px-4 sm:px-6 lg:px-10 xl:px-14 py-10">
           <div className="flex items-center gap-1.5 text-white/70 text-xs mb-4">
             <Link href="/" className="hover:text-white transition-colors">Dashboard</Link>
             <ChevronRight className="size-3" />
@@ -169,10 +169,10 @@ export function EventDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-6">
+      {/* Main content — full-width layout; sidebar fixed, map/tabs fill remaining space */}
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14 py-6 flex flex-col lg:flex-row gap-6">
         {/* Left sidebar */}
-        <aside className="lg:w-72 xl:w-80 shrink-0 space-y-4">
+        <aside className="lg:w-64 xl:w-72 shrink-0 space-y-4">
           <div className="rounded-2xl border border-border bg-card p-4">
             <div className="flex items-center gap-2 mb-2">
               <Target className="size-4 text-violet-500" />
@@ -261,8 +261,8 @@ export function EventDetailClient({ id }: { id: string }) {
             </TabsList>
 
             {/* Assets Map Tab */}
-            <TabsContent value="map">
-              <div className="rounded-2xl border border-border overflow-hidden bg-card">
+            <TabsContent value="map" className="w-full">
+              <div className="rounded-2xl border border-border overflow-hidden bg-card w-full">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/30">
                   <span className="text-sm font-medium text-muted-foreground">
                     {event.assets.length} asset{event.assets.length !== 1 ? 's' : ''} on canvas
@@ -294,7 +294,7 @@ export function EventDetailClient({ id }: { id: string }) {
 
                 <div
                   ref={mapRef}
-                  className="relative h-[600px] overflow-hidden cursor-grab active:cursor-grabbing select-none"
+                  className="relative h-[70vh] min-h-[500px] max-h-[900px] overflow-hidden cursor-grab active:cursor-grabbing select-none"
                   style={{
                     backgroundImage: `radial-gradient(circle, rgba(139,92,246,0.12) 1px, transparent 1px)`,
                     backgroundSize: `${24 * zoom}px ${24 * zoom}px`,

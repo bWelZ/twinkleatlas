@@ -1,52 +1,80 @@
+/* ============================================================
+   TwinkleAtlas — Global CSS
+   ============================================================
+
+   Twinkle DS token files are loaded via <link> tags in
+   TwinkleStyles.tsx (public/twinkle/v2/). They define
+   --tw-* custom properties consumed here via var().
+
+   Layer priority (lowest → highest):
+     theme (Tailwind v4 design tokens)
+     base (Tailwind + our heading rules)
+     components (Tailwind)
+     utilities (Tailwind)
+     [unlayered] :root / .dark overrides
+   ============================================================ */
+
+
+/* ── 1. Tailwind System ────────────────────────────────────── */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
+
+/* ── 2. Tailwind @theme (font + color token bridge) ─────────── */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
+  --font-sans:        var(--font-nunito-sans);
+  --font-mono:        var(--font-geist-mono);
+  --font-heading:     var(--font-nunito);
+  --color-sidebar-ring:               var(--sidebar-ring);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
+  --color-sidebar-primary:            var(--sidebar-primary);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar:                    var(--sidebar);
+  --color-chart-5:             var(--chart-5);
+  --color-chart-4:             var(--chart-4);
+  --color-chart-3:             var(--chart-3);
+  --color-chart-2:             var(--chart-2);
+  --color-chart-1:             var(--chart-1);
+  --color-ring:                var(--ring);
+  --color-input:               var(--input);
+  --color-border:              var(--border);
+  --color-destructive:         var(--destructive);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-accent:              var(--accent);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-muted:               var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --color-secondary:           var(--secondary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-primary:             var(--primary);
+  --color-popover-foreground:  var(--popover-foreground);
+  --color-popover:             var(--popover);
+  --color-card-foreground:     var(--card-foreground);
+  --color-card:                var(--card);
+  --radius-sm:  calc(var(--radius) * 0.6);
+  --radius-md:  calc(var(--radius) * 0.8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 }
+
+
+/* ── 3. Color Tokens ──────────────────────────────────────────
+   shadcn OKLCH scale first, then WELS + Rainbow overrides.
+   Within one :root block, the LAST declaration wins.
+   ─────────────────────────────────────────────────────────── */
 
 :root {
   --background: oklch(1 0 0);
@@ -81,6 +109,50 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* WELS brand — overrides shadcn defaults above (last wins) */
+  --primary:                    var(--tw-color-brand, #1f35ff);
+  --primary-foreground:         #ffffff;
+  --ring:                       var(--tw-color-brand, #1f35ff);
+  --sidebar-primary:            var(--tw-color-brand, #1f35ff);
+  --sidebar-primary-foreground: #ffffff;
+
+  /* Rainbow chart colors — replaces shadcn grayscale */
+  --chart-1: #1f35ff;   /* Palatinate Blue  */
+  --chart-2: #1dc386;   /* Mint             */
+  --chart-3: #971adb;   /* Dark Violet      */
+  --chart-4: #c5761b;   /* Ochre            */
+  --chart-5: #4fcab2;   /* Turquoise        */
+
+  /* Rainbow raw primaries */
+  --rainbow-1: #1f35ff;
+  --rainbow-2: #1dc386;
+  --rainbow-3: #971adb;
+  --rainbow-4: #c5761b;
+  --rainbow-5: #4fcab2;
+  --rainbow-6: #e11474;
+
+  /* Per-color subtle backgrounds + accessible foregrounds */
+  --rainbow-1-bg: #eef0ff;   --rainbow-1-fg: #1431cc;
+  --rainbow-2-bg: #e6faf3;   --rainbow-2-fg: #0d7a52;
+  --rainbow-3-bg: #f3e8fd;   --rainbow-3-fg: #680fa0;
+  --rainbow-4-bg: #fdf3e6;   --rainbow-4-fg: #8a4f0d;
+  --rainbow-5-bg: #e6f8f5;   --rainbow-5-fg: #2a7d6e;
+  --rainbow-6-bg: #fce9f3;   --rainbow-6-fg: #a00d52;
+
+  /* Event category aliases */
+  --rainbow-event-1: var(--rainbow-1);
+  --rainbow-event-2: var(--rainbow-2);
+  --rainbow-event-3: var(--rainbow-3);
+  --rainbow-event-4: var(--rainbow-4);
+  --rainbow-event-5: var(--rainbow-5);
+  --rainbow-event-6: var(--rainbow-6);
+
+  /* Progress indicator slots */
+  --rainbow-progress-low:    var(--rainbow-6);
+  --rainbow-progress-mid:    var(--rainbow-4);
+  --rainbow-progress-good:   var(--rainbow-2);
+  --rainbow-progress-strong: var(--rainbow-1);
 }
 
 .dark {
@@ -112,19 +184,96 @@
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* WELS brand in dark mode */
+  --primary:                    var(--tw-color-brand, #1f35ff);
+  --primary-foreground:         #ffffff;
+  --ring:                       var(--tw-color-brand, #1f35ff);
+  --sidebar-primary:            var(--tw-color-brand, #1f35ff);
+  --sidebar-primary-foreground: #ffffff;
+
+  /* Rainbow chart colors — vivid enough on dark backgrounds */
+  --chart-1: #1f35ff;
+  --chart-2: #1dc386;
+  --chart-3: #971adb;
+  --chart-4: #c5761b;
+  --chart-5: #4fcab2;
+
+  /* Rainbow dark mode subtle backgrounds */
+  --rainbow-1-bg: color-mix(in srgb, #1f35ff 15%, transparent);
+  --rainbow-1-fg: #7f90ff;
+  --rainbow-2-bg: color-mix(in srgb, #1dc386 15%, transparent);
+  --rainbow-2-fg: #4de8a8;
+  --rainbow-3-bg: color-mix(in srgb, #971adb 15%, transparent);
+  --rainbow-3-fg: #c46cf0;
+  --rainbow-4-bg: color-mix(in srgb, #c5761b 15%, transparent);
+  --rainbow-4-fg: #e8a55a;
+  --rainbow-5-bg: color-mix(in srgb, #4fcab2 15%, transparent);
+  --rainbow-5-fg: #7dddd0;
+  --rainbow-6-bg: color-mix(in srgb, #e11474 15%, transparent);
+  --rainbow-6-fg: #f067ab;
 }
+
+
+/* ── 4. Base Layer — typography hierarchy ───────────────────── */
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--tw-font-text, var(--font-nunito-sans));
+    font-size: var(--tw-type-body, 1rem);
+    font-weight: var(--tw-font-normal, 400);
+    line-height: 1.5;
   }
-  html {
-    @apply font-sans;
+
+  /* Heading hierarchy — Nunito, semibold, tight leading */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--tw-font-title, var(--font-nunito));
+    font-weight: var(--tw-font-semibold, 600);
+    line-height: 1.2;
+  }
+
+  /* Mobile-first heading scale */
+  h1 { font-size: 22px; }
+  h2 { font-size: 18px; }
+  h3 { font-size: 16px; }
+  h4 { font-size: 15px; }
+  h5 { font-size: 14px; }
+  h6 { font-size: 13px; }
+
+  /* Desktop heading scale (≥ 1280px) */
+  @media (min-width: 1280px) {
+    h1 { font-size: var(--tw-type-h1, 2.25rem); }
+    h2 { font-size: var(--tw-type-h2, 1.875rem); }
+    h3 { font-size: var(--tw-type-h3, 1.5rem); }
+    h4 { font-size: var(--tw-type-h4, 1.25rem); }
+    h5 { font-size: var(--tw-type-h5, 1.125rem); }
+    h6 { font-size: var(--tw-type-h6, 1rem); }
+  }
+
+  /* UI controls use the heading font */
+  button, label {
+    font-family: var(--tw-font-ui, var(--font-nunito));
+    font-weight: var(--tw-font-medium, 500);
+  }
+
+  /* Monospace contexts */
+  code, kbd, pre, samp {
+    font-family: var(--tw-font-mono, var(--font-geist-mono));
+    font-size: var(--tw-type-code, 0.875em);
   }
 }

@@ -1,0 +1,94 @@
+/* ============================================================
+   Twinkle Rainbow Palette — Semantic Tokens
+   ============================================================
+   Named rainbow colors drawn from Twinkle's palette primaries.
+   These are palette-independent fixed values — they don't change
+   when the active palette switches, so they're reliable for
+   data visualisation, category colours, and visual differentiation.
+
+   Usage targets:
+     • Dashboard cards          → --rainbow-bg-*, --rainbow-fg-*
+     • Chart series             → --rainbow-1 … --rainbow-6 (+ chart-*)
+     • Category / tag chips     → --rainbow-*-subtle + --rainbow-*-fg
+     • Progress indicators      → --rainbow-* direct
+     • Event type differentiation → --rainbow-event-*
+     • Analytics surfaces       → --rainbow-bg-*
+
+   Never use these for primary brand actions — those use --tw-color-brand.
+   ============================================================ */
+
+:root {
+
+  /* ── Raw rainbow primaries (palette brand colors) ─────────── */
+  --rainbow-1:  #1f35ff;   /* Palatinate Blue   (blue palette)      */
+  --rainbow-2:  #1dc386;   /* Mint              (mint palette)       */
+  --rainbow-3:  #971adb;   /* Dark Violet       (violet palette)     */
+  --rainbow-4:  #c5761b;   /* Ochre             (ochre palette)      */
+  --rainbow-5:  #4fcab2;   /* Turquoise         (turquoise palette)  */
+  --rainbow-6:  #e11474;   /* Mexican Pink      (pink palette)       */
+
+  /* ── Chart colors (replaces grayscale --chart-* from shadcn) ─ */
+  --chart-1: var(--rainbow-1);
+  --chart-2: var(--rainbow-2);
+  --chart-3: var(--rainbow-3);
+  --chart-4: var(--rainbow-4);
+  --chart-5: var(--rainbow-5);
+
+  /* ── Per-color subtle backgrounds (for tags, chips, cards) ─── */
+  --rainbow-1-bg:  #eef0ff;   /* light blue tint  */
+  --rainbow-1-fg:  #1431cc;   /* accessible dark blue  */
+
+  --rainbow-2-bg:  #e6faf3;   /* light mint tint  */
+  --rainbow-2-fg:  #0d7a52;   /* accessible dark mint  */
+
+  --rainbow-3-bg:  #f3e8fd;   /* light violet tint */
+  --rainbow-3-fg:  #680fa0;   /* accessible dark violet */
+
+  --rainbow-4-bg:  #fdf3e6;   /* light ochre tint */
+  --rainbow-4-fg:  #8a4f0d;   /* accessible dark ochre  */
+
+  --rainbow-5-bg:  #e6f8f5;   /* light turquoise tint */
+  --rainbow-5-fg:  #2a7d6e;   /* accessible dark turquoise */
+
+  --rainbow-6-bg:  #fce9f3;   /* light pink tint */
+  --rainbow-6-fg:  #a00d52;   /* accessible dark pink */
+
+  /* ── Event category aliases ───────────────────────────────── */
+  /* Map event types to rainbow slots — customise per domain    */
+  --rainbow-event-1: var(--rainbow-1);   /* default / general     */
+  --rainbow-event-2: var(--rainbow-2);   /* performance / live    */
+  --rainbow-event-3: var(--rainbow-3);   /* arts / exhibition     */
+  --rainbow-event-4: var(--rainbow-4);   /* cultural / heritage   */
+  --rainbow-event-5: var(--rainbow-5);   /* outdoor / seasonal    */
+  --rainbow-event-6: var(--rainbow-6);   /* special / celebration */
+
+  /* ── Progress / stat indicator slots ─────────────────────── */
+  --rainbow-progress-low:    var(--rainbow-6);   /* pink  → warning  */
+  --rainbow-progress-mid:    var(--rainbow-4);   /* ochre → caution  */
+  --rainbow-progress-good:   var(--rainbow-2);   /* mint  → healthy  */
+  --rainbow-progress-strong: var(--rainbow-1);   /* blue  → complete */
+
+}
+
+/* ── Dark mode adjustments ────────────────────────────────── */
+/* Raw primaries stay the same — they're vivid enough on dark.  */
+/* Subtle backgrounds need to lighten alpha instead of tint.    */
+.dark {
+  --rainbow-1-bg: color-mix(in srgb, #1f35ff 15%, transparent);
+  --rainbow-1-fg: #7f90ff;
+
+  --rainbow-2-bg: color-mix(in srgb, #1dc386 15%, transparent);
+  --rainbow-2-fg: #4de8a8;
+
+  --rainbow-3-bg: color-mix(in srgb, #971adb 15%, transparent);
+  --rainbow-3-fg: #c46cf0;
+
+  --rainbow-4-bg: color-mix(in srgb, #c5761b 15%, transparent);
+  --rainbow-4-fg: #e8a55a;
+
+  --rainbow-5-bg: color-mix(in srgb, #4fcab2 15%, transparent);
+  --rainbow-5-fg: #7dddd0;
+
+  --rainbow-6-bg: color-mix(in srgb, #e11474 15%, transparent);
+  --rainbow-6-fg: #f067ab;
+}

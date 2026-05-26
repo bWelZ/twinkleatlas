@@ -1,0 +1,242 @@
+/*
+ * Twinkle Design System — v2
+ * Base: Typography
+ *
+ * Requires: core/tokens.css, semantic/tokens.css
+ * Migrated from: twinkle-typography-v1.1.0
+ *
+ * Backwards-compatible with all v1 utility classes.
+ */
+
+@layer typography {
+
+/* ── Font Import (variable fonts) ────────────────────────── */
+
+
+/* ── Document Base ────────────────────────────────────────── */
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    font-family: var(--tw-font-text);
+    font-size: 14px;
+    font-weight: var(--tw-font-normal);
+    line-height: 1.5;
+    color: var(--tw-color-text-primary, #000214);
+}
+
+@media (min-width: 1280px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+
+/* ── Headings ─────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--tw-font-title);
+    font-weight: var(--tw-font-semibold);
+    line-height: 1.2;
+    color: inherit;
+}
+
+/* Mobile-first scale */
+h1, .h1 { font-size: 22px; }
+h2, .h2 { font-size: 18px; }
+h3, .h3 { font-size: 16px; }
+h4, .h4 { font-size: 15px; }
+h5, .h5 { font-size: 14px; }
+h6, .h6 { font-size: 13px; }
+
+/* Desktop scale (≥1280px) */
+@media (min-width: 1280px) {
+    h1, .h1 { font-size: 26px; }
+    h2, .h2 { font-size: 22px; }
+    h3, .h3 { font-size: 20px; }
+    h4, .h4 { font-size: 18px; }
+    h5, .h5 { font-size: 16px; }
+    h6, .h6 { font-size: 14px; }
+}
+
+
+/* ── UI Elements ──────────────────────────────────────────── */
+button,
+label,
+.tw-btn {
+    font-family: var(--tw-font-ui);
+    font-weight: var(--tw-font-medium);
+}
+
+
+/* ── Links ────────────────────────────────────────────────── */
+a {
+    color: var(--tw-color-text-link);
+    text-decoration: none;
+}
+
+a:hover,
+a:focus {
+    color: var(--tw-color-text-link-hover);
+    text-decoration: none;
+    outline: none;
+}
+
+
+/* ── Miscellaneous ────────────────────────────────────────── */
+.footer-container {
+    font-size: 11px;
+}
+
+@media (min-width: 1280px) {
+    .footer-container {
+        font-size: 13px;
+    }
+}
+
+
+/* ======================================================== */
+/*  Utility Font Size Classes                               */
+/*  Backwards-compatible with twinkle-typography-v1.1.0    */
+/* ======================================================== */
+
+/* ── Named Scale ──────────────────────────────────────────── */
+.tw-text-xs   { font-size: 12px; line-height: 16px; }
+.tw-text-sm   { font-size: 14px; line-height: 20px; }
+.tw-text-base { font-size: 16px; line-height: 24px; }
+.tw-text-md   { font-size: 18px; line-height: 26px; }
+.tw-text-lg   { font-size: 20px; line-height: 28px; }
+.tw-text-xl   { font-size: 24px; line-height: 32px; }
+.tw-text-2xl  { font-size: 28px; line-height: 36px; }
+.tw-text-3xl  { font-size: 32px; line-height: 40px; }
+.tw-text-4xl  { font-size: 36px; line-height: 44px; }
+.tw-text-5xl  { font-size: 48px; line-height: 56px; }
+
+/* ── Pixel Scale (legacy & explicit) ─────────────────────── */
+.tw-text-10 { font-size: 10px; line-height: 14px; }
+.tw-text-12 { font-size: 12px; line-height: 16px; }
+.tw-text-14 { font-size: 14px; line-height: 20px; }
+.tw-text-16 { font-size: 16px; line-height: 24px; }
+.tw-text-18 { font-size: 18px; line-height: 26px; }
+.tw-text-20 { font-size: 20px; line-height: 28px; }
+.tw-text-24 { font-size: 24px; line-height: 32px; }
+.tw-text-28 { font-size: 28px; line-height: 36px; }
+.tw-text-32 { font-size: 32px; line-height: 40px; }
+.tw-text-36 { font-size: 36px; line-height: 44px; }
+.tw-text-48 { font-size: 48px; line-height: 56px; }
+
+
+/* ======================================================== */
+/*  Utility Font Family Classes                             */
+/* ======================================================== */
+
+.nunito {
+    font-family: "Nunito", sans-serif;
+    font-style: normal;
+    font-optical-sizing: auto;
+}
+
+.nunito-sans {
+    font-family: "Nunito Sans", sans-serif;
+    font-style: normal;
+    font-optical-sizing: auto;
+    font-variation-settings: "wdth" 100, "YTLC" 500;
+}
+
+.alt-font {
+    font-family: "Nunito Sans", sans-serif;
+}
+
+
+/* ======================================================== */
+/*  Utility Font Weight Classes                             */
+/* ======================================================== */
+
+.nunito-200,
+.nunito-sans-200 { font-weight: 200; }
+
+.nunito-400,
+.nunito-sans-400 { font-weight: 400; }
+
+.nunito-500,
+.nunito-sans-500 { font-weight: 500; }
+
+.nunito-600,
+.nunito-sans-600 { font-weight: 600; }
+
+.nunito-700,
+.nunito-sans-700 { font-weight: 700; }
+
+.nunito-800,
+.nunito-sans-800 { font-weight: 800; }
+
+/* Token-based weight utilities */
+.tw-font-light     { font-weight: var(--tw-font-light); }
+.tw-font-normal    { font-weight: var(--tw-font-normal); }
+.tw-font-medium    { font-weight: var(--tw-font-medium); }
+.tw-font-semibold  { font-weight: var(--tw-font-semibold); }
+.tw-font-bold      { font-weight: var(--tw-font-bold); }
+.tw-font-extrabold { font-weight: var(--tw-font-extrabold); }
+
+
+/* ======================================================== */
+/*  Text Color Utilities                                    */
+/* ======================================================== */
+
+.tw-text-primary   { color: var(--tw-color-text-primary); }
+.tw-text-secondary { color: var(--tw-color-text-secondary); }
+.tw-text-muted     { color: var(--tw-color-text-muted); }
+.tw-text-on-brand  { color: var(--tw-color-text-on-brand); }
+.tw-text-inverse   { color: var(--tw-color-text-inverse); }
+.tw-text-brand     { color: var(--tw-color-brand); }
+
+
+/* ======================================================== */
+/*  Text Truncation / Overflow                              */
+/* ======================================================== */
+
+.tw-ellipsis {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.tw-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tw-text-nowrap { white-space: nowrap; }
+.tw-text-wrap   { white-space: normal; }
+.tw-text-balance { text-wrap: balance; }
+
+
+/* ======================================================== */
+/*  Text Alignment                                          */
+/* ======================================================== */
+
+.tw-text-left    { text-align: left; }
+.tw-text-center  { text-align: center; }
+.tw-text-right   { text-align: right; }
+
+
+/* ======================================================== */
+/*  Italic / Uppercase                                      */
+/* ======================================================== */
+
+.tw-italic   { font-style: italic; }
+.tw-not-italic { font-style: normal; }
+.tw-uppercase   { text-transform: uppercase; }
+.tw-lowercase   { text-transform: lowercase; }
+.tw-capitalize  { text-transform: capitalize; }
+.tw-normal-case { text-transform: none; }
+
+} /* end @layer typography */

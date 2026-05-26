@@ -1,0 +1,52 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Mode: Light (Explicit Reset)
+   ============================================================
+   Light mode is the default — this file is only needed to
+   reset a dark mode applied by a parent element, or to
+   explicitly scope a light region inside a dark page.
+
+   Usage:
+     <html data-mode="light">
+     <div class="tw-light"> ...scoped light region... </div>
+   ============================================================ */
+
+@layer themes {
+
+:root[data-mode="light"],
+.tw-light {
+    --tw-color-surface-default: var(--tw-color-0);
+    --tw-color-surface-raised:  var(--tw-color-9);
+    --tw-color-surface-overlay: var(--tw-color-8);
+    --tw-color-surface-sunken:  var(--tw-color-9);
+    --tw-color-surface-card:    var(--tw-color-0);
+
+    --tw-color-text-primary:   var(--tw-color-3);
+    --tw-color-text-secondary: var(--tw-color-5);
+    --tw-color-text-muted:     var(--tw-color-6);
+    --tw-color-text-inverse:   var(--tw-color-0);
+
+    --tw-color-border-default: var(--tw-color-7);
+    --tw-color-border-strong:  var(--tw-color-6);
+
+    --tw-shadow-1:
+        0 1.4px 2.2px hsl(var(--tw-color-dark-hsl) / 0.008),
+        0 3.35px 5.3px hsl(var(--tw-color-dark-hsl) / 0.012),
+        0 6.25px 10px  hsl(var(--tw-color-dark-hsl) / 0.015);
+
+    --tw-shadow-2:
+        0 1.4px 2.2px  hsl(var(--tw-color-dark-hsl) / 0.012),
+        0 3.35px 5.3px hsl(var(--tw-color-dark-hsl) / 0.016),
+        0 6.25px 10px  hsl(var(--tw-color-dark-hsl) / 0.024),
+        0 11.15px 17.9px hsl(var(--tw-color-dark-hsl) / 0.024);
+
+    --tw-shadow-3:
+        0 1.4px 2.2px    hsl(var(--tw-color-dark-hsl) / 0.016),
+        0 3.35px 5.3px   hsl(var(--tw-color-dark-hsl) / 0.024),
+        0 6.25px 10px    hsl(var(--tw-color-dark-hsl) / 0.030),
+        0 11.15px 17.9px hsl(var(--tw-color-dark-hsl) / 0.036),
+        0 20px 33.4px    hsl(var(--tw-color-dark-hsl) / 0.042),
+        0 50px 80px      hsl(var(--tw-color-dark-hsl) / 0.060);
+}
+
+} /* end @layer themes */

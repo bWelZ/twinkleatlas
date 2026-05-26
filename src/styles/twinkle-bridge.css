@@ -1,0 +1,51 @@
+/* ============================================================
+   Twinkle → TwinkleAtlas Bridge
+   ============================================================
+   Unlayered (highest cascade priority) — always wins over
+   the Twinkle CDN layers loaded before it.
+
+   Purpose:
+     1. Map Twinkle semantic tokens to shadcn CSS variable names
+        so Tailwind utilities (bg-primary, ring, etc.) pick up
+        WELS brand colors automatically.
+     2. Replace grayscale shadcn chart tokens with real colors.
+     3. Bridge dark mode: map .dark class to Twinkle dark tokens.
+
+   Rules:
+     • Use var(--tw-color-*) references — never hardcode values.
+     • Only override tokens that have a direct Twinkle equivalent.
+     • Do NOT change layout, spacing, or card variables here.
+   ============================================================ */
+
+/* ── Light Mode: WELS brand integration ────────────────────── */
+:root {
+
+  /* Primary → WELS Palatinate Blue (#1f35ff) */
+  --primary:            var(--tw-color-brand);
+  --primary-foreground: var(--tw-color-text-on-brand);
+
+  /* Ring / focus → WELS blue */
+  --ring: var(--tw-color-brand);
+
+  /* Sidebar active state → WELS blue */
+  --sidebar-primary:            var(--tw-color-brand);
+  --sidebar-primary-foreground: var(--tw-color-text-on-brand);
+
+  /* Link color (matches Tailwind's accent in anchor contexts) */
+  /* --accent is intentionally left as-is (layout surface) */
+}
+
+/* ── Dark Mode: map .dark to Twinkle dark tokens ────────────── */
+.dark {
+
+  /* Primary stays WELS blue in dark mode (vibrant on dark surfaces) */
+  --primary:            var(--tw-color-brand);
+  --primary-foreground: var(--tw-color-text-on-brand);
+
+  /* Ring stays blue for consistent keyboard focus indicators */
+  --ring: var(--tw-color-brand);
+
+  /* Sidebar in dark mode */
+  --sidebar-primary:            var(--tw-color-brand);
+  --sidebar-primary-foreground: var(--tw-color-text-on-brand);
+}

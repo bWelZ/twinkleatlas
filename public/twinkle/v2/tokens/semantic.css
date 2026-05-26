@@ -1,0 +1,71 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Semantic Tokens — Purpose Layer
+   ============================================================
+   These tokens carry meaning. Use these in all component CSS.
+   Never use --tw-color-0..9 directly in components.
+
+   Load order: core/tokens.css → semantic/tokens.css
+   ============================================================ */
+
+@layer tokens {
+
+:root {
+
+    /* ── Brand ───────────────────────────────────────────── */
+    --tw-color-brand:           var(--tw-color-1);
+    --tw-color-brand-hover:     var(--tw-color-2);
+    --tw-color-brand-subtle:    var(--tw-color-8);
+
+    /* ── Surface ─────────────────────────────────────────── */
+    --tw-color-surface-default: var(--tw-color-0);
+    --tw-color-surface-raised:  var(--tw-color-9);
+    --tw-color-surface-overlay: var(--tw-color-8);
+    --tw-color-surface-sunken:  var(--tw-color-9);
+    --tw-color-surface-card:    var(--tw-color-0);
+
+    /* ── Text ────────────────────────────────────────────── */
+    --tw-color-text-primary:    var(--tw-color-3);
+    --tw-color-text-secondary:  var(--tw-color-4);
+    --tw-color-text-muted:      var(--tw-color-5);
+    --tw-color-text-on-brand:   #ffffff;
+    --tw-color-text-inverse:    var(--tw-color-0);
+    --tw-color-text-link:       var(--tw-color-1);
+    --tw-color-text-link-hover: var(--tw-color-2);
+
+    /* ── Border ──────────────────────────────────────────── */
+    --tw-color-border-default:  var(--tw-color-7);
+    --tw-color-border-strong:   var(--tw-color-6);
+    --tw-color-border-focus:    var(--tw-color-1);
+
+    /* ── Interactive ─────────────────────────────────────── */
+    --tw-color-interactive:         var(--tw-color-1);
+    --tw-color-interactive-hover:   var(--tw-color-2);
+    --tw-color-interactive-muted:   var(--tw-color-4);
+
+    /* ── Focus Ring ──────────────────────────────────────── */
+    --tw-focus-ring: 0 0 0 4px color-mix(in srgb, var(--tw-color-brand), white 50%);
+
+    /* ── Semantic Spacing ────────────────────────────────── */
+    --tw-space-page-x:   var(--tw-space-6);
+    --tw-space-page-y:   var(--tw-space-8);
+    --tw-space-section:  var(--tw-space-16);
+    --tw-space-card:     var(--tw-space-5);
+    --tw-space-form-gap: var(--tw-space-4);
+    --tw-space-inline:   var(--tw-space-2);
+
+    /* ── Semantic Typography ─────────────────────────────── */
+    --tw-type-h1:    var(--tw-text-4xl);
+    --tw-type-h2:    var(--tw-text-3xl);
+    --tw-type-h3:    var(--tw-text-2xl);
+    --tw-type-h4:    var(--tw-text-xl);
+    --tw-type-h5:    var(--tw-text-lg);
+    --tw-type-h6:    var(--tw-text-base);
+    --tw-type-body:  var(--tw-text-base);
+    --tw-type-small: var(--tw-text-sm);
+    --tw-type-xs:    var(--tw-text-xs);
+    --tw-type-label: var(--tw-text-sm);
+    --tw-type-code:  var(--tw-text-sm);
+}
+
+} /* end @layer tokens */

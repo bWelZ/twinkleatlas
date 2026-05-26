@@ -1,0 +1,36 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Turquoise
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --turquoise:        #4fcab2;
+    --tiffany-blue:     #73d4c0;
+    --dark-teal:        #05231e;
+    --brunswick-green:  #0c453b;
+    --cambridge-blue:   #739e9a;
+    --powder-blue:      #bfd4d5;
+    --mint-cream:       #dbe6e3;
+    --antiflash-white:  #eef3f2;
+    --mint-cream-2:     #f6fcfa;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--turquoise);
+    --tw-color-2: var(--tiffany-blue);
+    --tw-color-3: var(--dark-teal);
+    --tw-color-4: var(--brunswick-green);
+    --tw-color-5: var(--cambridge-blue);
+    --tw-color-6: var(--powder-blue);
+    --tw-color-7: var(--mint-cream);
+    --tw-color-8: var(--antiflash-white);
+    --tw-color-9: var(--mint-cream-2);
+
+    /* Dark HSL for color-3: #05231e → 170deg 75% 8% */
+    --tw-color-dark-hsl: 170deg 75% 8%;
+}
+
+} /* end @layer themes */

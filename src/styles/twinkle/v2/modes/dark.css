@@ -1,0 +1,95 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Mode: Dark
+   ============================================================
+   Dark mode uses its own neutral surface values, independent
+   of any palette. Brand/interactive/palette colors are NOT
+   overridden — the active palette still controls those.
+
+   Compose freely:
+     palette-mint.css + mode-dark.css = dark mint theme
+     palette-violet.css + mode-dark.css = dark violet theme
+
+   Usage:
+     <html data-mode="dark">
+     <div class="tw-dark"> ...scoped dark region... </div>
+   ============================================================ */
+
+@layer themes {
+
+:root[data-mode="dark"],
+.tw-dark {
+
+    /* ── Surface ─────────────────────────────────────────── */
+    --tw-color-surface-default: #0f1117;
+    --tw-color-surface-raised:  #1a1d27;
+    --tw-color-surface-overlay: #232636;
+    --tw-color-surface-sunken:  #0a0c11;
+    --tw-color-surface-card:    #1a1d27;
+
+    /* ── Text ────────────────────────────────────────────── */
+    --tw-color-text-primary:   #f1f2f6;
+    --tw-color-text-secondary: #9ea3b0;
+    --tw-color-text-muted:     #6b7280;
+    --tw-color-text-inverse:   #111827;
+
+    /* ── Border ──────────────────────────────────────────── */
+    --tw-color-border-default: #2a2d3a;
+    --tw-color-border-strong:  #373b4d;
+
+    /* ── Shadows (stronger in dark context) ──────────────── */
+    --tw-shadow-1:
+        0 1.4px 2.2px  rgba(0, 0, 0, 0.15),
+        0 3.35px 5.3px rgba(0, 0, 0, 0.20),
+        0 6.25px 10px  rgba(0, 0, 0, 0.24);
+
+    --tw-shadow-2:
+        0 1.4px 2.2px    rgba(0, 0, 0, 0.20),
+        0 3.35px 5.3px   rgba(0, 0, 0, 0.24),
+        0 6.25px 10px    rgba(0, 0, 0, 0.30),
+        0 11.15px 17.9px rgba(0, 0, 0, 0.30);
+
+    --tw-shadow-3:
+        0 1.4px 2.2px    rgba(0, 0, 0, 0.25),
+        0 6.25px 10px    rgba(0, 0, 0, 0.36),
+        0 20px 33.4px    rgba(0, 0, 0, 0.42),
+        0 50px 80px      rgba(0, 0, 0, 0.60);
+
+    /* ── Status role tokens — dark mode overrides ────────────
+       In dark mode the light-tint backgrounds (-light) are
+       too washed out. Replace with semi-transparent fills
+       so status colors read clearly on dark surfaces.
+         -bg     → 15% tint of base color
+         -border → 40% tint of base color (subtle ring)
+         -fg     → base color at full brightness (readable)
+    ─────────────────────────────────────────────────────── */
+    --tw-status-color-red-bg:      color-mix(in srgb, #fc6161 15%, transparent);
+    --tw-status-color-red-border:  color-mix(in srgb, #fc6161 40%, transparent);
+    --tw-status-color-red-fg:      #fc6161;
+
+    --tw-status-color-blue-bg:     color-mix(in srgb, #629ffc 15%, transparent);
+    --tw-status-color-blue-border: color-mix(in srgb, #629ffc 40%, transparent);
+    --tw-status-color-blue-fg:     #629ffc;
+
+    --tw-status-color-green-bg:     color-mix(in srgb, #1be181 15%, transparent);
+    --tw-status-color-green-border: color-mix(in srgb, #1be181 40%, transparent);
+    --tw-status-color-green-fg:     #1be181;
+
+    --tw-status-color-amber-bg:     color-mix(in srgb, #ffa31a 15%, transparent);
+    --tw-status-color-amber-border: color-mix(in srgb, #ffa31a 40%, transparent);
+    --tw-status-color-amber-fg:     #ffa31a;
+
+    --tw-status-color-yellow-bg:     color-mix(in srgb, #ffd138 15%, transparent);
+    --tw-status-color-yellow-border: color-mix(in srgb, #ffd138 40%, transparent);
+    --tw-status-color-yellow-fg:     #ffd138;
+
+    --tw-status-color-gray-bg:     color-mix(in srgb, #cccccc 15%, transparent);
+    --tw-status-color-gray-border: color-mix(in srgb, #cccccc 40%, transparent);
+    --tw-status-color-gray-fg:     #cccccc;
+
+    --tw-status-color-purple-bg:     color-mix(in srgb, #9b6cff 15%, transparent);
+    --tw-status-color-purple-border: color-mix(in srgb, #9b6cff 40%, transparent);
+    --tw-status-color-purple-fg:     #9b6cff;
+}
+
+} /* end @layer themes */

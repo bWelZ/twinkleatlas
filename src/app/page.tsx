@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Search, Package, CalendarDays, SlidersHorizontal, X } from 'lucide-react';
+import { Sparkles, Search, SlidersHorizontal, X } from 'lucide-react';
+import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
 import { Navigation } from '@/components/Navigation';
 import { CommandPalette } from '@/components/CommandPalette';
 import { EventCard } from '@/components/EventCard';
@@ -101,10 +102,10 @@ export default function DashboardPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-3 mt-8 max-w-lg">
             {[
-              { icon: CalendarDays, label: 'Events', value: events.length, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-100 dark:bg-violet-900/30' },
-              { icon: Package, label: 'Assets', value: totalAssets, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/30' },
-              { icon: CalendarDays, label: 'Deadlines', value: upcomingDeadlines, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
-            ].map(({ icon: Icon, label, value, color, bg }) => (
+              { icon: 'calendar' as TwinkleIconName, label: 'Events', value: events.length, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-100 dark:bg-violet-900/30' },
+              { icon: 'box' as TwinkleIconName, label: 'Assets', value: totalAssets, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/30' },
+              { icon: 'calendar-check' as TwinkleIconName, label: 'Deadlines', value: upcomingDeadlines, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
+            ].map(({ icon, label, value, color, bg }) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -113,7 +114,7 @@ export default function DashboardPage() {
                 className="rounded-2xl border border-border bg-card p-4 text-center"
               >
                 <div className={cn('inline-flex items-center justify-center w-8 h-8 rounded-full mb-2', bg)}>
-                  <Icon className={cn('size-4', color)} />
+                  <TwinkleIcon name={icon} size="sm" className={color} />
                 </div>
                 <p className="text-2xl font-bold">{value}</p>
                 <p className="text-xs text-muted-foreground">{label}</p>

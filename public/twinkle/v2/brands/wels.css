@@ -1,0 +1,29 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Brand: WELS
+   ============================================================
+   WELS uses the blue palette as its base. This file overrides
+   only semantic tokens — not color primitives.
+
+   Compose: palette-blue.css + brand-wels.css
+
+   To customize: override semantic tokens for WELS-specific
+   intent (e.g., a specific accessible shade, brand typography,
+   or custom surface treatments).
+   ============================================================ */
+
+@layer themes {
+
+:root[data-brand="wels"],
+.tw-brand-wels {
+
+    /* WELS uses the default blue semantic mapping — no overrides needed.
+       Add overrides here as brand requirements are defined.
+
+    Example:
+    --tw-color-brand:        #1a32e0;   exact WELS brand blue
+    --tw-color-text-link:    #1a32e0;
+    */
+}
+
+} /* end @layer themes */

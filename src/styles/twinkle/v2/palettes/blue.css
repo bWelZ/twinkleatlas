@@ -1,0 +1,40 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Blue (Default)
+   ============================================================
+   This is the default palette — core/tokens.css already sets
+   these values. Link this file explicitly if you want to reset
+   to blue after applying another palette.
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --palatinate-blue: #1f35ff;
+    --risd-blue:       #3145ff;
+    --rich-black:      #000214;
+    --gunmetal:        #272c35;
+    --cool-gray:       #8a8899;
+    --thistle:         #b8b4cc;
+    --platinum:        #dbdce3;
+    --ghost-white:     #f2f2fc;
+    --seasalt:         #f8f9fb;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--palatinate-blue);
+    --tw-color-2: var(--risd-blue);
+    --tw-color-3: var(--rich-black);
+    --tw-color-4: var(--gunmetal);
+    --tw-color-5: var(--cool-gray);
+    --tw-color-6: var(--thistle);
+    --tw-color-7: var(--platinum);
+    --tw-color-8: var(--ghost-white);
+    --tw-color-9: var(--seasalt);
+
+    /* Dark HSL for color-3: #000214 → 230deg 100% 3.9% */
+    --tw-color-dark-hsl: 230deg 100% 3.9%;
+}
+
+} /* end @layer themes */

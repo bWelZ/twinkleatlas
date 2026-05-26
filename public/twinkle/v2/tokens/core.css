@@ -1,0 +1,139 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Core Tokens — Primitive Scale
+   ============================================================
+   Raw values only. Never reference these in component CSS.
+   Use semantic/tokens.css for component-level usage.
+   ============================================================ */
+
+@layer tokens {
+
+:root {
+
+    /* ── Color Scale (default: blue palette) ─────────────── */
+    --tw-color-0:    #ffffff;
+    --tw-color-1:    #1f35ff;
+    --tw-color-2:    #3145ff;
+    --tw-color-3:    #000214;
+    --tw-color-4:    #272c35;
+    --tw-color-5:    #8a8899;
+    --tw-color-6:    #b8b4cc;
+    --tw-color-7:    #dbdce3;
+    --tw-color-8:    #f2f2fc;
+    --tw-color-9:    #f8f9fb;
+
+    /* ── Dark HSL (palette-driven — drives alpha & shadows) ─ */
+    --tw-color-dark-hsl: 230deg 100% 3.9%;
+
+    /* ── Alpha Colors (auto-update when palette overrides HSL) */
+    --tw-color-dark001:  hsl(var(--tw-color-dark-hsl) / 0.01);
+    --tw-color-dark0025: hsl(var(--tw-color-dark-hsl) / 0.025);
+    --tw-color-dark01:   hsl(var(--tw-color-dark-hsl) / 0.1);
+    --tw-color-dark02:   hsl(var(--tw-color-dark-hsl) / 0.2);
+    --tw-color-dark03:   hsl(var(--tw-color-dark-hsl) / 0.3);
+    --tw-color-dark04:   hsl(var(--tw-color-dark-hsl) / 0.4);
+    --tw-color-dark05:   hsl(var(--tw-color-dark-hsl) / 0.5);
+    --tw-color-dark06:   hsl(var(--tw-color-dark-hsl) / 0.6);
+    --tw-color-dark07:   hsl(var(--tw-color-dark-hsl) / 0.7);
+    --tw-color-dark08:   hsl(var(--tw-color-dark-hsl) / 0.8);
+    --tw-color-dark09:   hsl(var(--tw-color-dark-hsl) / 0.9);
+    --tw-color-backdrop: var(--tw-color-dark07);
+    --tw-color-stripe:   var(--tw-color-dark0025);
+
+    /* ── Shadows (auto-update with palette dark HSL) ─────── */
+    --tw-shadow-1:
+        0 1.4px 2.2px hsl(var(--tw-color-dark-hsl) / 0.008),
+        0 3.35px 5.3px hsl(var(--tw-color-dark-hsl) / 0.012),
+        0 6.25px 10px  hsl(var(--tw-color-dark-hsl) / 0.015);
+
+    --tw-shadow-2:
+        0 1.4px 2.2px  hsl(var(--tw-color-dark-hsl) / 0.012),
+        0 3.35px 5.3px hsl(var(--tw-color-dark-hsl) / 0.016),
+        0 6.25px 10px  hsl(var(--tw-color-dark-hsl) / 0.024),
+        0 11.15px 17.9px hsl(var(--tw-color-dark-hsl) / 0.024);
+
+    --tw-shadow-3:
+        0 1.4px 2.2px    hsl(var(--tw-color-dark-hsl) / 0.016),
+        0 3.35px 5.3px   hsl(var(--tw-color-dark-hsl) / 0.024),
+        0 6.25px 10px    hsl(var(--tw-color-dark-hsl) / 0.030),
+        0 11.15px 17.9px hsl(var(--tw-color-dark-hsl) / 0.036),
+        0 20px 33.4px    hsl(var(--tw-color-dark-hsl) / 0.042),
+        0 50px 80px      hsl(var(--tw-color-dark-hsl) / 0.060);
+
+    /* ── Spacing Scale (4pt grid) ───────────────────────── */
+    --tw-space-0:   0;
+    --tw-space-1:   4px;
+    --tw-space-2:   8px;
+    --tw-space-3:   12px;
+    --tw-space-4:   16px;
+    --tw-space-5:   20px;
+    --tw-space-6:   24px;
+    --tw-space-8:   32px;
+    --tw-space-10:  40px;
+    --tw-space-12:  48px;
+    --tw-space-16:  64px;
+    --tw-space-20:  80px;
+    --tw-space-24:  96px;
+
+    /* ── Radius Scale ─────────────────────────────────────── */
+    --tw-radius-xs:   4px;
+    --tw-radius-sm:   6px;
+    --tw-radius-md:   8px;
+    --tw-radius-lg:   12px;
+    --tw-radius-xl:   16px;
+    --tw-radius-2xl:  24px;
+    --tw-radius-full: 9999px;
+
+    /* ── Typography ──────────────────────────────────────── */
+    --tw-font-ui:    "Nunito", system-ui, sans-serif;
+    --tw-font-title: "Nunito", system-ui, sans-serif;
+    --tw-font-text:  "Nunito Sans", system-ui, sans-serif;
+    --tw-font-mono:  ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+
+    --tw-text-xs:   0.75rem;
+    --tw-text-sm:   0.875rem;
+    --tw-text-base: 1rem;
+    --tw-text-lg:   1.125rem;
+    --tw-text-xl:   1.25rem;
+    --tw-text-2xl:  1.5rem;
+    --tw-text-3xl:  1.875rem;
+    --tw-text-4xl:  2.25rem;
+
+    --tw-font-light:     300;
+    --tw-font-normal:    400;
+    --tw-font-medium:    500;
+    --tw-font-semibold:  600;
+    --tw-font-bold:      700;
+    --tw-font-extrabold: 800;
+
+    /* ── Motion ──────────────────────────────────────────── */
+    --tw-duration-fast:   100ms;
+    --tw-duration-base:   200ms;
+    --tw-duration-slow:   350ms;
+    --tw-ease-default:    ease-in-out;
+    --tw-ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+    --tw-ease-in:         cubic-bezier(0.4, 0, 1, 1);
+    --tw-ease-out:        cubic-bezier(0, 0, 0.2, 1);
+
+    /* ── Z-Index Scale ───────────────────────────────────── */
+    --tw-z-base:     0;
+    --tw-z-raised:   10;
+    --tw-z-dropdown: 100;
+    --tw-z-sticky:   200;
+    --tw-z-overlay:  300;
+    --tw-z-modal:    400;
+    --tw-z-toast:    500;
+    --tw-z-tooltip:  600;
+}
+
+/* ── Reduced Motion ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+} /* end @layer tokens */

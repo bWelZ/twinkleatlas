@@ -1,0 +1,36 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Violet
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --dark-violet:    #971adb;
+    --veronica:       #a224e5;
+    --licorice:       #150024;
+    --russian-violet: #280938;
+    --chinese-violet: #755680;
+    --lilac:          #ccabd1;
+    --pale-purple:    #dcd1e3;
+    --magnolia:       #f4edf7;
+    --magnolia-2:     #f9f2fc;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--dark-violet);
+    --tw-color-2: var(--veronica);
+    --tw-color-3: var(--licorice);
+    --tw-color-4: var(--russian-violet);
+    --tw-color-5: var(--chinese-violet);
+    --tw-color-6: var(--lilac);
+    --tw-color-7: var(--pale-purple);
+    --tw-color-8: var(--magnolia);
+    --tw-color-9: var(--magnolia-2);
+
+    /* Dark HSL for color-3: #150024 → 275deg 100% 7% */
+    --tw-color-dark-hsl: 275deg 100% 7%;
+}
+
+} /* end @layer themes */
