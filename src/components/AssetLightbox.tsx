@@ -78,78 +78,75 @@ export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps
                 <AssetStatusBadge status={asset.status} className="shrink-0 mt-1" />
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-3 text-base">
-                <div>
-                  <p className="text-base text-muted-foreground uppercase tracking-wider mb-1">Type</p>
-                  <p className="font-medium">{assetTypeLabel(asset.type)}</p>
-                </div>
-                <div>
-                  <p className="text-base text-muted-foreground uppercase tracking-wider mb-1">Aspect Ratio</p>
-                  <p className="font-medium">{asset.aspectRatio}</p>
-                </div>
+              {/* Inline meta row */}
+              <div className="mt-3 flex items-center gap-2 flex-wrap">
+                <span className="rounded-md bg-muted px-2.5 py-1 text-base font-medium">{assetTypeLabel(asset.type)}</span>
+                <span className="text-muted-foreground">·</span>
+                <span className="text-base text-muted-foreground">{asset.aspectRatio}</span>
+                {asset.category && (
+                  <>
+                    <span className="text-muted-foreground">·</span>
+                    <span className="text-base text-muted-foreground capitalize">{asset.category}</span>
+                  </>
+                )}
                 {asset.exportDate && (
-                  <div>
-                    <p className="text-base text-muted-foreground uppercase tracking-wider mb-1">Exported</p>
-                    <p className="font-medium">{formatDate(asset.exportDate)}</p>
-                  </div>
+                  <>
+                    <span className="text-muted-foreground">·</span>
+                    <span className="text-base text-muted-foreground">Exported {formatDate(asset.exportDate)}</span>
+                  </>
                 )}
               </div>
 
               {asset.notes && (
-                <div className="mt-4">
-                  <p className="text-base text-muted-foreground uppercase tracking-wider mb-1">Notes</p>
-                  <p className="text-base text-muted-foreground">{asset.notes}</p>
-                </div>
+                <p className="mt-3 text-base text-muted-foreground leading-relaxed">{asset.notes}</p>
               )}
 
               {asset.tags.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-1.5">
+                <div className="mt-3 flex flex-wrap gap-1.5">
                   {asset.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-base rounded-full bg-muted px-2 py-0.5 text-muted-foreground"
-                    >
+                    <span key={tag} className="text-base rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
                       {tag}
                     </span>
                   ))}
                 </div>
               )}
 
-              {asset.printFile && (
-                <div className="mt-5 rounded-xl border border-border bg-muted/40 p-4 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 shrink-0">
-                      <FileText className="size-5 text-emerald-600 dark:text-emerald-400" />
+              {(asset.printFile || asset.externalUrl) && (
+                <div className="mt-4 flex flex-col gap-2">
+                  {asset.printFile && (
+                    <div className="rounded-xl border border-border bg-muted/40 p-3 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 shrink-0">
+                          <FileText className="size-4 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-base font-medium truncate">{asset.printFile.filename}</p>
+                          {asset.printFile.size && (
+                            <p className="text-sm text-muted-foreground">{asset.printFile.size}</p>
+                          )}
+                        </div>
+                      </div>
+                      <a
+                        href={asset.printFile.url}
+                        download={asset.printFile.filename}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-white text-base font-medium px-3 py-1.5 shrink-0"
+                      >
+                        <Download className="size-3.5" />
+                        Download
+                      </a>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-base font-medium truncate">{asset.printFile.filename}</p>
-                      {asset.printFile.size && (
-                        <p className="text-base text-muted-foreground">{asset.printFile.size}</p>
-                      )}
-                    </div>
-                  </div>
-                  <a
-                    href={asset.printFile.url}
-                    download={asset.printFile.filename}
-                    className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 transition-colors text-white text-base font-medium px-4 py-2 shrink-0"
-                  >
-                    <Download className="size-4" />
-                    Download
-                  </a>
-                </div>
-              )}
-
-              {asset.externalUrl && (
-                <div className="mt-4">
-                  <a
-                    href={asset.externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-base text-violet-600 dark:text-violet-400 hover:underline"
-                  >
-                    <ExternalLink className="size-3.5" />
-                    View external link
-                  </a>
+                  )}
+                  {asset.externalUrl && (
+                    <a
+                      href={asset.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-base text-violet-600 dark:text-violet-400 hover:underline"
+                    >
+                      <ExternalLink className="size-3.5" />
+                      View external link
+                    </a>
+                  )}
                 </div>
               )}
             </div>
