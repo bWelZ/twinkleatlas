@@ -28,7 +28,8 @@ const CATEGORY_ACCENT: Record<string, string> = {
 };
 
 export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardProps) {
-  const isContent = asset.category === 'content' || asset.category === 'operations';
+  const hasThumbnail = !!asset.printFile?.thumbnailUrl;
+  const isContent = !hasThumbnail && (asset.category === 'content' || asset.category === 'operations');
   const [w, h] = asset.aspectRatio.split('/').map(Number);
   const paddingPercent = h && w ? `${((h / w) * 100).toFixed(2)}%` : '66.67%';
   const ContentIcon = CONTENT_ICONS[asset.type] ?? FileText;
