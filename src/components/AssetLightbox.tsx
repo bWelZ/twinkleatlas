@@ -41,7 +41,7 @@ export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.93, opacity: 0 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-2xl rounded-2xl bg-card border border-border shadow-2xl overflow-hidden"
+            className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close */}
@@ -52,27 +52,22 @@ export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps
               <X className="size-4" />
             </button>
 
-            {/* Preview block — thumbnail if available, else color swatch */}
-            {(() => {
-              const [w, h] = asset.aspectRatio.split('/').map(Number);
-              const paddingPercent = h && w ? `${((h / w) * 100).toFixed(2)}%` : '56.25%';
-              return (
-                <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>
-                  {asset.printFile?.thumbnailUrl ? (
-                    <img
-                      src={asset.printFile.thumbnailUrl}
-                      alt={asset.title}
-                      className="absolute inset-0 w-full h-full object-contain bg-muted"
-                    />
-                  ) : (
-                    <div className={cn('absolute inset-0', asset.previewColor)} />
-                  )}
-                </div>
-              );
-            })()}
+            {/* Preview block — capped height, never overflows viewport */}
+            {asset.printFile?.thumbnailUrl ? (
+              <div className="w-full bg-muted shrink-0" style={{ maxHeight: '58vh' }}>
+                <img
+                  src={asset.printFile.thumbnailUrl}
+                  alt={asset.title}
+                  className="w-full h-full object-contain"
+                  style={{ maxHeight: '58vh', display: 'block' }}
+                />
+              </div>
+            ) : (
+              <div className={cn('w-full shrink-0', asset.previewColor)} style={{ height: '220px' }} />
+            )}
 
-            {/* Details */}
-            <div className="p-5">
+            {/* Details — scrollable if content is tall */}
+            <div className="p-5 overflow-y-auto">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-lg font-semibold leading-tight">{asset.title}</h2>
