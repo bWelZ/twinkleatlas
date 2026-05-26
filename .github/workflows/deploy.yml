@@ -28,7 +28,7 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.twinkleatlas.bwelz.org
+          server: 82.25.88.48
           username: u536206966.twinkleatlas.bwelz.org
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
