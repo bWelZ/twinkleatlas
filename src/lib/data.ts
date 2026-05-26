@@ -593,11 +593,17 @@ Primary goals:
       {
         id: 'a-g-b5', title: 'Postcard',
         type: 'postcard', category: 'booth',
-        previewColor: 'bg-emerald-600', aspectRatio: '3/2', status: 'in-design',
-        notes: 'Printed postcard for conference distribution — includes QR code linking to play.prek.club',
-        tags: ['booth', 'postcard', 'print'],
+        previewColor: 'bg-emerald-600', aspectRatio: '7/5', status: 'approved',
+        notes: '5×7 in printed postcard for conference distribution — includes QR code linking to play.prek.club',
+        tags: ['booth', 'postcard', 'print', '5x7'],
         relatedAssets: ['a-g-b6'],
         mapPosition: { x: 330, y: 590 },
+        printFile: {
+          url: '/prints/grow-lead-succeed-2026/GLS2026_PreKClub_Postcard_5x7_Print.pdf',
+          filename: 'GLS2026_PreKClub_Postcard_5x7_Print.pdf',
+          size: '5×7 in',
+          thumbnailUrl: '/prints/grow-lead-succeed-2026/GLS2026_PreKClub_Postcard_5x7_Thumb.jpg',
+        },
       },
       {
         id: 'a-g-b7', title: 'SafetyPlug Print',
