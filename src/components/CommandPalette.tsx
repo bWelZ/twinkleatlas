@@ -53,7 +53,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           <CommandEmpty>
             <div className="flex flex-col items-center gap-2 py-4">
               <Sparkles className="size-8 text-muted-foreground/40" />
-              <p className="text-sm text-muted-foreground">No results found</p>
+              <p className="text-base text-muted-foreground">No results found</p>
             </div>
           </CommandEmpty>
 
@@ -100,7 +100,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   className={`w-3 h-3 rounded-full bg-gradient-to-br ${event.coverGradient} shrink-0`}
                 />
                 <span className="flex-1 truncate">{event.title}</span>
-                <span className="text-xs text-muted-foreground shrink-0 ml-2">{event.company}</span>
+                <span className="text-base text-muted-foreground shrink-0 ml-2">{event.company}</span>
               </CommandItem>
             ))}
           </CommandGroup>

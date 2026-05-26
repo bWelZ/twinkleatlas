@@ -102,7 +102,7 @@ export default function TimelinePage() {
             </div>
             <h1 className="text-2xl font-bold tracking-tight">Global Timeline</h1>
           </div>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-base">
             {allDeadlines.length} deadlines across {events.length} events — {conferenceCount} conferences, {doneCount} completed
           </p>
         </motion.div>
@@ -119,7 +119,7 @@ export default function TimelinePage() {
           <select
             value={filterCompany}
             onChange={(e) => setFilterCompany(e.target.value)}
-            className="h-8 rounded-lg border border-border bg-card px-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-violet-500/30"
+            className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none focus:ring-2 focus:ring-violet-500/30"
           >
             <option value="">All Companies</option>
             {ALL_COMPANIES.map((c) => (
@@ -130,7 +130,7 @@ export default function TimelinePage() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="h-8 rounded-lg border border-border bg-card px-2.5 text-sm text-foreground outline-none focus:ring-2 focus:ring-violet-500/30"
+            className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none focus:ring-2 focus:ring-violet-500/30"
           >
             <option value="">All Types</option>
             {ALL_TYPES.map((t) => (
@@ -152,10 +152,10 @@ export default function TimelinePage() {
             >
               {showDone && <Check className="size-2.5 text-white" />}
             </div>
-            <span className="text-sm text-muted-foreground">Show completed</span>
+            <span className="text-base text-muted-foreground">Show completed</span>
           </label>
 
-          <span className="ml-auto text-xs text-muted-foreground">
+          <span className="ml-auto text-base text-muted-foreground">
             {filtered.length} of {allDeadlines.length} deadlines
           </span>
         </motion.div>
@@ -174,11 +174,11 @@ export default function TimelinePage() {
                 >
                   {/* Month header */}
                   <div className="flex items-center gap-3 mb-3">
-                    <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                    <h2 className="text-base font-semibold text-muted-foreground uppercase tracking-wider">
                       {monthLabel(monthKey)}
                     </h2>
                     <div className="flex-1 h-px bg-border" />
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-base text-muted-foreground">
                       {deadlines.length} items
                     </span>
                   </div>
@@ -215,18 +215,18 @@ export default function TimelinePage() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-0.5">
                               <p className={cn(
-                                'text-sm font-medium',
+                                'text-base font-medium',
                                 dl.done && 'line-through text-muted-foreground'
                               )}>
                                 {dl.title}
                               </p>
                               {isConference && (
-                                <span className="text-xs rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium shrink-0">
+                                <span className="text-base rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium shrink-0">
                                   Conference
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <div className="flex items-center gap-2 text-base text-muted-foreground">
                               <span>{formatDateShort(dl.date)}</span>
                               <span>·</span>
                               <Link
@@ -241,7 +241,7 @@ export default function TimelinePage() {
                           {/* Company + done */}
                           <div className="flex items-center gap-2 shrink-0">
                             <span className={cn(
-                              'hidden sm:inline-flex text-xs rounded-full px-2 py-0.5 font-medium',
+                              'hidden sm:inline-flex text-base rounded-full px-2 py-0.5 font-medium',
                               companyColor(dl.company)
                             )}>
                               {dl.company}
@@ -273,7 +273,7 @@ export default function TimelinePage() {
               <CalendarDays className="size-9 text-muted-foreground/40" />
             </div>
             <h3 className="text-lg font-semibold mb-2">No deadlines found</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Try adjusting your filters to see more items.
             </p>
           </motion.div>

@@ -34,7 +34,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             <div className="relative p-4 h-full flex flex-col justify-between">
               <div className="flex items-start justify-between gap-2">
                 <EventStatusBadge status={event.status} className="bg-white/20 text-white border-0" />
-                <span className={cn('text-xs font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
+                <span className={cn('text-base font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
                   {event.company}
                 </span>
               </div>
@@ -47,15 +47,15 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
           {/* Card body */}
           <div className="p-4 space-y-3">
             {/* Org */}
-            <p className="text-xs text-muted-foreground truncate">{event.organization}</p>
+            <p className="text-base text-muted-foreground truncate">{event.organization}</p>
 
             {/* Meta */}
             <div className="space-y-1.5">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
                 <MapPin className="size-3 shrink-0" />
                 <span className="truncate">{event.location}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
                 <Calendar className="size-3 shrink-0" />
                 <span>{formatDateShort(event.date)}</span>
                 {event.endDate && (
@@ -66,7 +66,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
 
             {/* Progress */}
             <div className="space-y-1">
-              <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center justify-between text-base">
                 <span className="text-muted-foreground">Progress</span>
                 <span className="font-medium text-foreground">{event.progress}%</span>
               </div>
@@ -82,14 +82,14 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
 
             {/* Footer stats */}
             <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1 text-base text-muted-foreground">
                 <Package className="size-3" />
                 <span>{event.assets.length} asset{event.assets.length !== 1 ? 's' : ''}</span>
               </div>
               {nextDeadline && (
                 <span
                   className={cn(
-                    'text-xs rounded-full px-2 py-0.5',
+                    'text-base rounded-full px-2 py-0.5',
                     days !== null && days <= 7
                       ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'
                       : days !== null && days <= 21

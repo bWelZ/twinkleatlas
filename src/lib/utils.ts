@@ -106,6 +106,9 @@ export function assetTypeLabel(type: AssetType): string {
     case 'logo': return 'Logo';
     case 'tablecloth': return 'Tablecloth';
     case 'booth': return 'Booth';
+    case 'copy': return 'Copy';
+    case 'email': return 'Email';
+    case 'workflow': return 'Workflow';
     case 'other': return 'Other';
     default: return type;
   }

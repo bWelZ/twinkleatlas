@@ -52,7 +52,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
           >
             <Sparkles className="size-4 text-white" />
           </motion.div>
-          <span className="font-semibold text-sm tracking-tight hidden sm:block">
+          <span className="font-semibold text-base tracking-tight hidden sm:block">
             Twinkle Atlas
           </span>
         </Link>
@@ -67,7 +67,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className={cn(
-                    'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium transition-colors',
+                    'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-base font-medium transition-colors',
                     active
                       ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300'
                       : 'text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -88,11 +88,11 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={onOpenCommandPalette}
-          className="hidden sm:flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted transition-colors"
+          className="hidden sm:flex items-center gap-2 rounded-lg border border-border bg-muted/50 px-3 py-1.5 text-base text-muted-foreground hover:bg-muted transition-colors"
         >
           <Search className="size-3.5" />
           <span>Search...</span>
-          <kbd className="ml-2 flex items-center gap-0.5 rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+          <kbd className="ml-2 flex items-center gap-0.5 rounded border border-border bg-background px-1.5 py-0.5 text-base font-mono text-muted-foreground">
             <span>⌘</span>
             <span>K</span>
           </kbd>

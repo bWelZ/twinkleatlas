@@ -1,17 +1,27 @@
 export type EventStatus = 'planning' | 'in-progress' | 'ready' | 'completed' | 'archived';
 export type AssetStatus = 'pending' | 'in-design' | 'review' | 'approved' | 'delivered';
-export type AssetType = 'banner' | 'social' | 'postcard' | 'swag' | 'landing' | 'ad' | 'qr' | 'mockup' | 'pdf' | 'logo' | 'tablecloth' | 'booth' | 'other';
+export type AssetType = 'banner' | 'social' | 'postcard' | 'swag' | 'landing' | 'ad' | 'qr' | 'mockup' | 'pdf' | 'logo' | 'tablecloth' | 'booth' | 'copy' | 'email' | 'workflow' | 'other';
+export type AssetCategory = 'social' | 'digital' | 'booth' | 'content' | 'operations';
+
+export interface PrintFile {
+  url: string;
+  filename: string;
+  size?: string;
+  thumbnailUrl?: string;
+}
 
 export interface Asset {
   id: string;
   title: string;
   type: AssetType;
+  category?: AssetCategory;
   previewColor: string;
   previewUrl?: string;
   aspectRatio: string;
   status: AssetStatus;
   notes?: string;
   externalUrl?: string;
+  printFile?: PrintFile;
   tags: string[];
   exportDate?: string;
   relatedAssets?: string[];
@@ -30,6 +40,9 @@ export interface EventContact {
   name: string;
   role: string;
   email?: string;
+  phone?: string;
+  website?: string;
+  group?: string;
 }
 
 export interface Event {

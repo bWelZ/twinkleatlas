@@ -56,7 +56,7 @@ export default function DashboardPage() {
         if (!match) return false;
       }
       if (filterCompany && e.company !== filterCompany) return false;
-      if (filterStatus && e.status !== filterStatus) return false;
+      if (filterStatus ? e.status !== filterStatus : e.status === 'archived') return false;
       if (filterMonth) {
         const d = new Date(e.date + 'T00:00:00');
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
@@ -93,7 +93,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Twinkle Atlas</h1>
-              <p className="text-muted-foreground text-sm mt-0.5">
+              <p className="text-muted-foreground text-base mt-0.5">
                 Visual event & creative asset management
               </p>
             </div>
@@ -117,7 +117,7 @@ export default function DashboardPage() {
                   <TwinkleIcon name={icon} size="sm" className={color} />
                 </div>
                 <p className="text-2xl font-bold">{value}</p>
-                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="text-base text-muted-foreground">{label}</p>
               </motion.div>
             ))}
           </div>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
                 placeholder="Search events, locations, companies..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-9 rounded-xl border border-border bg-card pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 placeholder:text-muted-foreground transition-colors"
+                className="w-full h-9 rounded-xl border border-border bg-card pl-9 pr-3 text-base outline-none focus:ring-2 focus:ring-violet-500/30 focus:border-violet-400 placeholder:text-muted-foreground transition-colors"
               />
               {search && (
                 <button
@@ -157,7 +157,7 @@ export default function DashboardPage() {
               <select
                 value={filterCompany}
                 onChange={(e) => setFilterCompany(e.target.value)}
-                className="h-9 rounded-xl border border-border bg-card px-2.5 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
+                className="h-9 rounded-xl border border-border bg-card px-2.5 text-base outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
               >
                 <option value="">All Companies</option>
                 {ALL_COMPANIES.map((c) => (
@@ -169,7 +169,7 @@ export default function DashboardPage() {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="h-9 rounded-xl border border-border bg-card px-2.5 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
+                className="h-9 rounded-xl border border-border bg-card px-2.5 text-base outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
               >
                 <option value="">All Statuses</option>
                 {ALL_STATUSES.map((s) => (
@@ -183,7 +183,7 @@ export default function DashboardPage() {
               <select
                 value={filterMonth}
                 onChange={(e) => setFilterMonth(e.target.value)}
-                className="hidden sm:block h-9 rounded-xl border border-border bg-card px-2.5 text-sm outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
+                className="hidden sm:block h-9 rounded-xl border border-border bg-card px-2.5 text-base outline-none focus:ring-2 focus:ring-violet-500/30 text-foreground transition-colors"
               >
                 <option value="">All Months</option>
                 {ALL_MONTHS.map((m) => (
@@ -196,7 +196,7 @@ export default function DashboardPage() {
           {/* Active filter chips */}
           {hasFilters && (
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-muted-foreground">
+              <span className="text-base text-muted-foreground">
                 {filtered.length} of {events.length} events
               </span>
               {[
@@ -211,7 +211,7 @@ export default function DashboardPage() {
                     <button
                       key={chip.label}
                       onClick={chip.clear}
-                      className="flex items-center gap-1 text-xs rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300 px-2.5 py-0.5 hover:opacity-80 transition-opacity"
+                      className="flex items-center gap-1 text-base rounded-full bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300 px-2.5 py-0.5 hover:opacity-80 transition-opacity"
                     >
                       {chip.label}
                       <X className="size-3" />
@@ -220,7 +220,7 @@ export default function DashboardPage() {
                 })}
               <button
                 onClick={clearFilters}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+                className="text-base text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
               >
                 Clear all
               </button>
@@ -245,12 +245,12 @@ export default function DashboardPage() {
               <Sparkles className="size-9 text-muted-foreground/40" />
             </div>
             <h3 className="text-lg font-semibold mb-2">No events found</h3>
-            <p className="text-sm text-muted-foreground max-w-xs mb-6">
+            <p className="text-base text-muted-foreground max-w-xs mb-6">
               No events match your current filters. Try adjusting your search or clearing filters.
             </p>
             <button
               onClick={clearFilters}
-              className="rounded-xl bg-violet-600 hover:bg-violet-700 transition-colors text-white text-sm font-medium px-4 py-2"
+              className="rounded-xl bg-violet-600 hover:bg-violet-700 transition-colors text-white text-base font-medium px-4 py-2"
             >
               Clear filters
             </button>

@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import {
   MapPin, Calendar, Users, Target, Building2, ExternalLink,
   ZoomIn, ZoomOut, RotateCcw, ChevronRight, Mail, Link as LinkIcon,
-  Check, Pencil, Printer, Truck, Flag, Eye, Filter, X
+  Check, Pencil, Printer, Truck, Flag, Eye, Filter, X, Phone, Globe
 } from 'lucide-react';
 import Link from 'next/link';
 import { Navigation } from '@/components/Navigation';
@@ -105,7 +105,7 @@ export function EventDetailClient({ id }: { id: string }) {
       <div className={cn('bg-gradient-to-r relative', event.coverGradient)}>
         <div className="absolute inset-0 bg-black/25" />
         <div className="relative px-4 sm:px-6 lg:px-10 xl:px-14 py-10">
-          <div className="flex items-center gap-1.5 text-white/70 text-xs mb-4">
+          <div className="flex items-center gap-1.5 text-white/70 text-base mb-4">
             <Link href="/" className="hover:text-white transition-colors">Dashboard</Link>
             <ChevronRight className="size-3" />
             <span className="text-white">{event.title}</span>
@@ -115,19 +115,19 @@ export function EventDetailClient({ id }: { id: string }) {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
                 <EventStatusBadge status={event.status} className="bg-white/20 text-white" />
-                <span className={cn('text-xs font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
+                <span className={cn('text-base font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
                   {event.company}
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight mb-2">
                 {event.title}
               </h1>
-              <p className="text-white/80 text-sm mb-4">{event.organization}</p>
+              <p className="text-white/80 text-base mb-4">{event.organization}</p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm text-white/90">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-white/90">
                 <div className="flex items-center gap-1.5">
                   <MapPin className="size-3.5 shrink-0" />
-                  <span className="truncate">{event.location}</span>
+                  <span>{event.location}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Calendar className="size-3.5 shrink-0" />
@@ -135,7 +135,7 @@ export function EventDetailClient({ id }: { id: string }) {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Users className="size-3.5 shrink-0" />
-                  <span className="truncate">{event.audience.split(',')[0]}</span>
+                  <span>{event.audience}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Building2 className="size-3.5 shrink-0" />
@@ -155,14 +155,14 @@ export function EventDetailClient({ id }: { id: string }) {
                     strokeDasharray={`${event.progress * 1.759} 175.9`}
                   />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">
+                <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-base">
                   {event.progress}%
                 </span>
               </div>
               <div className="text-white">
-                <p className="font-semibold text-sm">Progress</p>
-                <p className="text-white/70 text-xs mt-0.5">{event.assets.length} assets</p>
-                <p className="text-white/70 text-xs">{doneCount}/{event.deadlines.length} done</p>
+                <p className="font-semibold text-base">Progress</p>
+                <p className="text-white/70 text-base mt-0.5">{event.assets.length} assets</p>
+                <p className="text-white/70 text-base">{doneCount}/{event.deadlines.length} deadlines done</p>
               </div>
             </div>
           </div>
@@ -170,48 +170,74 @@ export function EventDetailClient({ id }: { id: string }) {
       </div>
 
       {/* Main content — full-width layout; sidebar fixed, map/tabs fill remaining space */}
-      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14 py-6 flex flex-col lg:flex-row gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14 py-8 flex flex-col lg:flex-row gap-8">
         {/* Left sidebar */}
-        <aside className="lg:w-64 xl:w-72 shrink-0 space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-4">
-            <div className="flex items-center gap-2 mb-2">
+        <aside className="lg:w-80 xl:w-96 shrink-0 space-y-5">
+          <div className="rounded-2xl border border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-3">
               <Target className="size-4 text-violet-500" />
-              <h3 className="font-semibold text-sm">Objective</h3>
+              <h3 className="font-semibold text-base">Objective</h3>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{event.objective}</p>
+            <p className="text-base text-muted-foreground leading-relaxed">{event.objective}</p>
           </div>
 
           {event.contacts.length > 0 && (
-            <div className="rounded-2xl border border-border bg-card p-4">
-              <h3 className="font-semibold text-sm mb-3">Contacts</h3>
-              <div className="space-y-3">
-                {event.contacts.map((c) => (
-                  <div key={c.name} className="flex items-start gap-2.5">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-semibold text-base mb-4">Contacts</h3>
+              {(() => {
+                const groups = Array.from(new Set(event.contacts.map(c => c.group ?? ''))).filter(Boolean);
+                const ungrouped = event.contacts.filter(c => !c.group);
+                const hasDetails = (c: typeof event.contacts[0]) => !!(c.role || c.email || c.phone || c.website);
+                const ContactRow = ({ c }: { c: typeof event.contacts[0] }) => (
+                  <div key={c.name} className={cn('flex gap-3', hasDetails(c) ? 'items-start' : 'items-center')}>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white text-base font-bold shrink-0">
                       {c.name[0]}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">{c.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">{c.role}</p>
+                      <p className="text-base font-medium">{c.name}</p>
+                      {c.role && <p className="text-base text-muted-foreground">{c.role}</p>}
                       {c.email && (
-                        <a
-                          href={`mailto:${c.email}`}
-                          className="text-xs text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 mt-0.5"
-                        >
-                          <Mail className="size-3" />
-                          {c.email}
+                        <a href={`mailto:${c.email}`} className="text-base text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 mt-1">
+                          <Mail className="size-3" />{c.email}
+                        </a>
+                      )}
+                      {c.phone && (
+                        <a href={`tel:${c.phone}`} className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
+                          <Phone className="size-3" />{c.phone}
+                        </a>
+                      )}
+                      {c.website && (
+                        <a href={`https://${c.website}`} target="_blank" rel="noopener noreferrer" className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
+                          <Globe className="size-3" />{c.website}
                         </a>
                       )}
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+                return (
+                  <div className="space-y-5">
+                    {groups.map((group) => (
+                      <div key={group}>
+                        <p className="text-base font-semibold text-muted-foreground uppercase tracking-wide mb-3">{group}</p>
+                        <div className="space-y-2">
+                          {event.contacts.filter(c => c.group === group).map(c => <ContactRow key={c.name} c={c} />)}
+                        </div>
+                      </div>
+                    ))}
+                    {ungrouped.length > 0 && (
+                      <div className="space-y-4">
+                        {ungrouped.map(c => <ContactRow key={c.name} c={c} />)}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
 
           {event.links.length > 0 && (
-            <div className="rounded-2xl border border-border bg-card p-4">
-              <h3 className="font-semibold text-sm mb-3">Links</h3>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-semibold text-base mb-4">Links</h3>
               <div className="space-y-1.5">
                 {event.links.map((l) => (
                   <a
@@ -219,7 +245,7 @@ export function EventDetailClient({ id }: { id: string }) {
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-violet-600 dark:text-violet-400 hover:underline"
+                    className="flex items-center gap-2 text-base text-violet-600 dark:text-violet-400 hover:underline"
                   >
                     <LinkIcon className="size-3.5 shrink-0" />
                     <span className="truncate">{l.label}</span>
@@ -231,18 +257,40 @@ export function EventDetailClient({ id }: { id: string }) {
           )}
 
           {event.notes && (
-            <div className="rounded-2xl border border-border bg-card p-4">
-              <h3 className="font-semibold text-sm mb-2">Notes</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{event.notes}</p>
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-semibold text-base mb-3">Notes</h3>
+              <div className="text-base text-muted-foreground leading-relaxed space-y-3">
+                {event.notes.split('\n\n').map((block, i) => {
+                  const lines = block.split('\n').filter(Boolean);
+                  const bulletLines = lines.filter(l => l.startsWith('- '));
+                  const nonBullet = lines.filter(l => !l.startsWith('- '));
+                  return (
+                    <div key={i}>
+                      <div className="space-y-1.5">
+                        {nonBullet.map((line, j) => (
+                          <p key={j}>{line}</p>
+                        ))}
+                      </div>
+                      {bulletLines.length > 0 && (
+                        <ul className="mt-1 space-y-1 list-disc list-inside">
+                          {bulletLines.map((line, j) => (
+                            <li key={j}>{line.replace(/^- /, '')}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 
           {event.tags.length > 0 && (
-            <div className="rounded-2xl border border-border bg-card p-4">
-              <h3 className="font-semibold text-sm mb-2">Tags</h3>
-              <div className="flex flex-wrap gap-1.5">
+            <div className="rounded-2xl border border-border bg-card p-6">
+              <h3 className="font-semibold text-base mb-3">Tags</h3>
+              <div className="flex flex-wrap gap-2">
                 {event.tags.map((tag) => (
-                  <span key={tag} className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
+                  <span key={tag} className="text-base rounded-full bg-muted px-3 py-1 text-muted-foreground">
                     {tag}
                   </span>
                 ))}
@@ -254,7 +302,7 @@ export function EventDetailClient({ id }: { id: string }) {
         {/* Main tabs area */}
         <div className="flex-1 min-w-0">
           <Tabs defaultValue="map">
-            <TabsList className="mb-5">
+            <TabsList className="mb-6">
               <TabsTrigger value="map">Assets Map</TabsTrigger>
               <TabsTrigger value="gallery">Gallery</TabsTrigger>
               <TabsTrigger value="timeline">Timeline</TabsTrigger>
@@ -263,8 +311,8 @@ export function EventDetailClient({ id }: { id: string }) {
             {/* Assets Map Tab */}
             <TabsContent value="map" className="w-full">
               <div className="rounded-2xl border border-border overflow-hidden bg-card w-full">
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/30">
-                  <span className="text-sm font-medium text-muted-foreground">
+                <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-muted/30">
+                  <span className="text-base font-medium text-muted-foreground">
                     {event.assets.length} asset{event.assets.length !== 1 ? 's' : ''} on canvas
                   </span>
                   <div className="flex items-center gap-1">
@@ -286,7 +334,7 @@ export function EventDetailClient({ id }: { id: string }) {
                     >
                       <RotateCcw className="size-4" />
                     </button>
-                    <span className="text-xs text-muted-foreground ml-2 tabular-nums">
+                    <span className="text-base text-muted-foreground ml-2 tabular-nums">
                       {Math.round(zoom * 100)}%
                     </span>
                   </div>
@@ -309,13 +357,32 @@ export function EventDetailClient({ id }: { id: string }) {
                     style={{
                       transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
                       transformOrigin: '0 0',
-                      width: 1200,
-                      height: 800,
+                      width: 1560,
+                      height: 820,
                       position: 'absolute',
                     }}
                   >
+                    {/* Category group zones */}
+                    {[
+                      { label: 'Social',      x: 30,  y: 30,  w: 580, h: 350, color: 'rgba(59,130,246,0.06)',  border: 'rgba(59,130,246,0.25)' },
+                      { label: 'Digital',     x: 640, y: 30,  w: 640, h: 370, color: 'rgba(139,92,246,0.06)', border: 'rgba(139,92,246,0.25)' },
+                      { label: 'Booth',       x: 30,  y: 430, w: 620, h: 350, color: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.25)' },
+                      { label: 'Content',     x: 640, y: 450, w: 640, h: 340, color: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.25)' },
+                      { label: 'Operations',  x: 1320, y: 450, w: 230, h: 200, color: 'rgba(239,68,68,0.06)',  border: 'rgba(239,68,68,0.25)' },
+                    ].map(({ label, x, y, w, h, color, border }) => (
+                      <div
+                        key={label}
+                        style={{ position: 'absolute', left: x, top: y, width: w, height: h, backgroundColor: color, border: `1.5px dashed ${border}`, borderRadius: 16 }}
+                      >
+                        <span style={{ position: 'absolute', top: 10, left: 14, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: border, opacity: 0.9 }}>
+                          {label}
+                        </span>
+                      </div>
+                    ))}
+
                     {event.assets.map((asset) => {
                       const pos = asset.mapPosition ?? { x: 50, y: 50 };
+                      const isContent = asset.category === 'content' || asset.category === 'operations';
                       return (
                         <motion.div
                           key={asset.id}
@@ -329,13 +396,25 @@ export function EventDetailClient({ id }: { id: string }) {
                           onClick={() => setLightboxAsset(asset)}
                           onMouseDown={(e) => e.stopPropagation()}
                         >
-                          <div className={cn('rounded-t-xl h-10 w-full', asset.previewColor)} />
+                          {isContent ? (
+                            <div className={cn('rounded-t-xl h-10 w-full flex items-center px-3 gap-2', asset.previewColor + '/20')}>
+                              <div className={cn('w-5 h-5 rounded flex items-center justify-center shrink-0', asset.previewColor)}>
+                                <Check className="size-2.5 text-white" />
+                              </div>
+                              <div className="space-y-1 flex-1">
+                                <div className="h-1.5 rounded-full bg-foreground/15 w-full" />
+                                <div className="h-1.5 rounded-full bg-foreground/10 w-3/4" />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className={cn('rounded-t-xl h-10 w-full', asset.previewColor)} />
+                          )}
                           <div className="p-2">
-                            <p className="text-xs font-medium line-clamp-2 leading-tight mb-1">
+                            <p className="text-base font-medium line-clamp-2 leading-tight mb-1">
                               {asset.title}
                             </p>
                             <div className="flex items-center justify-between gap-1">
-                              <span className="text-xs text-muted-foreground">{assetTypeLabel(asset.type)}</span>
+                              <span className="text-base text-muted-foreground">{assetTypeLabel(asset.type)}</span>
                               <AssetStatusBadge status={asset.status} />
                             </div>
                           </div>
@@ -354,7 +433,7 @@ export function EventDetailClient({ id }: { id: string }) {
                 <select
                   value={galleryTypeFilter}
                   onChange={(e) => setGalleryTypeFilter(e.target.value as AssetType | '')}
-                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-sm text-foreground outline-none"
+                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none"
                 >
                   <option value="">All Types</option>
                   {assetTypes.map((t) => (
@@ -364,7 +443,7 @@ export function EventDetailClient({ id }: { id: string }) {
                 <select
                   value={galleryStatusFilter}
                   onChange={(e) => setGalleryStatusFilter(e.target.value as AssetStatus | '')}
-                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-sm text-foreground outline-none"
+                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none"
                 >
                   <option value="">All Statuses</option>
                   {assetStatuses.map((s) => (
@@ -376,31 +455,60 @@ export function EventDetailClient({ id }: { id: string }) {
                 {(galleryTypeFilter || galleryStatusFilter) && (
                   <button
                     onClick={() => { setGalleryTypeFilter(''); setGalleryStatusFilter(''); }}
-                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    className="flex items-center gap-1 text-base text-muted-foreground hover:text-foreground"
                   >
                     <X className="size-3" />
                     Clear
                   </button>
                 )}
-                <span className="text-xs text-muted-foreground ml-auto">
+                <span className="text-base text-muted-foreground ml-auto">
                   {filteredGalleryAssets.length} of {event.assets.length}
                 </span>
               </div>
 
-              {filteredGalleryAssets.length > 0 ? (
-                <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                  {filteredGalleryAssets.map((asset, i) => (
-                    <div key={asset.id} className="break-inside-avoid">
-                      <AssetCard asset={asset} index={i} onClick={() => setLightboxAsset(asset)} />
-                    </div>
-                  ))}
-                </div>
-              ) : (
+              {filteredGalleryAssets.length > 0 ? (() => {
+                const CATEGORY_ORDER = ['social', 'digital', 'booth', 'content', 'operations'] as const;
+                const CATEGORY_LABELS: Record<string, string> = { social: 'Social', digital: 'Digital', booth: 'Booth', content: 'Content', operations: 'Operations' };
+                const categorized = filteredGalleryAssets.filter(a => a.category);
+                const uncategorized = filteredGalleryAssets.filter(a => !a.category);
+                const groups = CATEGORY_ORDER.map(cat => ({ cat, items: categorized.filter(a => a.category === cat) })).filter(g => g.items.length > 0);
+                return (
+                  <div className="space-y-8">
+                    {groups.map(({ cat, items }) => (
+                      <section key={cat}>
+                        <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
+                          {CATEGORY_LABELS[cat]}
+                          <span className="text-base text-muted-foreground font-normal">{items.length}</span>
+                        </h3>
+                        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+                          {items.map((asset, i) => (
+                            <div key={asset.id} className="break-inside-avoid">
+                              <AssetCard asset={asset} index={i} onClick={() => setLightboxAsset(asset)} />
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    ))}
+                    {uncategorized.length > 0 && (
+                      <section>
+                        <h3 className="text-base font-semibold mb-3">Other</h3>
+                        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+                          {uncategorized.map((asset, i) => (
+                            <div key={asset.id} className="break-inside-avoid">
+                              <AssetCard asset={asset} index={i} onClick={() => setLightboxAsset(asset)} />
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+                  </div>
+                );
+              })() : (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <p className="text-muted-foreground text-sm">No assets match the selected filters.</p>
+                  <p className="text-muted-foreground text-base">No assets match the selected filters.</p>
                   <button
                     onClick={() => { setGalleryTypeFilter(''); setGalleryStatusFilter(''); }}
-                    className="mt-3 text-sm text-violet-600 dark:text-violet-400 hover:underline"
+                    className="mt-3 text-base text-violet-600 dark:text-violet-400 hover:underline"
                   >
                     Clear filters
                   </button>
@@ -412,7 +520,7 @@ export function EventDetailClient({ id }: { id: string }) {
             <TabsContent value="timeline">
               {Object.entries(deadlinesByMonth).map(([month, deadlines]) => (
                 <div key={month} className="mb-6">
-                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-1">
+                  <h3 className="text-base font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-1">
                     {month}
                   </h3>
                   <div className="space-y-2">
@@ -437,10 +545,10 @@ export function EventDetailClient({ id }: { id: string }) {
                             <Icon className={cn('size-4', deadlineTypeColor(dl.type))} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={cn('text-sm font-medium', dl.done && 'line-through text-muted-foreground')}>
+                            <p className={cn('text-base font-medium', dl.done && 'line-through text-muted-foreground')}>
                               {dl.title}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-base text-muted-foreground">
                               {formatDate(dl.date)}
                               <span className="ml-2 capitalize opacity-70">{dl.type}</span>
                             </p>

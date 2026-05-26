@@ -10,7 +10,7 @@ export function EventStatusBadge({ status, className }: EventStatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full px-2 py-0.5 text-sm font-medium',
         eventStatusColor(status),
         className
       )}
@@ -29,7 +29,7 @@ export function AssetStatusBadge({ status, className }: AssetStatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full px-2 py-0.5 text-sm font-medium',
         assetStatusColor(status),
         className
       )}
