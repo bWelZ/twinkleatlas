@@ -90,23 +90,24 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
         </div>
       ) : asset.sides && asset.sides.length >= 2 ? (
         /* Multi-side preview — front/back split */
-        <div className="relative w-full flex overflow-hidden">
-          {asset.sides.map((side, i) => (
-            <div key={i} className={cn('relative flex-1', i > 0 && 'border-l border-border/40')}>
-              <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>
+        <div className="relative w-full bg-muted/40">
+          <div className="flex items-end justify-center gap-3 px-4 pt-4 pb-2">
+            {asset.sides.map((side, i) => (
+              <div key={i} className="flex flex-col items-center gap-1.5 flex-1 min-w-0">
                 <img
                   src={side.previewUrl}
                   alt={`${asset.title} — ${side.label}`}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="object-contain w-full rounded-sm shadow-sm"
+                  style={{ aspectRatio: asset.aspectRatio, display: 'block' }}
                 />
-                <span className="absolute bottom-1.5 inset-x-0 text-center text-[11px] font-semibold text-white drop-shadow">
+                <span className="shrink-0 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
                   {side.label}
                 </span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 flex items-center justify-center pointer-events-none">
-            <span className="text-white text-base font-medium">View</span>
+            <span className="text-foreground text-base font-medium">View</span>
           </div>
         </div>
       ) : (

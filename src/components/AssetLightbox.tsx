@@ -232,16 +232,16 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
                     </button>
                   </div>
                   {asset.sides && asset.sides.length >= 2 ? (
-                    <div className="w-full bg-muted shrink-0 flex items-stretch" style={{ maxHeight: '58vh' }}>
+                    <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-6 pb-3">
                       {asset.sides.map((side, i) => (
-                        <div key={i} className={cn('relative flex-1 flex flex-col items-center justify-center overflow-hidden', i > 0 && 'border-l border-border/40')}>
+                        <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
                           <img
                             src={side.previewUrl}
                             alt={`${asset.title} — ${side.label}`}
-                            className="object-contain"
-                            style={{ maxHeight: '54vh', maxWidth: '100%', display: 'block' }}
+                            className="object-contain w-full"
+                            style={{ maxHeight: '50vh', display: 'block' }}
                           />
-                          <span className="absolute bottom-2 text-xs font-semibold text-white/80 bg-black/30 rounded-full px-2.5 py-0.5">
+                          <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                             {side.label}
                           </span>
                         </div>
