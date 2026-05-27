@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Download, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ExternalLink, Download, FileText, ChevronLeft, ChevronRight, Globe } from 'lucide-react';
 import type { Asset } from '@/lib/types';
 import { AssetStatusBadge } from '@/components/StatusBadge';
 import { assetTypeLabel, formatDate, cn } from '@/lib/utils';
@@ -15,39 +15,113 @@ interface AssetLightboxProps {
   onNavigate?: (asset: Asset) => void;
 }
 
+function imageMaxWidth(aspectRatio: string, physicalSize?: Asset['physicalSize']): string {
+  if (physicalSize) {
+    const f = physicalSize.unit === 'ft' ? 12 : physicalSize.unit === 'cm' ? 0.394 : 1;
+    const maxDim = Math.max(physicalSize.w * f, physicalSize.h * f);
+    if (maxDim <= 2.5) return '22%';   // sticker, safety plug — tiny
+    if (maxDim <= 12)  return '55%';   // postcard, tabletop sign — medium
+    if (maxDim <= 48)  return '80%';   // backdrop, table throw — large
+  }
+  const [w, h] = aspectRatio.split('/').map(Number);
+  if (!w || !h) return '100%';
+  const ratio = w / h;
+  if (ratio < 0.6)  return '38%';   // 9/16 story — very tall portrait
+  if (ratio < 0.85) return '55%';   // 4/5, 3/4 — portrait
+  if (ratio < 1.1)  return '65%';   // ~square
+  return '100%';                     // landscape — full width
+}
+
+function renderInline(text: string) {
+  const parts = text.split(/(\*[^*]+\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith('*') && part.endsWith('*')
+      ? <strong key={i} className="font-semibold">{part.slice(1, -1)}</strong>
+      : <span key={i}>{part}</span>
+  );
+}
+
+function isBulletLine(l: string) { return /^\s*(•|-)\s/.test(l); }
+function isHeadingLine(l: string) { return l.trim().length < 55 && !/[.!?,]$/.test(l.trim()) && !/^\s*(•|-)/.test(l); }
+
 function renderNotes(notes: string) {
   const blocks = notes.split('\n\n').filter(Boolean);
   return (
-    <div className="space-y-3">
+    <div className="space-y-5">
       {blocks.map((block, i) => {
         const lines = block.split('\n').filter(Boolean);
-        const isHashtagBlock = lines.every(l => l.trim().split(/\s+/).every(w => w.startsWith('#')));
-        if (isHashtagBlock) {
+
+        // Hashtag block
+        if (lines.every(l => l.trim().split(/\s+/).every(w => w.startsWith('#')))) {
           return (
-            <p key={i} className="text-sm text-muted-foreground/60 leading-relaxed flex flex-wrap gap-x-2">
-              {lines.join(' ').split(/\s+/).map((tag, j) => (
-                <span key={j}>{tag}</span>
-              ))}
+            <p key={i} className="text-sm flex flex-wrap gap-x-2 text-muted-foreground">
+              {lines.join(' ').split(/\s+/).map((tag, j) => <span key={j}>{tag}</span>)}
             </p>
           );
         }
-        const isBulletBlock = lines.every(l => l.trim().startsWith('•') || l.trim().startsWith('-'));
-        if (isBulletBlock) {
+
+        // Flow block: single line with multiple → arrows
+        if (lines.length === 1 && (lines[0].match(/→/g) || []).length >= 2) {
+          const steps = lines[0].split('→').map(s => s.trim()).filter(Boolean);
           return (
-            <ul key={i} className="space-y-1 pl-1">
+            <div key={i} className="flex flex-wrap items-center gap-1.5">
+              {steps.map((step, j) => (
+                <span key={j} className="flex items-center gap-1.5">
+                  <span className="rounded-md bg-muted px-2.5 py-1 text-sm font-medium">{step}</span>
+                  {j < steps.length - 1 && <span className="text-muted-foreground text-sm">→</span>}
+                </span>
+              ))}
+            </div>
+          );
+        }
+
+        // Heading + bullets in same block
+        const firstLine = lines[0];
+        const restLines = lines.slice(1);
+        if (isHeadingLine(firstLine) && restLines.length > 0 && restLines.every(isBulletLine)) {
+          return (
+            <div key={i} className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{firstLine.trim()}</p>
+              <ul className="space-y-1.5 pl-1">
+                {restLines.map((line, j) => (
+                  <li key={j} className="flex items-start gap-2.5 text-base leading-snug">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-foreground/25 shrink-0" />
+                    <span>{renderInline(line.replace(/^\s*(•|-)\s*/, ''))}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        }
+
+        // Pure bullet block
+        if (lines.every(isBulletLine)) {
+          return (
+            <ul key={i} className="space-y-1.5 pl-1">
               {lines.map((line, j) => (
-                <li key={j} className="flex items-start gap-2 text-base leading-snug">
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-foreground/30 shrink-0" />
-                  <span>{line.replace(/^[•\-]\s*/, '')}</span>
+                <li key={j} className="flex items-start gap-2.5 text-base leading-snug">
+                  <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-foreground/25 shrink-0" />
+                  <span>{renderInline(line.replace(/^\s*(•|-)\s*/, ''))}</span>
                 </li>
               ))}
             </ul>
           );
         }
+
+        // Standalone heading (short, no punctuation, starts uppercase)
+        if (lines.length === 1 && isHeadingLine(lines[0]) && /^[A-Z]/.test(lines[0].trim())) {
+          return (
+            <p key={i} className="text-xs font-semibold uppercase tracking-widest text-muted-foreground pt-1">
+              {lines[0].trim()}
+            </p>
+          );
+        }
+
+        // Regular paragraph(s)
         return (
-          <div key={i} className="space-y-0.5">
+          <div key={i} className="space-y-1">
             {lines.map((line, j) => (
-              <p key={j} className="text-base leading-relaxed">{line}</p>
+              <p key={j} className="text-base leading-relaxed">{renderInline(line)}</p>
             ))}
           </div>
         );
@@ -119,40 +193,86 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close + position indicator */}
-            <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
-              {assets && assets.length > 1 && (
-                <span className="text-sm text-white/80 bg-black/30 rounded-full px-2.5 py-0.5 tabular-nums">
-                  {currentIndex + 1} / {assets.length}
-                </span>
-              )}
-              <button
-                onClick={onClose}
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-colors text-white"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-
-            {/* Preview block — capped height, never overflows viewport */}
+            {/* Close controls — inline for text-only, floating over image for visual */}
             {(() => {
               const thumb = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
-              return thumb ? (
-                <div className="w-full bg-muted shrink-0" style={{ maxHeight: '58vh' }}>
-                  <img
-                    src={thumb}
-                    alt={asset.title}
-                    className="w-full h-full object-contain"
-                    style={{ maxHeight: '58vh', display: 'block' }}
-                  />
-                </div>
-              ) : (
-                <div className={cn('w-full shrink-0', asset.previewColor)} style={{ height: '220px' }} />
+              const isTextOnly = !thumb && (asset.type === 'copy' || asset.type === 'email' || asset.type === 'workflow');
+
+              if (isTextOnly) {
+                return (
+                  <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
+                    {assets && assets.length > 1 ? (
+                      <span className="text-sm text-muted-foreground tabular-nums">
+                        {currentIndex + 1} / {assets.length}
+                      </span>
+                    ) : <span />}
+                    <button
+                      onClick={onClose}
+                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <>
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+                    {assets && assets.length > 1 && (
+                      <span className="text-sm text-white/80 bg-black/30 rounded-full px-2.5 py-0.5 tabular-nums">
+                        {currentIndex + 1} / {assets.length}
+                      </span>
+                    )}
+                    <button
+                      onClick={onClose}
+                      className="flex items-center justify-center w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-colors text-white"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  </div>
+                  {thumb ? (
+                    <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
+                      <img
+                        src={thumb}
+                        alt={asset.title}
+                        className="object-contain"
+                        style={{
+                          maxHeight: '58vh',
+                          maxWidth: imageMaxWidth(asset.aspectRatio, asset.physicalSize),
+                          display: 'block',
+                        }}
+                      />
+                      {asset.iframeUrl && (
+                        <a
+                          href={asset.iframeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-sm font-medium px-4 py-1.5 transition-colors"
+                        >
+                          <Globe className="size-3.5" />
+                          {asset.iframeUrl}
+                        </a>
+                      )}
+                    </div>
+                  ) : (() => {
+                    const mw = imageMaxWidth(asset.aspectRatio, asset.physicalSize);
+                    const [w, h] = asset.aspectRatio.split('/').map(Number);
+                    const ratio = w && h ? w / h : 1;
+                    const swatchH = mw === '100%' ? 220 : Math.round(Math.min(parseInt(mw) / 100 * 560, 320) / ratio);
+                    return (
+                      <div className="w-full bg-muted shrink-0 flex items-center justify-center" style={{ height: `${Math.max(swatchH, 160)}px` }}>
+                        <div className={cn('rounded-xl', asset.previewColor)} style={{ width: mw, aspectRatio: `${w}/${h}`, maxHeight: '280px' }} />
+                      </div>
+                    );
+                  })()}
+                </>
               );
             })()}
 
             {/* Details — scrollable if content is tall */}
-            <div className="p-5 overflow-y-auto">
+            <div className="p-6 overflow-y-auto">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-lg font-semibold leading-tight">{asset.title}</h2>
@@ -185,16 +305,6 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
               {asset.notes && (
                 <div className="mt-4">
                   {renderNotes(asset.notes)}
-                </div>
-              )}
-
-              {asset.tags.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {asset.tags.map((tag) => (
-                    <span key={tag} className="text-base rounded-full bg-muted px-2.5 py-0.5 text-muted-foreground">
-                      {tag}
-                    </span>
-                  ))}
                 </div>
               )}
 

@@ -19,6 +19,7 @@ import {
   deadlineTypeColor, deadlineTypeBg
 } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { BacklogTab } from '@/components/BacklogTab';
 
 const DEADLINE_ICONS: Record<string, React.ElementType> = {
   design: Pencil,
@@ -272,9 +273,30 @@ export function EventDetailClient({ id }: { id: string }) {
         {/* Main tabs area */}
         <div className="flex-1 min-w-0">
           <Tabs defaultValue="assets">
-            <TabsList className="mb-6">
-              <TabsTrigger value="assets">Assets</TabsTrigger>
-              <TabsTrigger value="timeline">Timeline</TabsTrigger>
+            <TabsList
+              variant="line"
+              className="mb-8 w-fit border-b-2 border-border rounded-none bg-transparent p-0 h-auto gap-0"
+            >
+              <TabsTrigger
+                value="assets"
+                className="flex-none text-base font-semibold px-5 pb-3 pt-1 h-auto rounded-none bg-transparent border-b-[3px] border-transparent -mb-[2px] data-active:border-violet-500 data-active:text-foreground data-active:bg-transparent data-active:shadow-none after:hidden text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Assets
+              </TabsTrigger>
+              <TabsTrigger
+                value="timeline"
+                className="flex-none text-base font-semibold px-5 pb-3 pt-1 h-auto rounded-none bg-transparent border-b-[3px] border-transparent -mb-[2px] data-active:border-violet-500 data-active:text-foreground data-active:bg-transparent data-active:shadow-none after:hidden text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Timeline
+              </TabsTrigger>
+              {event.backlog && event.backlog.length > 0 && (
+                <TabsTrigger
+                  value="plan"
+                  className="flex-none text-base font-semibold px-5 pb-3 pt-1 h-auto rounded-none bg-transparent border-b-[3px] border-transparent -mb-[2px] data-active:border-violet-500 data-active:text-foreground data-active:bg-transparent data-active:shadow-none after:hidden text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Plan
+                </TabsTrigger>
+              )}
             </TabsList>
 
             {/* Assets Board Tab */}
@@ -434,6 +456,12 @@ export function EventDetailClient({ id }: { id: string }) {
                 </div>
               ))}
             </TabsContent>
+
+            {event.backlog && event.backlog.length > 0 && (
+              <TabsContent value="plan">
+                <BacklogTab items={event.backlog} />
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </div>

@@ -1,4 +1,21 @@
 export type EventStatus = 'planning' | 'in-progress' | 'ready' | 'completed' | 'archived';
+export type BacklogStatus = 'todo' | 'in-progress' | 'done';
+export type BacklogPriority = 'high' | 'medium' | 'optional';
+export type BacklogCategory = 'social' | 'digital' | 'booth' | 'print' | 'content' | 'system';
+
+export interface BacklogItem {
+  id: string;
+  title: string;
+  category: BacklogCategory;
+  status: BacklogStatus;
+  priority: BacklogPriority;
+  notes?: string;
+  direction?: string[];
+  headline?: string;
+  cta?: string;
+  missing?: string[];
+  variants?: string[];
+}
 export type AssetStatus = 'pending' | 'in-design' | 'review' | 'approved' | 'delivered';
 export type AssetType = 'banner' | 'social' | 'postcard' | 'swag' | 'landing' | 'ad' | 'qr' | 'mockup' | 'pdf' | 'logo' | 'tablecloth' | 'booth' | 'copy' | 'email' | 'workflow' | 'other';
 export type AssetCategory = 'social' | 'digital' | 'booth' | 'content' | 'operations';
@@ -21,6 +38,7 @@ export interface Asset {
   status: AssetStatus;
   notes?: string;
   externalUrl?: string;
+  iframeUrl?: string;
   printFile?: PrintFile;
   tags: string[];
   exportDate?: string;
@@ -66,4 +84,5 @@ export interface Event {
   links: { label: string; url: string }[];
   contacts: EventContact[];
   tags: string[];
+  backlog?: BacklogItem[];
 }
