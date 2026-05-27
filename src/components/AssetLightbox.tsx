@@ -184,6 +184,15 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             </button>
           )}
 
+          {/* Counter — outside the card */}
+          {assets && assets.length > 1 && (
+            <span
+              className="absolute top-3 left-1/2 -translate-x-1/2 z-20 text-white/80 text-sm tabular-nums bg-black/30 backdrop-blur-sm rounded-full px-3 py-1 pointer-events-none"
+            >
+              {currentIndex + 1} / {assets.length}
+            </span>
+          )}
+
           <motion.div
             key={asset.id}
             initial={{ scale: 0.93, opacity: 0 }}
@@ -193,119 +202,85 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close controls — inline for text-only and multi-side, floating over image for single visual */}
+            {/* Unified header — type label left, close right */}
+            <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
+              <span className="text-sm font-medium text-muted-foreground">{assetTypeLabel(asset.type)}</span>
+              <button
+                onClick={onClose}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            {/* Image / preview section */}
             {(() => {
               const thumb = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
-              const isTextOnly = !thumb && (asset.type === 'copy' || asset.type === 'email' || asset.type === 'workflow');
-              const hasSides = !!(asset.sides && asset.sides.length >= 2);
 
-              const inlineHeader = (
-                <div className="flex items-center justify-end gap-2 px-6 pt-5 pb-0 shrink-0">
-                  {assets && assets.length > 1 && (
-                    <span className="text-sm text-muted-foreground tabular-nums">
-                      {currentIndex + 1} / {assets.length}
-                    </span>
-                  )}
-                  <button
-                    onClick={onClose}
-                    className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
-                  >
-                    <X className="size-4" />
-                  </button>
-                </div>
-              );
-
-              if (isTextOnly) {
-                return inlineHeader;
-              }
-
-              if (hasSides) {
+              if (asset.sides && asset.sides.length >= 2) {
                 return (
-                  <>
-                    {inlineHeader}
-                    <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-3">
-                      {asset.sides!.map((side, i) => (
-                        <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
-                          <img
-                            src={side.previewUrl}
-                            alt={`${asset.title} — ${side.label}`}
-                            className="object-contain w-full"
-                            style={{ maxHeight: '50vh', display: 'block' }}
-                          />
-                          <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                            {side.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </>
+                  <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-3">
+                    {asset.sides.map((side, i) => (
+                      <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
+                        <img
+                          src={side.previewUrl}
+                          alt={`${asset.title} — ${side.label}`}
+                          className="object-contain w-full"
+                          style={{ maxHeight: '50vh', display: 'block' }}
+                        />
+                        <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                          {side.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 );
               }
 
-              return (
-                <>
-                  <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
-                    {assets && assets.length > 1 && (
-                      <span className="text-sm text-white/80 bg-black/30 rounded-full px-2.5 py-0.5 tabular-nums">
-                        {currentIndex + 1} / {assets.length}
-                      </span>
+              if (thumb) {
+                return (
+                  <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
+                    <img
+                      src={thumb}
+                      alt={asset.title}
+                      className="object-contain"
+                      style={{
+                        maxHeight: '58vh',
+                        maxWidth: imageMaxWidth(asset.aspectRatio, asset.physicalSize),
+                        display: 'block',
+                      }}
+                    />
+                    {asset.iframeUrl && (
+                      <a
+                        href={asset.iframeUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-sm font-medium px-4 py-1.5 transition-colors"
+                      >
+                        <Globe className="size-3.5" />
+                        {asset.iframeUrl}
+                      </a>
                     )}
-                    <button
-                      onClick={onClose}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-colors text-white"
-                    >
-                      <X className="size-4" />
-                    </button>
                   </div>
-                  {thumb ? (
-                    <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
-                      <img
-                        src={thumb}
-                        alt={asset.title}
-                        className="object-contain"
-                        style={{
-                          maxHeight: '58vh',
-                          maxWidth: imageMaxWidth(asset.aspectRatio, asset.physicalSize),
-                          display: 'block',
-                        }}
-                      />
-                      {asset.iframeUrl && (
-                        <a
-                          href={asset.iframeUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="absolute bottom-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white text-sm font-medium px-4 py-1.5 transition-colors"
-                        >
-                          <Globe className="size-3.5" />
-                          {asset.iframeUrl}
-                        </a>
-                      )}
-                    </div>
-                  ) : (() => {
-                    const mw = imageMaxWidth(asset.aspectRatio, asset.physicalSize);
-                    const [w, h] = asset.aspectRatio.split('/').map(Number);
-                    const ratio = w && h ? w / h : 1;
-                    const swatchH = mw === '100%' ? 220 : Math.round(Math.min(parseInt(mw) / 100 * 560, 320) / ratio);
-                    return (
-                      <div className="w-full bg-muted shrink-0 flex items-center justify-center" style={{ height: `${Math.max(swatchH, 160)}px` }}>
-                        <div className={cn('rounded-xl', asset.previewColor)} style={{ width: mw, aspectRatio: `${w}/${h}`, maxHeight: '280px' }} />
-                      </div>
-                    );
-                  })()}
-                </>
+                );
+              }
+
+              const mw = imageMaxWidth(asset.aspectRatio, asset.physicalSize);
+              const [w, h] = asset.aspectRatio.split('/').map(Number);
+              const ratio = w && h ? w / h : 1;
+              const swatchH = mw === '100%' ? 220 : Math.round(Math.min(parseInt(mw) / 100 * 560, 320) / ratio);
+              return (
+                <div className="w-full bg-muted shrink-0 flex items-center justify-center" style={{ height: `${Math.max(swatchH, 160)}px` }}>
+                  <div className={cn('rounded-xl', asset.previewColor)} style={{ width: mw, aspectRatio: `${w}/${h}`, maxHeight: '280px' }} />
+                </div>
               );
             })()}
 
             {/* Details — scrollable if content is tall */}
             <div className="p-6 overflow-y-auto">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="text-lg font-semibold leading-tight">{asset.title}</h2>
-                  {eventTitle && (
-                    <p className="text-base text-muted-foreground mt-0.5">{eventTitle}</p>
-                  )}
-                </div>
+                <h2 className="text-lg font-semibold leading-tight">{asset.title}</h2>
                 <AssetStatusBadge status={asset.status} className="shrink-0 mt-1" />
               </div>
 

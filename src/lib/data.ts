@@ -923,7 +923,7 @@ Primary goals:
       {
         id: 'a-g-b5', title: 'Postcard',
         type: 'postcard', category: 'booth',
-        previewColor: 'bg-emerald-600', aspectRatio: '5/7', status: 'approved',
+        previewColor: 'bg-emerald-600', aspectRatio: '5/7', status: 'review',
         notes: '5×7 in printed postcard for conference distribution — includes QR code linking to play.prek.club',
         tags: ['booth', 'postcard', 'print', '5x7'],
         physicalSize: { w: 5, h: 7, unit: 'in' },
