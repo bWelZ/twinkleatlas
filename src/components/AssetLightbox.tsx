@@ -200,12 +200,12 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
               const hasSides = !!(asset.sides && asset.sides.length >= 2);
 
               const inlineHeader = (
-                <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
-                  {assets && assets.length > 1 ? (
+                <div className="flex items-center justify-end gap-2 px-6 pt-5 pb-0 shrink-0">
+                  {assets && assets.length > 1 && (
                     <span className="text-sm text-muted-foreground tabular-nums">
                       {currentIndex + 1} / {assets.length}
                     </span>
-                  ) : <span />}
+                  )}
                   <button
                     onClick={onClose}
                     className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
