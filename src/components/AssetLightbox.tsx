@@ -193,26 +193,52 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close controls — inline for text-only, floating over image for visual */}
+            {/* Close controls — inline for text-only and multi-side, floating over image for single visual */}
             {(() => {
               const thumb = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
               const isTextOnly = !thumb && (asset.type === 'copy' || asset.type === 'email' || asset.type === 'workflow');
+              const hasSides = !!(asset.sides && asset.sides.length >= 2);
+
+              const inlineHeader = (
+                <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
+                  {assets && assets.length > 1 ? (
+                    <span className="text-sm text-muted-foreground tabular-nums">
+                      {currentIndex + 1} / {assets.length}
+                    </span>
+                  ) : <span />}
+                  <button
+                    onClick={onClose}
+                    className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              );
 
               if (isTextOnly) {
+                return inlineHeader;
+              }
+
+              if (hasSides) {
                 return (
-                  <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
-                    {assets && assets.length > 1 ? (
-                      <span className="text-sm text-muted-foreground tabular-nums">
-                        {currentIndex + 1} / {assets.length}
-                      </span>
-                    ) : <span />}
-                    <button
-                      onClick={onClose}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
-                    >
-                      <X className="size-4" />
-                    </button>
-                  </div>
+                  <>
+                    {inlineHeader}
+                    <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-3">
+                      {asset.sides!.map((side, i) => (
+                        <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
+                          <img
+                            src={side.previewUrl}
+                            alt={`${asset.title} — ${side.label}`}
+                            className="object-contain w-full"
+                            style={{ maxHeight: '50vh', display: 'block' }}
+                          />
+                          <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                            {side.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 );
               }
 
@@ -231,23 +257,7 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
                       <X className="size-4" />
                     </button>
                   </div>
-                  {asset.sides && asset.sides.length >= 2 ? (
-                    <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-6 pb-3">
-                      {asset.sides.map((side, i) => (
-                        <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
-                          <img
-                            src={side.previewUrl}
-                            alt={`${asset.title} — ${side.label}`}
-                            className="object-contain w-full"
-                            style={{ maxHeight: '50vh', display: 'block' }}
-                          />
-                          <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                            {side.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  ) : thumb ? (
+                  {thumb ? (
                     <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
                       <img
                         src={thumb}
