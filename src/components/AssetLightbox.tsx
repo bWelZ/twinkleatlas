@@ -219,7 +219,7 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
 
               if (asset.sides && asset.sides.length >= 2) {
                 return (
-                  <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-3">
+                  <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-6">
                     {asset.sides.map((side, i) => (
                       <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
                         <img
