@@ -1,27 +1,41 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Download, FileText } from 'lucide-react';
+import { X, ExternalLink, Download, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Asset } from '@/lib/types';
 import { AssetStatusBadge } from '@/components/StatusBadge';
 import { assetTypeLabel, formatDate, cn } from '@/lib/utils';
 
 interface AssetLightboxProps {
   asset: Asset | null;
+  assets?: Asset[];
   eventTitle?: string;
   onClose: () => void;
+  onNavigate?: (asset: Asset) => void;
 }
 
-export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps) {
+export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }: AssetLightboxProps) {
+  const currentIndex = assets && asset ? assets.findIndex(a => a.id === asset.id) : -1;
+  const hasPrev = assets && assets.length > 1;
+  const hasNext = assets && assets.length > 1;
+
+  const goTo = useCallback((dir: 1 | -1) => {
+    if (!assets || assets.length <= 1 || currentIndex < 0 || !onNavigate) return;
+    const next = (currentIndex + dir + assets.length) % assets.length;
+    onNavigate(assets[next]);
+  }, [assets, currentIndex, onNavigate]);
+
   useEffect(() => {
     if (!asset) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') goTo(1);
+      if (e.key === 'ArrowLeft') goTo(-1);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [asset, onClose]);
+  }, [asset, onClose, goTo]);
 
   return (
     <AnimatePresence>
@@ -35,8 +49,28 @@ export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={onClose}
         >
+          {/* Prev */}
+          {hasPrev && (
+            <button
+              onClick={(e) => { e.stopPropagation(); goTo(-1); }}
+              className="absolute left-3 z-20 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 hover:bg-black/60 transition-colors text-white"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+          )}
+
+          {/* Next */}
+          {hasNext && (
+            <button
+              onClick={(e) => { e.stopPropagation(); goTo(1); }}
+              className="absolute right-3 z-20 flex items-center justify-center w-10 h-10 rounded-full bg-black/30 hover:bg-black/60 transition-colors text-white"
+            >
+              <ChevronRight className="size-5" />
+            </button>
+          )}
+
           <motion.div
-            key="lightbox-content"
+            key={asset.id}
             initial={{ scale: 0.93, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.93, opacity: 0 }}
@@ -44,13 +78,20 @@ export function AssetLightbox({ asset, eventTitle, onClose }: AssetLightboxProps
             className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-colors text-white"
-            >
-              <X className="size-4" />
-            </button>
+            {/* Close + position indicator */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+              {assets && assets.length > 1 && (
+                <span className="text-sm text-white/80 bg-black/30 rounded-full px-2.5 py-0.5 tabular-nums">
+                  {currentIndex + 1} / {assets.length}
+                </span>
+              )}
+              <button
+                onClick={onClose}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-black/20 hover:bg-black/40 transition-colors text-white"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
 
             {/* Preview block — capped height, never overflows viewport */}
             {asset.printFile?.thumbnailUrl ? (

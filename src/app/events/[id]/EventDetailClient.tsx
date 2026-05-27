@@ -63,7 +63,13 @@ export function EventDetailClient({ id }: { id: string }) {
     <>
       <Navigation onOpenCommandPalette={() => setCmdOpen(true)} />
       <CommandPalette open={cmdOpen} onOpenChange={setCmdOpen} />
-      <AssetLightbox asset={lightboxAsset} eventTitle={event.title} onClose={() => setLightboxAsset(null)} />
+      <AssetLightbox
+        asset={lightboxAsset}
+        assets={event.assets}
+        eventTitle={event.title}
+        onClose={() => setLightboxAsset(null)}
+        onNavigate={setLightboxAsset}
+      />
 
       {/* Hero */}
       <div className={cn('bg-gradient-to-r relative', event.coverGradient)}>
