@@ -15,6 +15,47 @@ interface AssetLightboxProps {
   onNavigate?: (asset: Asset) => void;
 }
 
+function renderNotes(notes: string) {
+  const blocks = notes.split('\n\n').filter(Boolean);
+  return (
+    <div className="space-y-3">
+      {blocks.map((block, i) => {
+        const lines = block.split('\n').filter(Boolean);
+        const isHashtagBlock = lines.every(l => l.trim().split(/\s+/).every(w => w.startsWith('#')));
+        if (isHashtagBlock) {
+          return (
+            <p key={i} className="text-sm text-muted-foreground/60 leading-relaxed flex flex-wrap gap-x-2">
+              {lines.join(' ').split(/\s+/).map((tag, j) => (
+                <span key={j}>{tag}</span>
+              ))}
+            </p>
+          );
+        }
+        const isBulletBlock = lines.every(l => l.trim().startsWith('•') || l.trim().startsWith('-'));
+        if (isBulletBlock) {
+          return (
+            <ul key={i} className="space-y-1 pl-1">
+              {lines.map((line, j) => (
+                <li key={j} className="flex items-start gap-2 text-base leading-snug">
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-foreground/30 shrink-0" />
+                  <span>{line.replace(/^[•\-]\s*/, '')}</span>
+                </li>
+              ))}
+            </ul>
+          );
+        }
+        return (
+          <div key={i} className="space-y-0.5">
+            {lines.map((line, j) => (
+              <p key={j} className="text-base leading-relaxed">{line}</p>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }: AssetLightboxProps) {
   const currentIndex = assets && asset ? assets.findIndex(a => a.id === asset.id) : -1;
   const hasPrev = assets && assets.length > 1;
@@ -142,7 +183,9 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
               </div>
 
               {asset.notes && (
-                <p className="mt-3 text-base text-muted-foreground leading-relaxed">{asset.notes}</p>
+                <div className="mt-4">
+                  {renderNotes(asset.notes)}
+                </div>
               )}
 
               {asset.tags.length > 0 && (
