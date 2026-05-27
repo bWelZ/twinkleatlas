@@ -1021,7 +1021,7 @@ Shipping address:
 
 Delivery deadline: June 15, 2026
 
-QR URL: https://play.prek.club/?utm_source=borntoteach&utm_medium=swagbag&utm_campaign=bt2026
+QR URL: https://play.prek.club/?utm_source=microfiber&utm_medium=qr
 
 Messaging direction:
 - Simplify childcare management
@@ -1074,32 +1074,55 @@ Messaging direction:
 
       // ── DIGITAL ─────────────────────────────────────────────
       {
-        id: 'a-bt-d1', title: 'QR Code — Swag Bag',
+        id: 'a-bt-d1', title: 'QR Code — Microfiber',
         type: 'qr', category: 'digital',
         previewColor: 'bg-slate-600', aspectRatio: '1/1', status: 'pending',
-        notes: 'QR tracking URL:\nhttps://play.prek.club/?utm_source=borntoteach&utm_medium=swagbag&utm_campaign=bt2026',
-        tags: ['qr', 'digital', 'swag-bag'],
+        notes: 'QR tracking URL:\nhttps://play.prek.club/?utm_source=microfiber&utm_medium=qr',
+        tags: ['qr', 'digital', 'microfiber', 'source'],
+        relatedAssets: ['a-bt-p3', 'a-bt-p4'],
         mapPosition: { x: 665, y: 75 },
+        printFile: {
+          url: '/prints/prekclub-shared/qr/play.prek.club_utm_source_microfiber_utm_medium_qr.svg',
+          filename: 'BT2026_PreKClub_QR_Microfiber.svg',
+          thumbnailUrl: '/prints/prekclub-shared/qr/play.prek.club_utm_source_microfiber_utm_medium_qr.svg',
+        },
+      },
+      {
+        id: 'a-bt-d2', title: 'QR Code — Postcard',
+        type: 'qr', category: 'digital',
+        previewColor: 'bg-emerald-800', aspectRatio: '1/1', status: 'approved',
+        physicalSize: { w: 1.5, h: 1.5, unit: 'in' },
+        notes: 'QR code source file for the postcard — links to play.prek.club with UTM tracking',
+        tags: ['operations', 'qr', 'postcard', 'source'],
+        relatedAssets: ['a-bt-b5'],
+        mapPosition: { x: 845, y: 75 },
+        printFile: {
+          url: '/prints/prekclub-shared/qr/play.prek.club_utm_source_postcard_utm_medium_qr.svg',
+          filename: 'BT2026_PreKClub_QR_Postcard.svg',
+          thumbnailUrl: '/prints/prekclub-shared/qr/play.prek.club_utm_source_postcard_utm_medium_qr.svg',
+        },
       },
 
       // ── PRINT ────────────────────────────────────────────────
       {
-        id: 'a-bt-p1', title: 'Postcard 5×7 — Design',
+        id: 'a-bt-b5', title: 'Postcard',
         type: 'postcard', category: 'booth',
-        previewColor: 'bg-emerald-500', aspectRatio: '5/7', status: 'pending',
-        notes: '5×7 double-sided postcard\n• Print-ready, mobile-first messaging\n• Strong CTA + QR code integration\n• Educator-focused visuals, PreK.Club branding\nQty: 600',
-        tags: ['postcard', 'print', '5x7', 'swag-bag'],
+        previewColor: 'bg-emerald-600', aspectRatio: '5/7', status: 'review',
+        notes: '5×7 in printed postcard for conference distribution — includes QR code linking to play.prek.club',
+        tags: ['booth', 'postcard', 'print', '5x7'],
         physicalSize: { w: 5, h: 7, unit: 'in' },
+        sides: [
+          { label: 'Front', previewUrl: '/prints/prekclub-shared/postcard/PreKClub_Postcard_5x7_Front.jpg' },
+          { label: 'Back',  previewUrl: '/prints/prekclub-shared/postcard/PreKClub_Postcard_5x7_Back.jpg' },
+        ],
+        relatedAssets: ['a-bt-d2'],
         mapPosition: { x: 55, y: 470 },
-      },
-      {
-        id: 'a-bt-p2', title: 'Postcard 5×7 — Print File',
-        type: 'postcard', category: 'booth',
-        previewColor: 'bg-emerald-700', aspectRatio: '5/7', status: 'pending',
-        notes: 'Print-ready production file — CMYK, bleed, crop marks\nQty: 600',
-        tags: ['postcard', 'print', '5x7', 'production'],
-        physicalSize: { w: 5, h: 7, unit: 'in' },
-        mapPosition: { x: 235, y: 470 },
+        printFile: {
+          url: '/prints/prekclub-shared/postcard/PreKClub_Postcard_5x7_Print.pdf',
+          filename: 'BT2026_PreKClub_Postcard_5x7_Print.pdf',
+          size: '5×7 in',
+          thumbnailUrl: '/prints/prekclub-shared/postcard/PreKClub_Postcard_5x7_Front.jpg',
+        },
       },
       {
         id: 'a-bt-p3', title: 'Microfiber Glass Cleaner — Design',
@@ -1107,6 +1130,7 @@ Messaging direction:
         previewColor: 'bg-teal-500', aspectRatio: '3/2', status: 'pending',
         notes: 'Microfiber glass cleaner — double-sided\n• Minimal and clean design\n• Highly legible logo placement\n• QR code optional depending on printable area\nQty: 600',
         tags: ['swag', 'microfiber', 'print', 'swag-bag'],
+        relatedAssets: ['a-bt-d1'],
         mapPosition: { x: 415, y: 470 },
       },
       {
@@ -1115,6 +1139,7 @@ Messaging direction:
         previewColor: 'bg-teal-700', aspectRatio: '3/2', status: 'pending',
         notes: 'Print-ready production file — CMYK, both sides, vendor specs\nQty: 600',
         tags: ['swag', 'microfiber', 'print', 'production'],
+        relatedAssets: ['a-bt-d1'],
         mapPosition: { x: 235, y: 590 },
       },
 

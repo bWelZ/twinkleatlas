@@ -203,7 +203,7 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             onClick={(e) => e.stopPropagation()}
           >
             {/* Unified header — title left, close right */}
-            <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
+            <div className="flex items-center justify-between px-6 pt-5 pb-5 shrink-0">
               <span className="text-xl font-semibold text-foreground leading-tight">{asset.title}</span>
               <button
                 onClick={onClose}
@@ -219,14 +219,14 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
 
               if (asset.sides && asset.sides.length >= 2) {
                 return (
-                  <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-4 pb-6">
+                  <div className="w-full bg-muted shrink-0 flex items-end justify-center gap-5 px-8 pt-5 pb-7">
                     {asset.sides.map((side, i) => (
                       <div key={i} className="flex flex-col items-center gap-2 flex-1 min-w-0">
                         <img
                           src={side.previewUrl}
                           alt={`${asset.title} — ${side.label}`}
                           className="object-contain w-full"
-                          style={{ maxHeight: '50vh', display: 'block' }}
+                          style={{ maxHeight: '60vh', display: 'block' }}
                         />
                         <span className="shrink-0 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                           {side.label}
@@ -239,13 +239,13 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
 
               if (thumb) {
                 return (
-                  <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
+                  <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '220px', maxHeight: '64vh' }}>
                     <img
                       src={thumb}
                       alt={asset.title}
                       className="object-contain"
                       style={{
-                        maxHeight: '58vh',
+                        maxHeight: '64vh',
                         maxWidth: imageMaxWidth(asset.aspectRatio, asset.physicalSize),
                         display: 'block',
                       }}
@@ -271,35 +271,34 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
               const ratio = w && h ? w / h : 1;
               const swatchH = mw === '100%' ? 220 : Math.round(Math.min(parseInt(mw) / 100 * 560, 320) / ratio);
               return (
-                <div className="w-full bg-muted shrink-0 flex items-center justify-center" style={{ height: `${Math.max(swatchH, 160)}px` }}>
-                  <div className={cn('rounded-xl', asset.previewColor)} style={{ width: mw, aspectRatio: `${w}/${h}`, maxHeight: '280px' }} />
+                <div className="w-full bg-muted shrink-0 flex items-center justify-center" style={{ height: `${Math.max(swatchH, 220)}px` }}>
+                  <div className={cn('rounded-xl', asset.previewColor)} style={{ width: mw, aspectRatio: `${w}/${h}`, maxHeight: '360px' }} />
                 </div>
               );
             })()}
 
             {/* Details — scrollable if content is tall */}
             <div className="p-6 overflow-y-auto">
-              <div className="flex items-center justify-end gap-3">
+              <div className="flex items-start justify-between gap-4">
+                {/* Inline meta row */}
+                <div className="flex min-w-0 items-center gap-2 flex-wrap">
+                  <span className="rounded-md bg-muted px-2.5 py-1 text-base font-medium">{assetTypeLabel(asset.type)}</span>
+                  <span className="text-muted-foreground">·</span>
+                  <span className="text-base text-muted-foreground">{asset.aspectRatio}</span>
+                  {asset.category && (
+                    <>
+                      <span className="text-muted-foreground">·</span>
+                      <span className="text-base text-muted-foreground capitalize">{asset.category}</span>
+                    </>
+                  )}
+                  {asset.exportDate && (
+                    <>
+                      <span className="text-muted-foreground">·</span>
+                      <span className="text-base text-muted-foreground">Exported {formatDate(asset.exportDate)}</span>
+                    </>
+                  )}
+                </div>
                 <AssetStatusBadge status={asset.status} className="shrink-0" />
-              </div>
-
-              {/* Inline meta row */}
-              <div className="mt-3 flex items-center gap-2 flex-wrap">
-                <span className="rounded-md bg-muted px-2.5 py-1 text-base font-medium">{assetTypeLabel(asset.type)}</span>
-                <span className="text-muted-foreground">·</span>
-                <span className="text-base text-muted-foreground">{asset.aspectRatio}</span>
-                {asset.category && (
-                  <>
-                    <span className="text-muted-foreground">·</span>
-                    <span className="text-base text-muted-foreground capitalize">{asset.category}</span>
-                  </>
-                )}
-                {asset.exportDate && (
-                  <>
-                    <span className="text-muted-foreground">·</span>
-                    <span className="text-base text-muted-foreground">Exported {formatDate(asset.exportDate)}</span>
-                  </>
-                )}
               </div>
 
               {asset.notes && (
