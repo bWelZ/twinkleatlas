@@ -27,6 +27,11 @@ export interface PrintFile {
   thumbnailUrl?: string;
 }
 
+export interface AssetSide {
+  label: string;
+  previewUrl: string;
+}
+
 export interface Asset {
   id: string;
   title: string;
@@ -42,6 +47,7 @@ export interface Asset {
   printFile?: PrintFile;
   tags: string[];
   exportDate?: string;
+  sides?: AssetSide[];
   relatedAssets?: string[];
   mapPosition?: { x: number; y: number };
   physicalSize?: { w: number; h: number; unit: 'in' | 'cm' | 'ft' };

@@ -88,6 +88,27 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
             </div>
           </div>
         </div>
+      ) : asset.sides && asset.sides.length >= 2 ? (
+        /* Multi-side preview — front/back split */
+        <div className="relative w-full flex overflow-hidden">
+          {asset.sides.map((side, i) => (
+            <div key={i} className={cn('relative flex-1', i > 0 && 'border-l border-border/40')}>
+              <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>
+                <img
+                  src={side.previewUrl}
+                  alt={`${asset.title} — ${side.label}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <span className="absolute bottom-1.5 inset-x-0 text-center text-[11px] font-semibold text-white drop-shadow">
+                  {side.label}
+                </span>
+              </div>
+            </div>
+          ))}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 flex items-center justify-center pointer-events-none">
+            <span className="text-white text-base font-medium">View</span>
+          </div>
+        </div>
       ) : (
         /* Color / thumbnail preview for visual assets */
         <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>

@@ -231,7 +231,23 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
                       <X className="size-4" />
                     </button>
                   </div>
-                  {thumb ? (
+                  {asset.sides && asset.sides.length >= 2 ? (
+                    <div className="w-full bg-muted shrink-0 flex items-stretch" style={{ maxHeight: '58vh' }}>
+                      {asset.sides.map((side, i) => (
+                        <div key={i} className={cn('relative flex-1 flex flex-col items-center justify-center overflow-hidden', i > 0 && 'border-l border-border/40')}>
+                          <img
+                            src={side.previewUrl}
+                            alt={`${asset.title} — ${side.label}`}
+                            className="object-contain"
+                            style={{ maxHeight: '54vh', maxWidth: '100%', display: 'block' }}
+                          />
+                          <span className="absolute bottom-2 text-xs font-semibold text-white/80 bg-black/30 rounded-full px-2.5 py-0.5">
+                            {side.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : thumb ? (
                     <div className="w-full bg-muted shrink-0 relative flex items-center justify-center" style={{ minHeight: '160px', maxHeight: '58vh' }}>
                       <img
                         src={thumb}

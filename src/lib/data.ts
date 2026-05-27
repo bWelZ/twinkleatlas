@@ -927,6 +927,10 @@ Primary goals:
         notes: '5×7 in printed postcard for conference distribution — includes QR code linking to play.prek.club',
         tags: ['booth', 'postcard', 'print', '5x7'],
         physicalSize: { w: 5, h: 7, unit: 'in' },
+        sides: [
+          { label: 'Front', previewUrl: '/prints/grow-lead-succeed-2026/GLS2026_PreKClub_Postcard_5x7_Thumb.jpg' },
+          { label: 'Back',  previewUrl: '/prints/grow-lead-succeed-2026/PreKClub-Postcard_5x7_Back.jpg' },
+        ],
         relatedAssets: ['a-g-b6'],
         mapPosition: { x: 330, y: 590 },
         printFile: {
