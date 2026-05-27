@@ -33,7 +33,8 @@ function toInches(size: { w: number; h: number; unit: 'in' | 'cm' | 'ft' }) {
 }
 
 export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardProps) {
-  const hasThumbnail = !!asset.printFile?.thumbnailUrl;
+  const thumbnail = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
+  const hasThumbnail = !!thumbnail;
   const maxDimIn = asset.physicalSize ? toInches(asset.physicalSize) : null;
   const isTiny = maxDimIn !== null && maxDimIn <= 2.5;
   const isContent = !hasThumbnail && !isTiny && (asset.category === 'content' || asset.category === 'operations');
@@ -58,8 +59,8 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
         /* Tiny physical item — show small centered to convey actual scale */
         <div className="relative w-full flex items-center justify-center bg-muted/40" style={{ height: '180px' }}>
           <div className="relative flex items-center justify-center" style={{ width: '32%', aspectRatio: asset.aspectRatio }}>
-            {asset.printFile?.thumbnailUrl ? (
-              <img src={asset.printFile.thumbnailUrl} alt={asset.title} className="w-full h-full object-contain rounded" />
+            {thumbnail ? (
+              <img src={thumbnail} alt={asset.title} className="w-full h-full object-contain rounded" />
             ) : (
               <div className={cn('w-full h-full rounded', asset.previewColor)} />
             )}
@@ -90,10 +91,10 @@ export function AssetCard({ asset, eventTitle, onClick, index = 0 }: AssetCardPr
       ) : (
         /* Color / thumbnail preview for visual assets */
         <div className="relative w-full" style={{ paddingBottom: paddingPercent }}>
-          <div className={cn('absolute inset-0', !asset.printFile?.thumbnailUrl && asset.previewColor)}>
-            {asset.printFile?.thumbnailUrl && (
+          <div className={cn('absolute inset-0', !thumbnail && asset.previewColor)}>
+            {thumbnail && (
               <img
-                src={asset.printFile.thumbnailUrl}
+                src={thumbnail}
                 alt={asset.title}
                 className="absolute inset-0 w-full h-full object-cover"
               />

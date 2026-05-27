@@ -94,18 +94,21 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             </div>
 
             {/* Preview block — capped height, never overflows viewport */}
-            {asset.printFile?.thumbnailUrl ? (
-              <div className="w-full bg-muted shrink-0" style={{ maxHeight: '58vh' }}>
-                <img
-                  src={asset.printFile.thumbnailUrl}
-                  alt={asset.title}
-                  className="w-full h-full object-contain"
-                  style={{ maxHeight: '58vh', display: 'block' }}
-                />
-              </div>
-            ) : (
-              <div className={cn('w-full shrink-0', asset.previewColor)} style={{ height: '220px' }} />
-            )}
+            {(() => {
+              const thumb = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
+              return thumb ? (
+                <div className="w-full bg-muted shrink-0" style={{ maxHeight: '58vh' }}>
+                  <img
+                    src={thumb}
+                    alt={asset.title}
+                    className="w-full h-full object-contain"
+                    style={{ maxHeight: '58vh', display: 'block' }}
+                  />
+                </div>
+              ) : (
+                <div className={cn('w-full shrink-0', asset.previewColor)} style={{ height: '220px' }} />
+              );
+            })()}
 
             {/* Details — scrollable if content is tall */}
             <div className="p-5 overflow-y-auto">

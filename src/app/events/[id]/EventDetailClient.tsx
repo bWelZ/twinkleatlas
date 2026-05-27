@@ -298,8 +298,9 @@ export function EventDetailClient({ id }: { id: string }) {
                           </h3>
                           <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
                             {items.map((asset, i) => {
-                              const isTextAsset = (asset.category === 'content' || asset.category === 'operations') && !asset.printFile?.thumbnailUrl;
-                              const hasThumb = !!asset.printFile?.thumbnailUrl;
+                              const thumb = asset.printFile?.thumbnailUrl ?? asset.previewUrl ?? null;
+                              const isTextAsset = (asset.category === 'content' || asset.category === 'operations') && !thumb;
+                              const hasThumb = !!thumb;
                               const maxDimIn = asset.physicalSize ? Math.max(asset.physicalSize.w, asset.physicalSize.h) * (asset.physicalSize.unit === 'ft' ? 12 : 1) : null;
                               const isTiny = maxDimIn !== null && maxDimIn <= 2.5;
                               const ContentIcon = CONTENT_ICONS[asset.type] ?? FileText;
@@ -325,7 +326,7 @@ export function EventDetailClient({ id }: { id: string }) {
                                     {isTiny ? (
                                       <div className="w-full flex items-center justify-center bg-muted/30" style={{ height: 160 }}>
                                         {hasThumb
-                                          ? <img src={asset.printFile!.thumbnailUrl!} alt={asset.title} className="object-contain rounded" style={{ maxWidth: '32%', maxHeight: '80%' }} />
+                                          ? <img src={thumb!} alt={asset.title} className="object-contain rounded" style={{ maxWidth: '32%', maxHeight: '80%' }} />
                                           : <div className={cn('rounded', asset.previewColor)} style={{ width: '32%', aspectRatio: asset.aspectRatio }} />
                                         }
                                       </div>
@@ -347,7 +348,7 @@ export function EventDetailClient({ id }: { id: string }) {
                                     ) : (
                                       <div className="relative w-full" style={{ paddingBottom: paddingPct }}>
                                         <div className={cn('absolute inset-0', !hasThumb && asset.previewColor)}>
-                                          {hasThumb && <img src={asset.printFile!.thumbnailUrl!} alt={asset.title} className="absolute inset-0 w-full h-full object-cover" />}
+                                          {hasThumb && <img src={thumb!} alt={asset.title} className="absolute inset-0 w-full h-full object-cover" />}
                                           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 flex items-center justify-center">
                                             <span className="text-white text-base font-medium drop-shadow">View</span>
                                           </div>
