@@ -1,20 +1,19 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   MapPin, Calendar, Users, Target, Building2, ExternalLink,
-  ZoomIn, ZoomOut, RotateCcw, ChevronRight, Mail, Link as LinkIcon,
-  Check, Pencil, Printer, Truck, Flag, Eye, Filter, X, Phone, Globe
+  ChevronRight, Mail, Link as LinkIcon, FileText, GitBranch,
+  Check, Pencil, Printer, Truck, Flag, Eye, Phone, Globe
 } from 'lucide-react';
 import Link from 'next/link';
 import { Navigation } from '@/components/Navigation';
 import { CommandPalette } from '@/components/CommandPalette';
-import { AssetCard } from '@/components/AssetCard';
 import { AssetLightbox } from '@/components/AssetLightbox';
 import { EventStatusBadge, AssetStatusBadge } from '@/components/StatusBadge';
 import { getEventById } from '@/lib/data';
-import type { Asset, AssetStatus, AssetType } from '@/lib/types';
+import type { Asset } from '@/lib/types';
 import {
   cn, formatDate, formatDateShort, companyColor, assetTypeLabel,
   deadlineTypeColor, deadlineTypeBg
@@ -35,32 +34,6 @@ export function EventDetailClient({ id }: { id: string }) {
 
   const [cmdOpen, setCmdOpen] = useState(false);
   const [lightboxAsset, setLightboxAsset] = useState<Asset | null>(null);
-  const [zoom, setZoom] = useState(1);
-  const [galleryTypeFilter, setGalleryTypeFilter] = useState<AssetType | ''>('');
-  const [galleryStatusFilter, setGalleryStatusFilter] = useState<AssetStatus | ''>('');
-
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const isPanning = useRef(false);
-  const panStart = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
-  const mapRef = useRef<HTMLDivElement>(null);
-
-  const handleMapMouseDown = useCallback((e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('[data-asset-card]')) return;
-    isPanning.current = true;
-    panStart.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y };
-    e.preventDefault();
-  }, [pan]);
-
-  const handleMapMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isPanning.current) return;
-    const dx = e.clientX - panStart.current.x;
-    const dy = e.clientY - panStart.current.y;
-    setPan({ x: panStart.current.panX + dx, y: panStart.current.panY + dy });
-  }, []);
-
-  const handleMapMouseUp = useCallback(() => {
-    isPanning.current = false;
-  }, []);
 
   if (!event) {
     return (
@@ -75,15 +48,6 @@ export function EventDetailClient({ id }: { id: string }) {
       </div>
     );
   }
-
-  const assetTypes = Array.from(new Set(event.assets.map((a) => a.type))) as AssetType[];
-  const assetStatuses = Array.from(new Set(event.assets.map((a) => a.status))) as AssetStatus[];
-
-  const filteredGalleryAssets = event.assets.filter((a) => {
-    if (galleryTypeFilter && a.type !== galleryTypeFilter) return false;
-    if (galleryStatusFilter && a.status !== galleryStatusFilter) return false;
-    return true;
-  });
 
   const deadlinesByMonth: Record<string, typeof event.deadlines> = {};
   for (const dl of event.deadlines) {
@@ -301,219 +265,121 @@ export function EventDetailClient({ id }: { id: string }) {
 
         {/* Main tabs area */}
         <div className="flex-1 min-w-0">
-          <Tabs defaultValue="map">
+          <Tabs defaultValue="assets">
             <TabsList className="mb-6">
-              <TabsTrigger value="map">Assets Map</TabsTrigger>
-              <TabsTrigger value="gallery">Gallery</TabsTrigger>
+              <TabsTrigger value="assets">Assets</TabsTrigger>
               <TabsTrigger value="timeline">Timeline</TabsTrigger>
             </TabsList>
 
-            {/* Assets Map Tab */}
-            <TabsContent value="map" className="w-full">
-              <div className="rounded-2xl border border-border overflow-hidden bg-card w-full">
-                <div className="flex items-center justify-between px-5 py-3 border-b border-border bg-muted/30">
-                  <span className="text-base font-medium text-muted-foreground">
-                    {event.assets.length} asset{event.assets.length !== 1 ? 's' : ''} on canvas
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => setZoom((z) => Math.min(z + 0.2, 3))}
-                      className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
-                    >
-                      <ZoomIn className="size-4" />
-                    </button>
-                    <button
-                      onClick={() => setZoom((z) => Math.max(z - 0.2, 0.3))}
-                      className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
-                    >
-                      <ZoomOut className="size-4" />
-                    </button>
-                    <button
-                      onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
-                      className="flex items-center justify-center w-7 h-7 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
-                    >
-                      <RotateCcw className="size-4" />
-                    </button>
-                    <span className="text-base text-muted-foreground ml-2 tabular-nums">
-                      {Math.round(zoom * 100)}%
-                    </span>
-                  </div>
-                </div>
+            {/* Assets Board Tab */}
+            <TabsContent value="assets">
+              {(() => {
+                const CAT_ORDER = ['social', 'digital', 'booth', 'content', 'operations'] as const;
+                const CAT_LABELS: Record<string, string> = { social: 'Social', digital: 'Digital', booth: 'Booth', content: 'Content', operations: 'Operations' };
+                const CAT_ACCENT: Record<string, string> = { social: 'border-l-blue-400', digital: 'border-l-violet-400', booth: 'border-l-emerald-400', content: 'border-l-amber-400', operations: 'border-l-rose-400' };
+                const CONTENT_ICONS: Record<string, React.ElementType> = { copy: FileText, email: Mail, workflow: GitBranch };
 
-                <div
-                  ref={mapRef}
-                  className="relative h-[70vh] min-h-[500px] max-h-[900px] overflow-hidden cursor-grab active:cursor-grabbing select-none"
-                  style={{
-                    backgroundImage: `radial-gradient(circle, rgba(139,92,246,0.12) 1px, transparent 1px)`,
-                    backgroundSize: `${24 * zoom}px ${24 * zoom}px`,
-                    backgroundPosition: `${pan.x}px ${pan.y}px`,
-                  }}
-                  onMouseDown={handleMapMouseDown}
-                  onMouseMove={handleMapMouseMove}
-                  onMouseUp={handleMapMouseUp}
-                  onMouseLeave={handleMapMouseUp}
-                >
-                  <div
-                    style={{
-                      transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-                      transformOrigin: '0 0',
-                      width: 1560,
-                      height: 820,
-                      position: 'absolute',
-                    }}
-                  >
-                    {/* Category group zones */}
-                    {[
-                      { label: 'Social',      x: 30,  y: 30,  w: 580, h: 350, color: 'rgba(59,130,246,0.06)',  border: 'rgba(59,130,246,0.25)' },
-                      { label: 'Digital',     x: 640, y: 30,  w: 640, h: 370, color: 'rgba(139,92,246,0.06)', border: 'rgba(139,92,246,0.25)' },
-                      { label: 'Booth',       x: 30,  y: 430, w: 620, h: 350, color: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.25)' },
-                      { label: 'Content',     x: 640, y: 450, w: 640, h: 340, color: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.25)' },
-                      { label: 'Operations',  x: 1320, y: 450, w: 230, h: 200, color: 'rgba(239,68,68,0.06)',  border: 'rgba(239,68,68,0.25)' },
-                    ].map(({ label, x, y, w, h, color, border }) => (
-                      <div
-                        key={label}
-                        style={{ position: 'absolute', left: x, top: y, width: w, height: h, backgroundColor: color, border: `1.5px dashed ${border}`, borderRadius: 16 }}
-                      >
-                        <span style={{ position: 'absolute', top: 10, left: 14, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: border, opacity: 0.9 }}>
-                          {label}
-                        </span>
-                      </div>
-                    ))}
+                const getColSpan = (asset: Asset) => {
+                  if (asset.category === 'content') return 'col-span-2';
+                  const [w, h] = asset.aspectRatio.split('/').map(Number);
+                  if (w && h && w / h >= 2.5) return 'col-span-2';
+                  return 'col-span-1';
+                };
 
-                    {event.assets.map((asset) => {
-                      const pos = asset.mapPosition ?? { x: 50, y: 50 };
-                      const isContent = asset.category === 'content' || asset.category === 'operations';
+                return (
+                  <div className="space-y-10">
+                    {CAT_ORDER.map((cat) => {
+                      const items = event.assets.filter(a => a.category === cat);
+                      if (!items.length) return null;
                       return (
-                        <motion.div
-                          key={asset.id}
-                          data-asset-card
-                          drag
-                          dragMomentum={false}
-                          dragElastic={0}
-                          initial={false}
-                          style={{ x: pos.x, y: pos.y, position: 'absolute' }}
-                          className="w-40 rounded-xl border border-border bg-card shadow-md cursor-pointer hover:shadow-lg hover:z-10 transition-shadow"
-                          onClick={() => setLightboxAsset(asset)}
-                          onMouseDown={(e) => e.stopPropagation()}
-                        >
-                          {isContent ? (
-                            <div className={cn('rounded-t-xl h-10 w-full flex items-center px-3 gap-2', asset.previewColor + '/20')}>
-                              <div className={cn('w-5 h-5 rounded flex items-center justify-center shrink-0', asset.previewColor)}>
-                                <Check className="size-2.5 text-white" />
-                              </div>
-                              <div className="space-y-1 flex-1">
-                                <div className="h-1.5 rounded-full bg-foreground/15 w-full" />
-                                <div className="h-1.5 rounded-full bg-foreground/10 w-3/4" />
-                              </div>
-                            </div>
-                          ) : (
-                            <div className={cn('rounded-t-xl h-10 w-full', asset.previewColor)} />
-                          )}
-                          <div className="p-2">
-                            <p className="text-base font-medium line-clamp-2 leading-tight mb-1">
-                              {asset.title}
-                            </p>
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="text-base text-muted-foreground">{assetTypeLabel(asset.type)}</span>
-                              <AssetStatusBadge status={asset.status} />
-                            </div>
+                        <section key={cat}>
+                          <h3 className="text-base font-semibold mb-4 flex items-center gap-2">
+                            {CAT_LABELS[cat]}
+                            <span className="text-base text-muted-foreground font-normal">{items.length}</span>
+                          </h3>
+                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {items.map((asset, i) => {
+                              const isTextAsset = (asset.category === 'content' || asset.category === 'operations') && !asset.printFile?.thumbnailUrl;
+                              const hasThumb = !!asset.printFile?.thumbnailUrl;
+                              const maxDimIn = asset.physicalSize ? Math.max(asset.physicalSize.w, asset.physicalSize.h) * (asset.physicalSize.unit === 'ft' ? 12 : 1) : null;
+                              const isTiny = maxDimIn !== null && maxDimIn <= 2.5;
+                              const ContentIcon = CONTENT_ICONS[asset.type] ?? FileText;
+                              const [aw, ah] = asset.aspectRatio.split('/').map(Number);
+                              const paddingPct = aw && ah ? `${((ah / aw) * 100).toFixed(2)}%` : '66.67%';
+
+                              return (
+                                <motion.div
+                                  key={asset.id}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.25, delay: i * 0.03 }}
+                                  className={getColSpan(asset)}
+                                >
+                                  <div
+                                    onClick={() => setLightboxAsset(asset)}
+                                    className={cn(
+                                      'group h-full rounded-2xl border border-border bg-card overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all duration-200',
+                                      'border-l-4', CAT_ACCENT[cat],
+                                    )}
+                                  >
+                                    {/* Preview area */}
+                                    {isTiny ? (
+                                      <div className="w-full flex items-center justify-center bg-muted/30" style={{ height: 160 }}>
+                                        {hasThumb
+                                          ? <img src={asset.printFile!.thumbnailUrl!} alt={asset.title} className="object-contain rounded" style={{ maxWidth: '32%', maxHeight: '80%' }} />
+                                          : <div className={cn('rounded', asset.previewColor)} style={{ width: '32%', aspectRatio: asset.aspectRatio }} />
+                                        }
+                                      </div>
+                                    ) : isTextAsset ? (
+                                      <div className="p-4 bg-muted/30 border-b border-border/60">
+                                        <div className={cn('flex items-center justify-center w-7 h-7 rounded-lg mb-3', asset.previewColor)}>
+                                          <ContentIcon className="size-3.5 text-white" />
+                                        </div>
+                                        {asset.notes ? (
+                                          <p className="text-base leading-relaxed line-clamp-6 whitespace-pre-line">{asset.notes}</p>
+                                        ) : (
+                                          <div className="space-y-1.5">
+                                            <div className="h-2 rounded-full bg-foreground/10 w-full" />
+                                            <div className="h-2 rounded-full bg-foreground/10 w-4/5" />
+                                            <div className="h-2 rounded-full bg-foreground/10 w-3/5" />
+                                          </div>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <div className="relative w-full" style={{ paddingBottom: paddingPct }}>
+                                        <div className={cn('absolute inset-0', !hasThumb && asset.previewColor)}>
+                                          {hasThumb && <img src={asset.printFile!.thumbnailUrl!} alt={asset.title} className="absolute inset-0 w-full h-full object-cover" />}
+                                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/10 flex items-center justify-center">
+                                            <span className="text-white text-base font-medium drop-shadow">View</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {/* Footer */}
+                                    <div className="p-3">
+                                      <div className="flex items-start justify-between gap-2">
+                                        <p className="text-base font-medium leading-tight line-clamp-2">{asset.title}</p>
+                                        <AssetStatusBadge status={asset.status} className="shrink-0 mt-0.5" />
+                                      </div>
+                                      <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
+                                        <span className="text-base text-muted-foreground">{assetTypeLabel(asset.type)}</span>
+                                        {asset.physicalSize && (
+                                          <span className="text-base text-muted-foreground">· {asset.physicalSize.w}×{asset.physicalSize.h} {asset.physicalSize.unit}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              );
+                            })}
                           </div>
-                        </motion.div>
+                        </section>
                       );
                     })}
                   </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            {/* Gallery Tab */}
-            <TabsContent value="gallery">
-              <div className="flex items-center gap-2 mb-4 flex-wrap">
-                <Filter className="size-4 text-muted-foreground" />
-                <select
-                  value={galleryTypeFilter}
-                  onChange={(e) => setGalleryTypeFilter(e.target.value as AssetType | '')}
-                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none"
-                >
-                  <option value="">All Types</option>
-                  {assetTypes.map((t) => (
-                    <option key={t} value={t}>{assetTypeLabel(t)}</option>
-                  ))}
-                </select>
-                <select
-                  value={galleryStatusFilter}
-                  onChange={(e) => setGalleryStatusFilter(e.target.value as AssetStatus | '')}
-                  className="h-8 rounded-lg border border-border bg-card px-2.5 text-base text-foreground outline-none"
-                >
-                  <option value="">All Statuses</option>
-                  {assetStatuses.map((s) => (
-                    <option key={s} value={s}>
-                      {s.charAt(0).toUpperCase() + s.slice(1).replace('-', ' ')}
-                    </option>
-                  ))}
-                </select>
-                {(galleryTypeFilter || galleryStatusFilter) && (
-                  <button
-                    onClick={() => { setGalleryTypeFilter(''); setGalleryStatusFilter(''); }}
-                    className="flex items-center gap-1 text-base text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="size-3" />
-                    Clear
-                  </button>
-                )}
-                <span className="text-base text-muted-foreground ml-auto">
-                  {filteredGalleryAssets.length} of {event.assets.length}
-                </span>
-              </div>
-
-              {filteredGalleryAssets.length > 0 ? (() => {
-                const CATEGORY_ORDER = ['social', 'digital', 'booth', 'content', 'operations'] as const;
-                const CATEGORY_LABELS: Record<string, string> = { social: 'Social', digital: 'Digital', booth: 'Booth', content: 'Content', operations: 'Operations' };
-                const categorized = filteredGalleryAssets.filter(a => a.category);
-                const uncategorized = filteredGalleryAssets.filter(a => !a.category);
-                const groups = CATEGORY_ORDER.map(cat => ({ cat, items: categorized.filter(a => a.category === cat) })).filter(g => g.items.length > 0);
-                return (
-                  <div className="space-y-8">
-                    {groups.map(({ cat, items }) => (
-                      <section key={cat}>
-                        <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
-                          {CATEGORY_LABELS[cat]}
-                          <span className="text-base text-muted-foreground font-normal">{items.length}</span>
-                        </h3>
-                        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                          {items.map((asset, i) => (
-                            <div key={asset.id} className="break-inside-avoid">
-                              <AssetCard asset={asset} index={i} onClick={() => setLightboxAsset(asset)} />
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-                    ))}
-                    {uncategorized.length > 0 && (
-                      <section>
-                        <h3 className="text-base font-semibold mb-3">Other</h3>
-                        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                          {uncategorized.map((asset, i) => (
-                            <div key={asset.id} className="break-inside-avoid">
-                              <AssetCard asset={asset} index={i} onClick={() => setLightboxAsset(asset)} />
-                            </div>
-                          ))}
-                        </div>
-                      </section>
-                    )}
-                  </div>
                 );
-              })() : (
-                <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <p className="text-muted-foreground text-base">No assets match the selected filters.</p>
-                  <button
-                    onClick={() => { setGalleryTypeFilter(''); setGalleryStatusFilter(''); }}
-                    className="mt-3 text-base text-violet-600 dark:text-violet-400 hover:underline"
-                  >
-                    Clear filters
-                  </button>
-                </div>
-              )}
+              })()}
             </TabsContent>
 
             {/* Timeline Tab */}
