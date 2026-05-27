@@ -279,13 +279,6 @@ export function EventDetailClient({ id }: { id: string }) {
                 const CAT_ACCENT: Record<string, string> = { social: 'border-l-blue-400', digital: 'border-l-violet-400', booth: 'border-l-emerald-400', content: 'border-l-amber-400', operations: 'border-l-rose-400' };
                 const CONTENT_ICONS: Record<string, React.ElementType> = { copy: FileText, email: Mail, workflow: GitBranch };
 
-                const getColSpan = (asset: Asset) => {
-                  if (asset.category === 'content') return 'col-span-2';
-                  const [w, h] = asset.aspectRatio.split('/').map(Number);
-                  if (w && h && w / h >= 2.5) return 'col-span-2';
-                  return 'col-span-1';
-                };
-
                 return (
                   <div className="space-y-10">
                     {CAT_ORDER.map((cat) => {
@@ -297,7 +290,7 @@ export function EventDetailClient({ id }: { id: string }) {
                             {CAT_LABELS[cat]}
                             <span className="text-base text-muted-foreground font-normal">{items.length}</span>
                           </h3>
-                          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                          <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
                             {items.map((asset, i) => {
                               const isTextAsset = (asset.category === 'content' || asset.category === 'operations') && !asset.printFile?.thumbnailUrl;
                               const hasThumb = !!asset.printFile?.thumbnailUrl;
@@ -313,7 +306,7 @@ export function EventDetailClient({ id }: { id: string }) {
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
                                   transition={{ duration: 0.25, delay: i * 0.03 }}
-                                  className={getColSpan(asset)}
+                                  className="break-inside-avoid mb-4"
                                 >
                                   <div
                                     onClick={() => setLightboxAsset(asset)}
