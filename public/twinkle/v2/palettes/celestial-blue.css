@@ -1,0 +1,36 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Celestial Blue
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --blue-ncs:        #1d90c2;
+    --celestial-blue:  #20a0d6;
+    --rich-black-teal: #000b0f;
+    --gunmetal-teal:   #002230;
+    --paynes-gray:     #576f80;
+    --powder-blue:     #abbacc;
+    --platinum-teal:   #d5e0e3;
+    --alice-blue:      #edf4f7;
+    --antiflash-white: #f5fbfc;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--blue-ncs);
+    --tw-color-2: var(--celestial-blue);
+    --tw-color-3: var(--rich-black-teal);
+    --tw-color-4: var(--gunmetal-teal);
+    --tw-color-5: var(--paynes-gray);
+    --tw-color-6: var(--powder-blue);
+    --tw-color-7: var(--platinum-teal);
+    --tw-color-8: var(--alice-blue);
+    --tw-color-9: var(--antiflash-white);
+
+    /* Dark HSL for color-3: #000b0f → 196deg 100% 3% */
+    --tw-color-dark-hsl: 196deg 100% 3%;
+}
+
+} /* end @layer themes */

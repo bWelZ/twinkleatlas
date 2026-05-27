@@ -139,15 +139,90 @@ export function deadlineTypeBg(type: string): string {
   }
 }
 
-// Company colors
-export function companyColor(company: string): string {
-  const map: Record<string, string> = {
-    'WELS': 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300',
-    'BWELZ': 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-    'PreK.Club': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-    'Bluejeanware': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-    'Partner Hub': 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300',
-    'ZipData': 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200',
-  };
-  return map[company] ?? 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300';
+// Company hex colors — keyed to Twinkle DS palettes
+const COMPANY_HEX: Record<string, string> = {
+  'WELS':           '#971adb',  // Violet palette
+  'PreK.Club':      '#1dc386',  // Mint palette
+  'WELS / Zipdata': '#4fcab2',  // Turquoise palette
+  'Zipdata':        '#1d90c2',  // Celestial Blue palette
+  'PartnerHub':     '#e11474',  // Pink palette
+  'Bluejeanware':   '#1f35ff',  // Blue palette
+  'BWELZ':          '#c5761b',  // Ochre palette
+};
+
+export function companyHex(company: string): string {
+  return COMPANY_HEX[company] ?? '#64748b';
+}
+
+const COMPANY_RAINBOW: Record<string, string> = {
+  'PreK.Club':      'var(--caribbean-green-regular, #40eab7)',
+  'WELS':           'var(--pink-flamingo-regular, #e46af3)',
+  'WELS / Zipdata': 'var(--turquoise-blue-regular, #28dcf7)',
+  'Zipdata':        'var(--picton-blue-regular, #2cc5ff)',
+  'PartnerHub':     'var(--brilliant-rose-regular, #fc7ac0)',
+  'Bluejeanware':   'var(--cornflower-blue-regular, #89a2fd)',
+  'BWELZ':          'var(--sea-buckthorn-regular, #ffab35)',
+};
+
+export function companyRainbow(company: string): string {
+  return COMPANY_RAINBOW[company] ?? 'var(--persimmon-regular, #ff6e5d)';
+}
+
+type CompanyRainbowPalette = {
+  light: string;
+  regular: string;
+  dark: string;
+};
+
+const COMPANY_RAINBOW_PALETTE: Record<string, CompanyRainbowPalette> = {
+  'PreK.Club': {
+    light: 'var(--caribbean-green-light, #b6f9de)',
+    regular: 'var(--caribbean-green-regular, #40eab7)',
+    dark: 'var(--caribbean-green-dark, #04291d)',
+  },
+  'WELS': {
+    light: 'var(--pink-flamingo-light, #f5d0f9)',
+    regular: 'var(--pink-flamingo-regular, #e46af3)',
+    dark: 'var(--pink-flamingo-dark, #301333)',
+  },
+  'WELS / Zipdata': {
+    light: 'var(--turquoise-blue-light, #bff2fc)',
+    regular: 'var(--turquoise-blue-regular, #28dcf7)',
+    dark: 'var(--turquoise-blue-dark, #0b272c)',
+  },
+  'Zipdata': {
+    light: 'var(--picton-blue-light, #c6ebfe)',
+    regular: 'var(--picton-blue-regular, #2cc5ff)',
+    dark: 'var(--picton-blue-dark, #07232f)',
+  },
+  'PartnerHub': {
+    light: 'var(--brilliant-rose-light, #ffd3e7)',
+    regular: 'var(--brilliant-rose-regular, #fc7ac0)',
+    dark: 'var(--brilliant-rose-dark, #3a0826)',
+  },
+  'Bluejeanware': {
+    light: 'var(--cornflower-blue-light, #d6e0ff)',
+    regular: 'var(--cornflower-blue-regular, #89a2fd)',
+    dark: 'var(--cornflower-blue-dark, #171d32)',
+  },
+  'BWELZ': {
+    light: 'var(--sea-buckthorn-light, #fbe4ca)',
+    regular: 'var(--sea-buckthorn-regular, #ffab35)',
+    dark: 'var(--sea-buckthorn-dark, #2c1b05)',
+  },
+};
+
+const DEFAULT_COMPANY_RAINBOW_PALETTE: CompanyRainbowPalette = {
+  light: 'var(--persimmon-light, #ffdfda)',
+  regular: 'var(--persimmon-regular, #ff6e5d)',
+  dark: 'var(--persimmon-dark, #3b0604)',
+};
+
+export function companyRainbowPalette(company: string): CompanyRainbowPalette {
+  return COMPANY_RAINBOW_PALETTE[company] ?? DEFAULT_COMPANY_RAINBOW_PALETTE;
+}
+
+// Keep for backward compat — callers should pair with style={{ backgroundColor: companyHex() }}
+export function companyColor(_company: string): string {
+  return 'text-white';
 }

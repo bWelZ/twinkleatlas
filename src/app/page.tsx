@@ -88,9 +88,6 @@ export default function DashboardPage() {
           className="py-10 sm:py-14"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 shadow-md">
-              <Sparkles className="size-5 text-white" />
-            </div>
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Twinkle Atlas</h1>
               <p className="text-muted-foreground text-base mt-0.5">
@@ -230,7 +227,7 @@ export default function DashboardPage() {
 
         {/* Event Grid */}
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filtered.map((event, i) => (
               <EventCard key={event.id} event={event} index={i} />
             ))}

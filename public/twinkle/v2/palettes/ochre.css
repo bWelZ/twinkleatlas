@@ -1,0 +1,36 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Ochre
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --ochre:        #c5761b;
+    --fulvous:      #d7811e;
+    --smoky-black:  #0f0800;
+    --bistre:       #2e1900;
+    --coyote:       #867251;
+    --dun:          #d0c8a9;
+    --timberwolf:   #e4dad2;
+    --isabelline:   #f2eee9;
+    --isabelline-2: #fcf7f3;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--ochre);
+    --tw-color-2: var(--fulvous);
+    --tw-color-3: var(--smoky-black);
+    --tw-color-4: var(--bistre);
+    --tw-color-5: var(--coyote);
+    --tw-color-6: var(--dun);
+    --tw-color-7: var(--timberwolf);
+    --tw-color-8: var(--isabelline);
+    --tw-color-9: var(--isabelline-2);
+
+    /* Dark HSL for color-3: #0f0800 → 32deg 100% 3% */
+    --tw-color-dark-hsl: 32deg 100% 3%;
+}
+
+} /* end @layer themes */

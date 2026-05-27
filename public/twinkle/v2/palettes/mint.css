@@ -1,0 +1,36 @@
+/* ============================================================
+   Twinkle Design System — v2
+   Palette: Mint
+   ============================================================ */
+
+@layer themes {
+
+:root {
+    /* Named colors */
+    --mint:         #1dc386;
+    --emerald:      #20d593;
+    --night:        #00100a;
+    --dark-green:   #00311f;
+    --hookers-green: #567f74;
+    --ash-gray:     #acccc9;
+    --mint-cream:   #d5e3dd;
+    --mint-cream-2: #edf7f4;
+    --mint-cream-3: #f5fcf9;
+
+    /* Color scale */
+    --tw-color-0: #ffffff;
+    --tw-color-1: var(--mint);
+    --tw-color-2: var(--emerald);
+    --tw-color-3: var(--night);
+    --tw-color-4: var(--dark-green);
+    --tw-color-5: var(--hookers-green);
+    --tw-color-6: var(--ash-gray);
+    --tw-color-7: var(--mint-cream);
+    --tw-color-8: var(--mint-cream-2);
+    --tw-color-9: var(--mint-cream-3);
+
+    /* Dark HSL for color-3: #00100a → 158deg 100% 3% */
+    --tw-color-dark-hsl: 158deg 100% 3%;
+}
+
+} /* end @layer themes */

@@ -15,12 +15,69 @@ import { CommandPalette } from '@/components/CommandPalette';
 import { AssetLightbox } from '@/components/AssetLightbox';
 import { EventStatusBadge, AssetStatusBadge } from '@/components/StatusBadge';
 import { getEventById } from '@/lib/data';
-import type { Asset } from '@/lib/types';
+import type { Asset, EventContact } from '@/lib/types';
 import {
-  cn, formatDate, formatDateShort, companyColor, assetTypeLabel,
+  cn, formatDate, formatDateShort, companyRainbowPalette, assetTypeLabel,
   deadlineTypeColor, deadlineTypeBg
 } from '@/lib/utils';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+
+type TabId = 'overview' | 'content' | 'assets' | 'operations' | 'timeline';
+
+function ContactRow({ c }: { c: EventContact }) {
+  const hasDetails = !!(c.role || c.email || c.phone || c.website);
+  return (
+    <div className={cn('flex gap-3', hasDetails ? 'items-start' : 'items-center')}>
+      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white text-base font-bold shrink-0">
+        {c.name[0]}
+      </div>
+      <div className="min-w-0">
+        <p className="text-base font-medium">{c.name}</p>
+        {c.role && <p className="text-base text-muted-foreground leading-tight">{c.role}</p>}
+        {c.email && (
+          <a href={`mailto:${c.email}`} className="text-base text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 mt-1">
+            <Mail className="size-3" />{c.email}
+          </a>
+        )}
+        {c.phone && (
+          <a href={`tel:${c.phone}`} className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
+            <Phone className="size-3" />{c.phone}
+          </a>
+        )}
+        {c.website && (
+          <a href={`https://${c.website}`} target="_blank" rel="noopener noreferrer" className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
+            <Globe className="size-3" />{c.website}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ContactsCard({ contacts }: { contacts: EventContact[] }) {
+  if (!contacts.length) return null;
+  const groups = Array.from(new Set(contacts.map(c => c.group ?? ''))).filter(Boolean);
+  const ungrouped = contacts.filter(c => !c.group);
+  return (
+    <div className="rounded-2xl border border-border bg-card p-6">
+      <h3 className="font-semibold text-base mb-4">Contacts</h3>
+      <div className="space-y-5">
+        {groups.map(group => (
+          <div key={group}>
+            <p className="text-base font-semibold text-muted-foreground uppercase tracking-wide mb-3">{group}</p>
+            <div className="space-y-4">
+              {contacts.filter(c => c.group === group).map(c => <ContactRow key={c.name} c={c} />)}
+            </div>
+          </div>
+        ))}
+        {ungrouped.length > 0 && (
+          <div className="space-y-4">
+            {ungrouped.map(c => <ContactRow key={c.name} c={c} />)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 const DEADLINE_ICONS: Record<string, React.ElementType> = {
   design: Pencil,
@@ -43,12 +100,11 @@ const CAT_ORDER = ['social', 'digital', 'booth'] as const;
 const CAT_LABELS: Record<string, string> = { social: 'Social', digital: 'Digital', booth: 'Booth & Print' };
 const CAT_ACCENT: Record<string, string> = { social: 'border-l-blue-400', digital: 'border-l-violet-400', booth: 'border-l-emerald-400' };
 
-const TAB = 'flex-none text-base font-semibold px-5 pb-3 pt-1 h-auto rounded-none bg-transparent border-b-[3px] border-transparent -mb-[2px] data-active:border-violet-500 data-active:text-foreground data-active:bg-transparent data-active:shadow-none after:hidden text-muted-foreground hover:text-foreground transition-colors gap-2';
-
 export function EventDetailClient({ id }: { id: string }) {
   const event = getEventById(id);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [lightboxAsset, setLightboxAsset] = useState<Asset | null>(null);
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
 
   if (!event) {
     return (
@@ -73,6 +129,7 @@ export function EventDetailClient({ id }: { id: string }) {
     deadlinesByMonth[key].push(dl);
   }
   const doneCount = event.deadlines.filter((d) => d.done).length;
+  const heroColor = companyRainbowPalette(event.company);
 
   // Priority counts from backlog
   const highCount    = event.backlog?.filter(b => b.priority === 'high').length ?? 0;
@@ -95,60 +152,6 @@ export function EventDetailClient({ id }: { id: string }) {
   const findBacklogItem = (asset: Asset) =>
     event.backlog?.find(b => b.title === asset.title) ?? null;
 
-  // Contacts renderer (reused in overview)
-  const ContactsCard = () => {
-    if (!event.contacts.length) return null;
-    const groups = Array.from(new Set(event.contacts.map(c => c.group ?? ''))).filter(Boolean);
-    const ungrouped = event.contacts.filter(c => !c.group);
-    const hasDetails = (c: typeof event.contacts[0]) => !!(c.role || c.email || c.phone || c.website);
-    const ContactRow = ({ c }: { c: typeof event.contacts[0] }) => (
-      <div className={cn('flex gap-3', hasDetails(c) ? 'items-start' : 'items-center')}>
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center text-white text-base font-bold shrink-0">
-          {c.name[0]}
-        </div>
-        <div className="min-w-0">
-          <p className="text-base font-medium">{c.name}</p>
-          {c.role && <p className="text-base text-muted-foreground leading-tight">{c.role}</p>}
-          {c.email && (
-            <a href={`mailto:${c.email}`} className="text-base text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 mt-1">
-              <Mail className="size-3" />{c.email}
-            </a>
-          )}
-          {c.phone && (
-            <a href={`tel:${c.phone}`} className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
-              <Phone className="size-3" />{c.phone}
-            </a>
-          )}
-          {c.website && (
-            <a href={`https://${c.website}`} target="_blank" rel="noopener noreferrer" className="text-base text-muted-foreground hover:text-foreground flex items-center gap-1 mt-0.5">
-              <Globe className="size-3" />{c.website}
-            </a>
-          )}
-        </div>
-      </div>
-    );
-    return (
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h3 className="font-semibold text-base mb-4">Contacts</h3>
-        <div className="space-y-5">
-          {groups.map(group => (
-            <div key={group}>
-              <p className="text-base font-semibold text-muted-foreground uppercase tracking-wide mb-3">{group}</p>
-              <div className="space-y-4">
-                {event.contacts.filter(c => c.group === group).map(c => <ContactRow key={c.name} c={c} />)}
-              </div>
-            </div>
-          ))}
-          {ungrouped.length > 0 && (
-            <div className="space-y-4">
-              {ungrouped.map(c => <ContactRow key={c.name} c={c} />)}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <>
       <Navigation onOpenCommandPalette={() => setCmdOpen(true)} />
@@ -162,25 +165,37 @@ export function EventDetailClient({ id }: { id: string }) {
       />
 
       {/* Hero */}
-      <div className={cn('bg-gradient-to-r relative', event.coverGradient)}>
-        <div className="absolute inset-0 bg-black/25" />
+      <div className="relative" style={{ backgroundColor: heroColor.light, color: heroColor.dark }}>
         <div className="relative px-4 sm:px-6 lg:px-10 xl:px-14 py-10">
-          <div className="flex items-center gap-1.5 text-white/70 text-base mb-4">
-            <Link href="/" className="hover:text-white transition-colors">Dashboard</Link>
+          <div className="flex items-center gap-1.5 text-base mb-4" style={{ color: `color-mix(in srgb, ${heroColor.dark} 70%, transparent)` }}>
+            <Link href="/" className="transition-colors" style={{ color: `color-mix(in srgb, ${heroColor.dark} 70%, transparent)` }}>Dashboard</Link>
             <ChevronRight className="size-3" />
-            <span className="text-white">{event.title}</span>
+            <span style={{ color: heroColor.dark }}>{event.title}</span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
-                <EventStatusBadge status={event.status} className="bg-white/20 text-white" />
-                <span className={cn('text-base font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
+                <EventStatusBadge
+                  status={event.status}
+                  className="border-0 px-2.5 py-0.5 text-base"
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${heroColor.regular} 35%, transparent)`,
+                    color: heroColor.dark,
+                  }}
+                />
+                <span
+                  className="text-base font-medium rounded-full px-2.5 py-0.5"
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${heroColor.regular} 45%, transparent)`,
+                    color: heroColor.dark,
+                  }}
+                >
                   {event.company}
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white leading-tight mb-2">{event.title}</h1>
-              <p className="text-white/80 text-base mb-4">{event.organization}</p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-white/90">
+              <h1 className="text-2xl sm:text-3xl font-bold leading-tight mb-2" style={{ color: heroColor.dark }}>{event.title}</h1>
+              <p className="text-base mb-4" style={{ color: `color-mix(in srgb, ${heroColor.dark} 78%, transparent)` }}>{event.organization}</p>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-base" style={{ color: `color-mix(in srgb, ${heroColor.dark} 88%, transparent)` }}>
                 <div className="flex items-center gap-1.5"><MapPin className="size-3.5 shrink-0" /><span>{event.location}</span></div>
                 <div className="flex items-center gap-1.5">
                   <Calendar className="size-3.5 shrink-0" />
@@ -190,19 +205,22 @@ export function EventDetailClient({ id }: { id: string }) {
                 {event.presence && <div className="flex items-center gap-1.5"><Building2 className="size-3.5 shrink-0" /><span>{event.presence}</span></div>}
               </div>
             </div>
-            <div className="flex items-center gap-4 bg-white/15 rounded-2xl px-5 py-4 backdrop-blur-sm">
+            <div
+              className="flex items-center gap-4 rounded-2xl px-5 py-4 backdrop-blur-sm"
+              style={{ backgroundColor: `color-mix(in srgb, ${heroColor.regular} 28%, white)` }}
+            >
               <div className="relative w-16 h-16">
                 <svg viewBox="0 0 64 64" className="w-full h-full -rotate-90">
-                  <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="6" />
-                  <circle cx="32" cy="32" r="28" fill="none" stroke="white" strokeWidth="6"
+                  <circle cx="32" cy="32" r="28" fill="none" stroke={heroColor.light} strokeWidth="6" />
+                  <circle cx="32" cy="32" r="28" fill="none" stroke={heroColor.regular} strokeWidth="6"
                     strokeLinecap="round" strokeDasharray={`${event.progress * 1.759} 175.9`} />
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-white font-bold text-base">{event.progress}%</span>
+                <span className="absolute inset-0 flex items-center justify-center font-bold text-base" style={{ color: heroColor.dark }}>{event.progress}%</span>
               </div>
-              <div className="text-white">
+              <div style={{ color: heroColor.dark }}>
                 <p className="font-semibold text-base">Progress</p>
-                <p className="text-white/70 text-base mt-0.5">{event.assets.length} assets</p>
-                <p className="text-white/70 text-base">{doneCount}/{event.deadlines.length} milestones</p>
+                <p className="text-base mt-0.5" style={{ color: `color-mix(in srgb, ${heroColor.dark} 72%, transparent)` }}>{event.assets.length} assets</p>
+                <p className="text-base" style={{ color: `color-mix(in srgb, ${heroColor.dark} 72%, transparent)` }}>{doneCount}/{event.deadlines.length} milestones</p>
               </div>
             </div>
           </div>
@@ -210,20 +228,35 @@ export function EventDetailClient({ id }: { id: string }) {
       </div>
 
       {/* Tabs — full width */}
-      <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-14 py-8">
-        <Tabs defaultValue="overview">
-          <TabsList variant="line" className="mb-8 w-fit border-b-2 border-border rounded-none bg-transparent p-0 h-auto gap-0">
-            <TabsTrigger value="overview"    className={TAB}><LayoutGrid   className="size-3.5" />Overview</TabsTrigger>
-            <TabsTrigger value="content"     className={TAB}><MessageSquare className="size-3.5" />Content</TabsTrigger>
-            <TabsTrigger value="assets"      className={TAB}><ListChecks   className="size-3.5" />Assets</TabsTrigger>
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-14 pt-6 pb-8">
+
+        {/* Twinkle DS tab bar */}
+        <div className="tw-tabs-wrapper" role="tablist">
+          <div className="tw-tabs-scroll">
+            <button role="tab" aria-selected={activeTab === 'overview'} aria-controls="ea-overview" onClick={() => setActiveTab('overview')}>
+              <LayoutGrid className="size-3.5" /> Overview
+            </button>
+            <button role="tab" aria-selected={activeTab === 'content'} aria-controls="ea-content" onClick={() => setActiveTab('content')}>
+              <MessageSquare className="size-3.5" /> Content
+            </button>
+            <button role="tab" aria-selected={activeTab === 'assets'} aria-controls="ea-assets" onClick={() => setActiveTab('assets')}>
+              <ListChecks className="size-3.5" /> Assets
+            </button>
             {workflowAssets.length > 0 && (
-              <TabsTrigger value="operations" className={TAB}><Activity     className="size-3.5" />Operations</TabsTrigger>
+              <button role="tab" aria-selected={activeTab === 'operations'} aria-controls="ea-operations" onClick={() => setActiveTab('operations')}>
+                <Activity className="size-3.5" /> Operations
+              </button>
             )}
-            <TabsTrigger value="timeline"    className={TAB}><Clock        className="size-3.5" />Timeline</TabsTrigger>
-          </TabsList>
+            <button role="tab" aria-selected={activeTab === 'timeline'} aria-controls="ea-timeline" onClick={() => setActiveTab('timeline')}>
+              <Clock className="size-3.5" /> Timeline
+            </button>
+          </div>
+        </div>
+
+        <div className="tw-tab-panels mt-8">
 
           {/* ─── OVERVIEW ─────────────────────────────────────────── */}
-          <TabsContent value="overview">
+          <div className="tw-tab-panel" role="tabpanel" id="ea-overview" hidden={activeTab !== 'overview'}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left — main content */}
               <div className="lg:col-span-2 space-y-6">
@@ -323,7 +356,7 @@ export function EventDetailClient({ id }: { id: string }) {
                   <div className="rounded-2xl border border-border bg-card p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <ListChecks className="size-4 text-violet-500" />
-                      <h3 className="font-semibold text-base">What's Included</h3>
+                      <h3 className="font-semibold text-base">What&apos;s Included</h3>
                       <span className="text-base text-muted-foreground">{event.assets.length} assets</span>
                     </div>
                     <div className="space-y-5">
@@ -369,7 +402,7 @@ export function EventDetailClient({ id }: { id: string }) {
                   </div>
                 )}
 
-                <ContactsCard />
+                <ContactsCard contacts={event.contacts} />
 
                 {event.links.length > 0 && (
                   <div className="rounded-2xl border border-border bg-card p-6">
@@ -389,10 +422,10 @@ export function EventDetailClient({ id }: { id: string }) {
                 )}
               </div>
             </div>
-          </TabsContent>
+          </div>{/* end ea-overview */}
 
           {/* ─── CONTENT ──────────────────────────────────────────── */}
-          <TabsContent value="content">
+          <div className="tw-tab-panel" role="tabpanel" id="ea-content" hidden={activeTab !== 'content'}>
             {contentAssets.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <MessageSquare className="size-10 text-muted-foreground/30 mb-3" />
@@ -408,7 +441,7 @@ export function EventDetailClient({ id }: { id: string }) {
                   return (
                     <section>
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Messages & Copy</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-4 w-full">
                         {copyItems.map((asset, i) => (
                           <motion.div key={asset.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
                             <div
@@ -447,7 +480,7 @@ export function EventDetailClient({ id }: { id: string }) {
                   return (
                     <section>
                       <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Strategic Resources — QR & Tracking</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="space-y-4 w-full">
                         {qrItems.map((asset, i) => (
                           <motion.div key={asset.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
                             <div
@@ -482,10 +515,10 @@ export function EventDetailClient({ id }: { id: string }) {
                 })()}
               </div>
             )}
-          </TabsContent>
+          </div>{/* end ea-content */}
 
           {/* ─── ASSETS ───────────────────────────────────────────── */}
-          <TabsContent value="assets">
+          <div className="tw-tab-panel" role="tabpanel" id="ea-assets" hidden={activeTab !== 'assets'}>
             {visualAssets.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <ListChecks className="size-10 text-muted-foreground/30 mb-3" />
@@ -642,11 +675,11 @@ export function EventDetailClient({ id }: { id: string }) {
                 })()}
               </div>
             )}
-          </TabsContent>
+          </div>{/* end ea-assets */}
 
           {/* ─── OPERATIONS ───────────────────────────────────────── */}
           {workflowAssets.length > 0 && (
-            <TabsContent value="operations">
+            <div className="tw-tab-panel" role="tabpanel" id="ea-operations" hidden={activeTab !== 'operations'}>
               <div className="space-y-8">
                 {workflowAssets.map((asset, ai) => {
                   const notes = asset.notes ?? '';
@@ -740,11 +773,11 @@ export function EventDetailClient({ id }: { id: string }) {
                   );
                 })}
               </div>
-            </TabsContent>
-          )}
+            </div>
+          )}{/* end ea-operations */}
 
           {/* ─── TIMELINE ─────────────────────────────────────────── */}
-          <TabsContent value="timeline">
+          <div className="tw-tab-panel" role="tabpanel" id="ea-timeline" hidden={activeTab !== 'timeline'}>
             {event.deadlines.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <Clock className="size-10 text-muted-foreground/30 mb-3" />
@@ -797,8 +830,8 @@ export function EventDetailClient({ id }: { id: string }) {
                 </div>
               ))
             )}
-          </TabsContent>
-        </Tabs>
+          </div>{/* end ea-timeline */}
+        </div>{/* end tw-tab-panels */}
       </div>
     </>
   );

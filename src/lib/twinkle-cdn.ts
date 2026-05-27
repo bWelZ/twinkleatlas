@@ -22,6 +22,8 @@
 // ── CDN meta ────────────────────────────────────────────────────────────────
 export const TWINKLE_VERSION = 'v2.1.0'
 export const TWINKLE_CDN_BASE = 'https://tds.bwelz.org'
+export const TWINKLE_COLOR_RAINBOW_HEX_CSS =
+  'https://tds.bwelz.org/twinkle-colors/twinkle-color-rainbow-hex.css?Expires=1937142021&Signature=gEJH8oYfXRYvyko6CeXA-0G7Hvk56BiTSXrns5pkDRepy7adJhsLp9iiVc29SG7rWMci1M6ilhvSe8-3PiAwGa7EB~dsgwPfbgPFtrBrMdYE6SqICln~YaLwJACKfyyMAmE78pjuQnobrxJ5vvG55yOiSp0V0Mi9QiODgYvIpUnYFdqu3xf18he5-Bl8GPHfa06FTNPX4GsjfsCpTqbS6mv98fJL8BUo7R9pm5qvpFt0B1XUTw1TSP9eAUpSqECihmoeZ2SjUYqZb2Bsp40DwWLknJTqi5q4axFuoj6lyNH3S1az51TlqN-JqOS3Bppo2gjO-Vz9mk5mWK9fxoQAeA__&Key-Pair-Id=K1PPZDIOWN47R1'
 
 // ── Foundation files (self-hosted, CDN-ready) ────────────────────────────────
 // Loaded via @import in globals.css — order matters for cascade.
@@ -121,7 +123,7 @@ export const TWINKLE_COMPONENTS = {
   navigation: {
     version: 'v2.0.1',
     expires: '2031-05-21',
-    css: 'https://tds.bwelz.org/v2/components/navigation/v2.0.1/dist/navigation.min.css?Expires=1937135180&Signature=QuWRWuSZbsJOas-S335DF85oYy2oR~QGbx8j8Ljs-VUYC5fI~LM54-r2r0uFhlG1Z~TjusuOsDsPL6FodbsPOKwLVLr74EvsxJixlaaY~ck5VKuNueUI8u-8OcedjYX4kTWB8-L849cf~b39KDg~XQffxdl8hbRELh8nPO9LjIz6LaDFaq975rcnNP1jlX1zHLka8mLHKau09U7BXs55zNnXbHE5dNabQHvcOALRTO4vqjLGLRFjymbSnH6yU7htBgAd6umW7vZJO2Qh29t-Z~Sq2Ru-2m4jDpPsfWH8Ifu7PcgaTPe12SOPPmxPtwOelTiNBIunSX8HSQB6abVXiKg__&Key-Pair-Id=K1PPZDIOWN47R1',
+    css: 'https://tds.bwelz.org/v2/components/navigation/v2.0.1/dist/navigation.min.css?Expires=1937135180&Signature=QuWRWuSZbsJOas-S335DF85oYy2oR~QGbx8j8Ljs-VUYC5fI~LM54-r2r0uFhlG1Z~TjusuODsPL6FodbsPOKwLVLr74EvsxJixlaaY~ck5VKuNueUI8u-8OcedjYX4kTWB8-L849cf~b39KDg~XQffxdl8hbRELh8nPO9LjIz6LaDFaq975rcnNP1jlX1zHLka8mLHKau09U7BXs55zNnXbHE5dNabQHvcOALRTO4vqjLGLRFjymbSnH6yU7htBgAd6umW7vZJO2Qh29t-Z~Sq2Ru-2m4jDpPsfWH8Ifu7PcgaTPe12SOPPmxPtwOelTiNBIunSX8HSQB6abVXiKg__&Key-Pair-Id=K1PPZDIOWN47R1',
     js:  'https://tds.bwelz.org/v2/components/navigation/v2.0.1/dist/nav.js?Expires=1937135180&Signature=RZuFgcvcVCQys9GR5AQTlQ3-NdjbzFZfwd4tTS44SiudhFZJq68~GUzN1d7n2MhU9EoKPI9~1myUOdtQsMVNcJ8aNRqsKRRAs7tB307nXlB2tfSx3Gi9mZiT-WaZKh3tmpuJBlzekXCHtIF5~~k8HJ3~IyE7yPRM8kcNaO89gqsIowsQ-g9U~DrZK5y7diN5sgzJimb7Hl-Xx6rm33gO2Jqa2T0Oh5r1hIpgzHOXzUnRYmucGWLeFC3dZfAMnEuabQlBddZTRIN1FsoDGl4wJxyK~eFOyA9XwukFb47GSaKs9UfKUL~eveQWu21ibzzEQhxmfmf2WJMUcWYPRaB4JQ__&Key-Pair-Id=K1PPZDIOWN47R1',
   },
   /** Controls — Segmented Control pill track (v2.0.0, 8 KB, pure CSS) */

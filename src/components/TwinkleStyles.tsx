@@ -1,3 +1,5 @@
+import { TWINKLE_COLOR_RAINBOW_HEX_CSS, TWINKLE_COMPONENTS } from '@/lib/twinkle-cdn';
+
 /**
  * TwinkleStyles — Twinkle DS foundation loader
  *
@@ -11,9 +13,6 @@
  * typography.css is intentionally excluded (it has element selectors
  * that would fight Tailwind's base layer). Font hierarchy lives in
  * globals.css @layer base instead.
- *
- * To add a Twinkle component bundle, import TWINKLE_COMPONENTS from
- * src/lib/twinkle-cdn.ts and add a <link> tag below.
  */
 export function TwinkleStyles() {
   return (
@@ -24,7 +23,18 @@ export function TwinkleStyles() {
       <link rel="stylesheet" href="/twinkle/v2/tokens/semantic.css" />
       {/* Status colors: error, warning, success, info */}
       <link rel="stylesheet" href="/twinkle/v2/tokens/status.css" />
-      {/* WELS Palatinate Blue palette (#1f35ff scale) */}
+      {/* Rainbow palettes — loaded BEFORE blue so named vars (--mint, --dark-violet…)
+          are available but the --tw-color-* scale is restored by blue below */}
+      <link rel="stylesheet" href="/twinkle/v2/palettes/mint.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/violet.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/ochre.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/turquoise.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/pink.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/celestial-blue.css" />
+      <link rel="stylesheet" href="/twinkle/v2/palettes/red-violet.css" />
+      {/* Rainbow hex tokens: --persimmon-regular, --caribbean-green-regular, etc. */}
+      <link rel="stylesheet" href={TWINKLE_COLOR_RAINBOW_HEX_CSS} />
+      {/* WELS Palatinate Blue palette — restores --tw-color-* scale as the active brand */}
       <link rel="stylesheet" href="/twinkle/v2/palettes/blue.css" />
       {/* WELS brand overrides (structure ready, no changes needed today) */}
       <link rel="stylesheet" href="/twinkle/v2/brands/wels.css" />
@@ -32,6 +42,8 @@ export function TwinkleStyles() {
       <link rel="stylesheet" href="/twinkle/v2/utilities/utilities.css" />
       {/* Twinkle Icons v2.0.1 — icon font, font files served from CDN */}
       <link rel="stylesheet" href="/twinkle/icons/v2.0.0/twinkle-icons.css" />
+      {/* Navigation component: Tabs, Breadcrumb, Pagination (v2.0.1) */}
+      <link rel="stylesheet" href={TWINKLE_COMPONENTS.navigation.css} />
     </>
   )
 }

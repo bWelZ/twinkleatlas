@@ -5,7 +5,7 @@ import { MapPin, Calendar, Package } from 'lucide-react';
 import Link from 'next/link';
 import type { Event } from '@/lib/types';
 import { EventStatusBadge } from '@/components/StatusBadge';
-import { formatDateShort, daysUntil, companyColor, cn } from '@/lib/utils';
+import { formatDateShort, daysUntil, companyRainbowPalette, cn } from '@/lib/utils';
 
 interface EventCardProps {
   event: Event;
@@ -13,6 +13,8 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, index = 0 }: EventCardProps) {
+  const companyColor = companyRainbowPalette(event.company);
+
   const nextDeadline = event.deadlines
     .filter((d) => !d.done)
     .sort((a, b) => a.date.localeCompare(b.date))[0];
@@ -29,33 +31,45 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
       <Link href={`/events/${event.id}`} className="block group">
         <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden transition-shadow duration-200 group-hover:shadow-md">
           {/* Gradient header */}
-          <div className={cn('bg-gradient-to-r h-24 relative', event.coverGradient)}>
-            <div className="absolute inset-0 bg-black/10" />
-            <div className="relative p-4 h-full flex flex-col justify-between">
-              <div className="flex items-start justify-between gap-2">
-                <EventStatusBadge status={event.status} className="bg-white/20 text-white border-0" />
-                <span className={cn('text-base font-medium rounded-full px-2 py-0.5', companyColor(event.company))}>
+          <div className="h-32 relative" style={{ backgroundColor: companyColor.light }}>
+            <div className="relative p-5 sm:p-6 h-full flex flex-col gap-5">
+              <div className="flex items-center justify-between gap-4">
+                <EventStatusBadge
+                  status={event.status}
+                  className="border-0 px-3 py-1 text-base"
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${companyColor.regular} 35%, transparent)`,
+                    color: companyColor.dark,
+                  }}
+                />
+                <span
+                  className="shrink-0 text-base font-medium rounded-full px-3 py-1"
+                  style={{
+                    backgroundColor: `color-mix(in srgb, ${companyColor.regular} 45%, transparent)`,
+                    color: companyColor.dark,
+                  }}
+                >
                   {event.company}
                 </span>
               </div>
-              <h3 className="text-white font-semibold text-base leading-tight line-clamp-2">
+              <h3 className="font-bold text-base leading-normal line-clamp-2" style={{ color: companyColor.dark }}>
                 {event.title}
               </h3>
             </div>
           </div>
 
           {/* Card body */}
-          <div className="p-4 space-y-3">
+          <div className="p-5 space-y-4">
             {/* Org */}
             <p className="text-base text-muted-foreground truncate">{event.organization}</p>
 
             {/* Meta */}
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-base text-muted-foreground">
                 <MapPin className="size-3 shrink-0" />
                 <span className="truncate">{event.location}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
+              <div className="flex items-center gap-2 text-base text-muted-foreground">
                 <Calendar className="size-3 shrink-0" />
                 <span>{formatDateShort(event.date)}</span>
                 {event.endDate && (
@@ -65,7 +79,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             </div>
 
             {/* Progress */}
-            <div className="space-y-1">
+            <div className="space-y-2">
               <div className="flex items-center justify-between text-base">
                 <span className="text-muted-foreground">Progress</span>
                 <span className="font-medium text-foreground">{event.progress}%</span>
@@ -75,14 +89,15 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
                   initial={{ width: 0 }}
                   animate={{ width: `${event.progress}%` }}
                   transition={{ duration: 0.7, delay: index * 0.07 + 0.2, ease: 'easeOut' }}
-                  className={cn('h-full rounded-full bg-gradient-to-r', event.coverGradient)}
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: companyColor.regular }}
                 />
               </div>
             </div>
 
             {/* Footer stats */}
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-center gap-1 text-base text-muted-foreground">
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-1.5 text-base text-muted-foreground">
                 <Package className="size-3" />
                 <span>{event.assets.length} asset{event.assets.length !== 1 ? 's' : ''}</span>
               </div>
