@@ -202,9 +202,9 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
             className="relative w-full max-w-2xl max-h-[92vh] rounded-2xl bg-card border border-border shadow-2xl flex flex-col overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Unified header — type label left, close right */}
+            {/* Unified header — title left, close right */}
             <div className="flex items-center justify-between px-6 pt-5 pb-0 shrink-0">
-              <span className="text-sm font-medium text-muted-foreground">{assetTypeLabel(asset.type)}</span>
+              <span className="text-xl font-semibold text-foreground leading-tight">{asset.title}</span>
               <button
                 onClick={onClose}
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-muted hover:bg-muted/80 transition-colors text-foreground"
@@ -279,9 +279,8 @@ export function AssetLightbox({ asset, assets, eventTitle, onClose, onNavigate }
 
             {/* Details — scrollable if content is tall */}
             <div className="p-6 overflow-y-auto">
-              <div className="flex items-start justify-between gap-3">
-                <h2 className="text-lg font-semibold leading-tight">{asset.title}</h2>
-                <AssetStatusBadge status={asset.status} className="shrink-0 mt-1" />
+              <div className="flex items-center justify-end gap-3">
+                <AssetStatusBadge status={asset.status} className="shrink-0" />
               </div>
 
               {/* Inline meta row */}
