@@ -12,7 +12,7 @@ import { CommandPalette } from '@/components/CommandPalette';
 import { events } from '@/lib/data';
 import type { EventDeadline } from '@/lib/types';
 import {
-  cn, formatDate, formatDateShort, deadlineTypeColor, deadlineTypeBg, companyColor, getMonthKey
+  cn, formatDate, formatDateShort, deadlineTypeColor, deadlineTypeBg, companyHex, getMonthKey
 } from '@/lib/utils';
 
 interface DeadlineItem extends EventDeadline {
@@ -240,10 +240,10 @@ export default function TimelinePage() {
 
                           {/* Company + done */}
                           <div className="flex items-center gap-2 shrink-0">
-                            <span className={cn(
-                              'hidden sm:inline-flex text-base rounded-full px-2 py-0.5 font-medium',
-                              companyColor(dl.company)
-                            )}>
+                            <span
+                              className="hidden sm:inline-flex text-base rounded-full px-2 py-0.5 font-medium text-white"
+                              style={{ backgroundColor: companyHex(dl.company) }}
+                            >
                               {dl.company}
                             </span>
                             <div className={cn(

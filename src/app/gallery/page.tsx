@@ -9,7 +9,7 @@ import { AssetCard } from '@/components/AssetCard';
 import { AssetLightbox } from '@/components/AssetLightbox';
 import { events } from '@/lib/data';
 import type { Asset, AssetStatus, AssetType, AssetCategory } from '@/lib/types';
-import { assetTypeLabel, companyColor } from '@/lib/utils';
+import { assetTypeLabel, companyHex } from '@/lib/utils';
 
 const CATEGORY_LABELS: Record<AssetCategory, string> = {
   social:     'Social',
@@ -192,7 +192,7 @@ export default function GalleryPage() {
                         <div className="relative group">
                           <AssetCard asset={asset} eventTitle={eventTitle} index={i} onClick={() => setLightboxAsset({ asset, eventTitle })} />
                           <div className="absolute top-2 left-2">
-                            <span className={`text-base rounded-full px-2 py-0.5 font-medium ${companyColor(company)}`}>{company}</span>
+                            <span className="text-base rounded-full px-2 py-0.5 font-medium text-white" style={{ backgroundColor: companyHex(company) }}>{company}</span>
                           </div>
                         </div>
                       </div>
@@ -210,7 +210,7 @@ export default function GalleryPage() {
                         <div className="relative group">
                           <AssetCard asset={asset} eventTitle={eventTitle} index={i} onClick={() => setLightboxAsset({ asset, eventTitle })} />
                           <div className="absolute top-2 left-2">
-                            <span className={`text-base rounded-full px-2 py-0.5 font-medium ${companyColor(company)}`}>{company}</span>
+                            <span className="text-base rounded-full px-2 py-0.5 font-medium text-white" style={{ backgroundColor: companyHex(company) }}>{company}</span>
                           </div>
                         </div>
                       </div>
