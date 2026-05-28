@@ -1,29 +1,21 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Images, Filter, X, SlidersHorizontal } from 'lucide-react';
+import { Images, LoaderCircle, X, SlidersHorizontal } from 'lucide-react';
 import { Navigation } from '@/components/Navigation';
 import { CommandPalette } from '@/components/CommandPalette';
 import { AssetCard } from '@/components/AssetCard';
 import { AssetLightbox } from '@/components/AssetLightbox';
 import { events } from '@/lib/data';
-import type { Asset, AssetStatus, AssetType, AssetCategory } from '@/lib/types';
+import type { Asset, AssetStatus, AssetType } from '@/lib/types';
 import { assetTypeLabel, companyHex } from '@/lib/utils';
-
-const CATEGORY_LABELS: Record<AssetCategory, string> = {
-  social:     'Social',
-  digital:    'Digital',
-  booth:      'Booth',
-  content:    'Content',
-  operations: 'Operations',
-};
-const CATEGORY_ORDER: AssetCategory[] = ['social', 'digital', 'booth', 'content', 'operations'];
 
 interface AssetWithEvent {
   asset: Asset;
   eventId: string;
   eventTitle: string;
+  eventDate: string;
   company: string;
 }
 
@@ -32,14 +24,21 @@ const allAssets: AssetWithEvent[] = events.flatMap((e) =>
     asset: a,
     eventId: e.id,
     eventTitle: e.title,
+    eventDate: e.date,
     company: e.company,
   }))
-);
+).sort((a, b) => {
+  const aDate = a.asset.exportDate ?? a.eventDate;
+  const bDate = b.asset.exportDate ?? b.eventDate;
+  return bDate.localeCompare(aDate);
+});
 
 const ALL_TYPES = Array.from(new Set(allAssets.map((a) => a.asset.type))).sort() as AssetType[];
 const ALL_STATUSES: AssetStatus[] = ['pending', 'in-design', 'review', 'approved', 'delivered'];
 const ALL_COMPANIES = Array.from(new Set(allAssets.map((a) => a.company))).sort();
 const ALL_EVENTS = events.map((e) => ({ id: e.id, title: e.title }));
+const INITIAL_ASSET_COUNT = 24;
+const ASSET_LOAD_BATCH = 16;
 
 export default function GalleryPage() {
   const [cmdOpen, setCmdOpen] = useState(false);
@@ -48,6 +47,8 @@ export default function GalleryPage() {
   const [filterStatus, setFilterStatus] = useState<AssetStatus | ''>('');
   const [filterCompany, setFilterCompany] = useState('');
   const [filterEvent, setFilterEvent] = useState('');
+  const [visibleCount, setVisibleCount] = useState(INITIAL_ASSET_COUNT);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const filtered = useMemo(() => {
     return allAssets.filter(({ asset, eventId, company }) => {
@@ -58,6 +59,58 @@ export default function GalleryPage() {
       return true;
     });
   }, [filterType, filterStatus, filterCompany, filterEvent]);
+
+  useEffect(() => {
+    setVisibleCount(INITIAL_ASSET_COUNT);
+  }, [filterType, filterStatus, filterCompany, filterEvent]);
+
+  const visibleAssets = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
+  const hasMoreAssets = visibleCount < filtered.length;
+  const loadMoreAssets = useCallback(() => {
+    setVisibleCount((count) => Math.min(count + ASSET_LOAD_BATCH, filtered.length));
+  }, [filtered.length]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasMoreAssets) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        loadMoreAssets();
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMoreAssets, loadMoreAssets, visibleCount]);
+
+  useEffect(() => {
+    if (!hasMoreAssets) return;
+
+    let frame = 0;
+    const handleScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const node = loadMoreRef.current;
+        const distanceToLoader = node
+          ? node.getBoundingClientRect().top - window.innerHeight
+          : document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+
+        if (distanceToLoader < 600) loadMoreAssets();
+      });
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [hasMoreAssets, loadMoreAssets, visibleCount]);
 
   const hasFilters = filterType || filterStatus || filterCompany || filterEvent;
   const clearFilters = () => {
@@ -155,7 +208,7 @@ export default function GalleryPage() {
             {hasFilters && (
               <>
                 <span className="text-base text-muted-foreground">
-                  {filtered.length} of {allAssets.length} assets
+                  Showing {visibleAssets.length} of {filtered.length} assets
                 </span>
                 <button
                   onClick={clearFilters}
@@ -169,58 +222,50 @@ export default function GalleryPage() {
           </div>
         </motion.div>
 
-        {/* Gallery — grouped by category when present, flat otherwise */}
-        {filtered.length > 0 ? (() => {
-          const categorized = filtered.filter(a => a.asset.category);
-          const uncategorized = filtered.filter(a => !a.asset.category);
-
-          const groups = CATEGORY_ORDER
-            .map(cat => ({ cat, items: categorized.filter(a => a.asset.category === cat) }))
-            .filter(g => g.items.length > 0);
-
-          return (
-            <div className="space-y-10">
-              {groups.map(({ cat, items }) => (
-                <section key={cat}>
-                  <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <span className="text-base">{CATEGORY_LABELS[cat]}</span>
-                    <span className="text-base text-muted-foreground font-normal">{items.length} assets</span>
-                  </h2>
-                  <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-                    {items.map(({ asset, eventTitle, company }, i) => (
-                      <div key={asset.id} className="break-inside-avoid">
-                        <div className="relative group">
-                          <AssetCard asset={asset} eventTitle={eventTitle} index={i} onClick={() => setLightboxAsset({ asset, eventTitle })} />
-                          <div className="absolute top-2 left-2">
-                            <span className="text-base rounded-full px-2 py-0.5 font-medium text-white" style={{ backgroundColor: companyHex(company) }}>{company}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+        {/* Gallery */}
+        {filtered.length > 0 ? (
+          <div className="space-y-8">
+            <div className="columns-1 gap-4 space-y-4 sm:columns-2 lg:columns-3 xl:columns-4">
+              {visibleAssets.map(({ asset, eventTitle, company }, i) => (
+                <div key={asset.id} className="break-inside-avoid">
+                  <div className="relative group">
+                    <AssetCard
+                      asset={asset}
+                      eventTitle={eventTitle}
+                      index={i}
+                      onClick={() => setLightboxAsset({ asset, eventTitle })}
+                    />
+                    <div className="absolute top-2 left-2">
+                      <span
+                        className="text-base rounded-full px-2 py-0.5 font-medium text-white"
+                        style={{ backgroundColor: companyHex(company) }}
+                      >
+                        {company}
+                      </span>
+                    </div>
                   </div>
-                </section>
+                </div>
               ))}
+            </div>
 
-              {uncategorized.length > 0 && (
-                <section>
-                  <h2 className="text-lg font-semibold mb-4">Other</h2>
-                  <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4">
-                    {uncategorized.map(({ asset, eventTitle, company }, i) => (
-                      <div key={asset.id} className="break-inside-avoid">
-                        <div className="relative group">
-                          <AssetCard asset={asset} eventTitle={eventTitle} index={i} onClick={() => setLightboxAsset({ asset, eventTitle })} />
-                          <div className="absolute top-2 left-2">
-                            <span className="text-base rounded-full px-2 py-0.5 font-medium text-white" style={{ backgroundColor: companyHex(company) }}>{company}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
+            <div ref={loadMoreRef} className="flex min-h-16 items-center justify-center py-6">
+              {hasMoreAssets ? (
+                <button
+                  type="button"
+                  onClick={loadMoreAssets}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-base font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
+                >
+                  <LoaderCircle className="size-4 animate-spin text-violet-600" />
+                  Load more assets
+                </button>
+              ) : (
+                <span className="text-base text-muted-foreground">
+                  Showing all {filtered.length} assets
+                </span>
               )}
             </div>
-          );
-        })() : (
+          </div>
+        ) : (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

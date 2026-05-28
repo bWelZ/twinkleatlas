@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Sparkles, Moon, Sun, Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, Moon, Sun, Search, BookOpen, LayoutTemplate, Users, ChevronDown } from 'lucide-react';
 import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
 import { useTheme } from '@/components/ThemeProvider';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,94 @@ const navLinks: { href: string; label: string; icon: TwinkleIconName }[] = [
   { href: '/gallery', label: 'Gallery', icon: 'image' },
   { href: '/timeline', label: 'Timeline', icon: 'calendar' },
 ];
+
+const guidelineCompanies = ['PreK.Club', 'WELS', 'BWELZ'];
+
+function PlaybookDropdown({ isActive }: { isActive: boolean }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-base font-medium transition-colors',
+          isActive
+            ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300'
+            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+        )}
+      >
+        <TwinkleIcon name="reading" size="14px" />
+        <span className="hidden sm:block">Playbook</span>
+        <ChevronDown className={cn('hidden sm:block size-3 transition-transform duration-150', open && 'rotate-180')} />
+      </motion.button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            className="absolute left-0 top-full mt-1.5 w-52 rounded-xl border border-border bg-popover shadow-lg overflow-hidden z-50"
+          >
+            {/* Guidelines section */}
+            <div className="px-3 pt-2.5 pb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                <BookOpen className="size-3" />
+                Guidelines
+              </p>
+            </div>
+            {guidelineCompanies.map((company) => (
+              <Link
+                key={company}
+                href={`/playbook?company=${encodeURIComponent(company)}`}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2 hover:bg-muted transition-colors"
+              >
+                <span className="text-sm text-foreground">{company}</span>
+              </Link>
+            ))}
+
+            {/* Separator */}
+            <div className="my-1 border-t border-border" />
+
+            {/* Other sections */}
+            <Link
+              href="/playbook/templates"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-muted transition-colors"
+            >
+              <LayoutTemplate className="size-3.5 text-muted-foreground" />
+              <span className="text-sm text-foreground">Templates</span>
+            </Link>
+            <Link
+              href="/playbook/vendors"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 px-3 py-2.5 hover:bg-muted transition-colors"
+            >
+              <Users className="size-3.5 text-muted-foreground" />
+              <span className="text-sm text-foreground">Vendors & Contacts</span>
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export function Navigation({ onOpenCommandPalette }: NavigationProps) {
   const { theme, toggleTheme } = useTheme();
@@ -79,6 +167,7 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
               </Link>
             );
           })}
+          <PlaybookDropdown isActive={pathname.startsWith('/playbook')} />
         </nav>
 
         <div className="flex-1" />

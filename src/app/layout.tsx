@@ -28,6 +28,23 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Twinkle Atlas',
   description: 'Visual event & creative asset management',
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    noarchive: true,
+    nosnippet: true,
+    noimageindex: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+      noarchive: true,
+      nosnippet: true,
+      'max-image-preview': 'none',
+      'max-snippet': 0,
+    },
+  },
 };
 
 export default function RootLayout({

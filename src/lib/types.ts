@@ -70,6 +70,74 @@ export interface EventContact {
   group?: string;
 }
 
+// ─── Playbook ────────────────────────────────────────────────────────────────
+
+export type MessageMode = 'selling' | 'gratitude' | 'awareness' | 'launch';
+
+export interface MessageExample {
+  channel: string;
+  text: string;
+}
+
+export interface MessageModeConfig {
+  mode: MessageMode;
+  label: string;
+  description: string;
+  tone: string;
+  headline?: string;
+  cta?: string;
+  examples: MessageExample[];
+  contexts: string[];
+}
+
+export interface CompanyGuideline {
+  id: string;
+  company: string;
+  year: number;
+  theme: string;
+  tagline?: string;
+  color: string;
+  mission?: string;
+  audience?: string;
+  toneDescriptors: string[];
+  toneAvoid?: string[];
+  messages: string[];
+  headlines: { primary: string; variations?: string[] };
+  ctas: string[];
+  modes: MessageModeConfig[];
+}
+
+export interface Template {
+  id: string;
+  title: string;
+  type: AssetType;
+  company?: string;
+  description?: string;
+  previewUrl?: string;
+  downloadUrl?: string;
+  externalUrl?: string;
+  tags: string[];
+  lastUpdated?: string;
+}
+
+export type DirectoryType = 'vendor' | 'partner' | 'internal' | 'contact';
+
+export interface DirectoryEntry {
+  id: string;
+  name: string;
+  company?: string;
+  type: DirectoryType;
+  role: string;
+  services?: string[];
+  email?: string;
+  phone?: string;
+  website?: string;
+  notes?: string;
+  tags: string[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface Event {
   id: string;
   title: string;

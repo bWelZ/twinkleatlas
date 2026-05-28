@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   CalendarDays, Pencil, Printer, Truck, Flag, Eye,
@@ -45,12 +45,16 @@ const allDeadlines: DeadlineItem[] = events
 
 const ALL_COMPANIES = Array.from(new Set(events.map((e) => e.company))).sort();
 const ALL_TYPES = ['design', 'print', 'shipping', 'conference', 'review', 'other'] as const;
+const INITIAL_DEADLINE_COUNT = 30;
+const DEADLINE_LOAD_BATCH = 20;
 
 export default function TimelinePage() {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [filterCompany, setFilterCompany] = useState('');
   const [filterType, setFilterType] = useState('');
   const [showDone, setShowDone] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_DEADLINE_COUNT);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const filtered = useMemo(() => {
     return allDeadlines.filter((d) => {
@@ -61,16 +65,68 @@ export default function TimelinePage() {
     });
   }, [filterCompany, filterType, showDone]);
 
+  useEffect(() => {
+    setVisibleCount(INITIAL_DEADLINE_COUNT);
+  }, [filterCompany, filterType, showDone]);
+
+  const visibleDeadlines = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
+  const hasMoreDeadlines = visibleCount < filtered.length;
+  const loadMoreDeadlines = useCallback(() => {
+    setVisibleCount((count) => Math.min(count + DEADLINE_LOAD_BATCH, filtered.length));
+  }, [filtered.length]);
+
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasMoreDeadlines) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        loadMoreDeadlines();
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMoreDeadlines, loadMoreDeadlines]);
+
+  useEffect(() => {
+    if (!hasMoreDeadlines) return;
+
+    let frame = 0;
+    const handleScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const node = loadMoreRef.current;
+        const distanceToLoader = node
+          ? node.getBoundingClientRect().top - window.innerHeight
+          : document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+
+        if (distanceToLoader < 600) loadMoreDeadlines();
+      });
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [hasMoreDeadlines, loadMoreDeadlines]);
+
   // Group by month
   const byMonth = useMemo(() => {
     const map: Record<string, DeadlineItem[]> = {};
-    for (const dl of filtered) {
+    for (const dl of visibleDeadlines) {
       const key = getMonthKey(dl.date);
       if (!map[key]) map[key] = [];
       map[key].push(dl);
     }
     return map;
-  }, [filtered]);
+  }, [visibleDeadlines]);
 
   const monthKeys = Object.keys(byMonth).sort();
 
@@ -156,7 +212,7 @@ export default function TimelinePage() {
           </label>
 
           <span className="ml-auto text-base text-muted-foreground">
-            {filtered.length} of {allDeadlines.length} deadlines
+            Showing {visibleDeadlines.length} of {filtered.length} deadlines
           </span>
         </motion.div>
 
@@ -262,6 +318,21 @@ export default function TimelinePage() {
                 </motion.section>
               );
             })}
+            <div ref={loadMoreRef} className="flex min-h-16 items-center justify-center py-6">
+              {hasMoreDeadlines ? (
+                <button
+                  type="button"
+                  onClick={loadMoreDeadlines}
+                  className="rounded-full border border-border bg-card px-4 py-2 text-base font-medium text-foreground shadow-sm transition-colors hover:bg-muted"
+                >
+                  Load more deadlines
+                </button>
+              ) : (
+                <span className="text-base text-muted-foreground">
+                  Showing all {filtered.length} deadlines
+                </span>
+              )}
+            </div>
           </div>
         ) : (
           <motion.div

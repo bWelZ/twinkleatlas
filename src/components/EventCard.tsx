@@ -28,22 +28,22 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
       transition={{ duration: 0.35, delay: index * 0.07, ease: 'easeOut' }}
       whileHover={{ y: -2 }}
     >
-      <Link href={`/events/${event.id}`} className="block group">
-        <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden transition-shadow duration-200 group-hover:shadow-md">
+      <Link href={`/events/${event.id}`} className="block group h-full">
+        <div className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden transition-shadow duration-200 group-hover:shadow-md flex flex-col h-full">
           {/* Gradient header */}
-          <div className="h-32 relative" style={{ backgroundColor: companyColor.light }}>
-            <div className="relative p-5 sm:p-6 h-full flex flex-col gap-5">
+          <div className="flex-1 relative" style={{ backgroundColor: companyColor.light }}>
+            <div className="relative p-5 sm:p-6 flex flex-col gap-5 h-full">
               <div className="flex items-center justify-between gap-4">
                 <EventStatusBadge
                   status={event.status}
-                  className="border-0 px-3 py-1 text-base"
+                  className="border-0 px-2 py-0.5 text-xs"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${companyColor.regular} 35%, transparent)`,
                     color: companyColor.dark,
                   }}
                 />
                 <span
-                  className="shrink-0 text-base font-medium rounded-full px-3 py-1"
+                  className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${companyColor.regular} 45%, transparent)`,
                     color: companyColor.dark,
@@ -52,7 +52,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
                   {event.company}
                 </span>
               </div>
-              <h3 className="font-bold text-base leading-normal line-clamp-2" style={{ color: companyColor.dark }}>
+              <h3 className="font-bold text-base leading-normal" style={{ color: companyColor.dark }}>
                 {event.title}
               </h3>
             </div>
