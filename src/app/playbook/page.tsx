@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Megaphone, Heart, Lightbulb, Rocket, X, ArrowRight } from 'lucide-react';
@@ -107,7 +107,7 @@ function ModeCard({ mode }: { mode: (typeof guidelines)[0]['modes'][0] }) {
   );
 }
 
-export default function GuidelinesPage() {
+function GuidelinesContent() {
   const [cmdOpen, setCmdOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -335,5 +335,13 @@ export default function GuidelinesPage() {
         </AnimatePresence>
       </main>
     </>
+  );
+}
+
+export default function GuidelinesPage() {
+  return (
+    <Suspense>
+      <GuidelinesContent />
+    </Suspense>
   );
 }
