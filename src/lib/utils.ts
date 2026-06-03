@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import type { EventStatus, AssetStatus, AssetType } from '@/lib/types';
+import type { Event, EventStatus, AssetStatus, AssetType } from '@/lib/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -31,6 +31,21 @@ export function daysUntil(dateStr: string): number {
   today.setHours(0, 0, 0, 0);
   const target = new Date(dateStr + 'T00:00:00');
   return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+export function completedEventShouldArchive(event: Event, referenceDate = new Date()): boolean {
+  if (event.status !== 'completed') return false;
+
+  const today = new Date(referenceDate);
+  today.setHours(0, 0, 0, 0);
+  const eventEnd = new Date(`${event.endDate ?? event.date}T00:00:00`);
+  const daysSinceEnd = Math.floor((today.getTime() - eventEnd.getTime()) / (1000 * 60 * 60 * 24));
+
+  return daysSinceEnd >= 7;
+}
+
+export function effectiveEventStatus(event: Event, referenceDate = new Date()): EventStatus {
+  return completedEventShouldArchive(event, referenceDate) ? 'archived' : event.status;
 }
 
 // Event status colors

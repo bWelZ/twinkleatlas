@@ -5,7 +5,7 @@ import { MapPin, Calendar, Package } from 'lucide-react';
 import Link from 'next/link';
 import type { Event } from '@/lib/types';
 import { EventStatusBadge } from '@/components/StatusBadge';
-import { formatDateShort, daysUntil, companyRainbowPalette, cn } from '@/lib/utils';
+import { formatDateShort, daysUntil, companyRainbowPalette, cn, effectiveEventStatus } from '@/lib/utils';
 
 interface EventCardProps {
   event: Event;
@@ -14,6 +14,7 @@ interface EventCardProps {
 
 export function EventCard({ event, index = 0 }: EventCardProps) {
   const companyColor = companyRainbowPalette(event.company);
+  const status = effectiveEventStatus(event);
 
   const nextDeadline = event.deadlines
     .filter((d) => !d.done)
@@ -35,7 +36,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
             <div className="relative p-5 sm:p-6 flex flex-col gap-5 h-full">
               <div className="flex items-center justify-between gap-4">
                 <EventStatusBadge
-                  status={event.status}
+                  status={status}
                   className="border-0 px-2 py-0.5 text-xs"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${companyColor.regular} 35%, transparent)`,
@@ -101,7 +102,7 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
                 <Package className="size-3" />
                 <span>{event.assets.length} asset{event.assets.length !== 1 ? 's' : ''}</span>
               </div>
-              {nextDeadline && (
+              {status !== 'archived' && nextDeadline && (
                 <span
                   className={cn(
                     'text-base rounded-full px-2 py-0.5',

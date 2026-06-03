@@ -18,7 +18,7 @@ import { getEventById } from '@/lib/data';
 import type { Asset, EventContact } from '@/lib/types';
 import {
   cn, formatDate, formatDateShort, companyRainbowPalette, assetTypeLabel,
-  deadlineTypeColor, deadlineTypeBg
+  deadlineTypeColor, deadlineTypeBg, effectiveEventStatus
 } from '@/lib/utils';
 
 type TabId = 'overview' | 'content' | 'assets' | 'operations' | 'timeline';
@@ -130,6 +130,7 @@ export function EventDetailClient({ id }: { id: string }) {
   }
   const doneCount = event.deadlines.filter((d) => d.done).length;
   const heroColor = companyRainbowPalette(event.company);
+  const status = effectiveEventStatus(event);
 
   // Priority counts from backlog
   const highCount    = event.backlog?.filter(b => b.priority === 'high').length ?? 0;
@@ -176,7 +177,7 @@ export function EventDetailClient({ id }: { id: string }) {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
                 <EventStatusBadge
-                  status={event.status}
+                  status={status}
                   className="border-0 px-2.5 py-0.5 text-base"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${heroColor.regular} 35%, transparent)`,

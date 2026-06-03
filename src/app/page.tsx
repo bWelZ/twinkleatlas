@@ -9,7 +9,7 @@ import { CommandPalette } from '@/components/CommandPalette';
 import { EventCard } from '@/components/EventCard';
 import { events } from '@/lib/data';
 import type { EventStatus } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn, effectiveEventStatus } from '@/lib/utils';
 
 const ALL_COMPANIES = Array.from(new Set(events.map((e) => e.company))).sort();
 const ALL_STATUSES: EventStatus[] = ['planning', 'in-progress', 'ready', 'completed', 'archived'];
@@ -45,7 +45,9 @@ export default function DashboardPage() {
   }, []);
 
   const filtered = useMemo(() => {
+    const referenceDate = new Date();
     return events.filter((e) => {
+      const status = effectiveEventStatus(e, referenceDate);
       if (search) {
         const q = search.toLowerCase();
         const match =
@@ -56,7 +58,7 @@ export default function DashboardPage() {
         if (!match) return false;
       }
       if (filterCompany && e.company !== filterCompany) return false;
-      if (filterStatus ? e.status !== filterStatus : e.status === 'archived') return false;
+      if (filterStatus ? status !== filterStatus : status === 'archived') return false;
       if (filterMonth) {
         const d = new Date(e.date + 'T00:00:00');
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;

@@ -8,7 +8,7 @@ import { Navigation } from '@/components/Navigation';
 import { CommandPalette } from '@/components/CommandPalette';
 import { guidelines } from '@/lib/playbook-data';
 import { events } from '@/lib/data';
-import { cn, formatDateShort } from '@/lib/utils';
+import { cn, effectiveEventStatus, formatDateShort } from '@/lib/utils';
 import { companyCopyHistoryHref, companyPlaybookHref } from '@/lib/playbook-routes';
 import { getCopyHistoryForCompany } from '@/lib/copy-history';
 import type { MessageMode } from '@/lib/types';
@@ -87,7 +87,7 @@ export function CompanyGuidelinesPage({ company }: { company: string }) {
   const guideline = guidelines.find((item) => item.company === company) ?? guidelines[0];
   const copyHistory = getCopyHistoryForCompany(guideline.company);
   const companyEvents = events
-    .filter((event) => event.status !== 'archived')
+    .filter((event) => effectiveEventStatus(event) !== 'archived')
     .filter((event) => event.company === guideline.company || event.company.includes(guideline.company) || (guideline.company === 'WELS' && event.company === 'WELS / Zipdata'));
 
   return (
