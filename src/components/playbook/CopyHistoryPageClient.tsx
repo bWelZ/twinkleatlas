@@ -3,13 +3,105 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Search } from 'lucide-react';
+import { ArrowLeft, Quote, Search } from 'lucide-react';
 import { Navigation } from '@/components/Navigation';
 import { CommandPalette } from '@/components/CommandPalette';
 import { guidelines } from '@/lib/playbook-data';
 import { companyPlaybookHref } from '@/lib/playbook-routes';
 import { getCopyHistoryForCompany } from '@/lib/copy-history';
 import { cn, formatDateShort } from '@/lib/utils';
+
+type FormattedLine =
+  | { kind: 'heading'; text: string }
+  | { kind: 'label'; label: string; value: string }
+  | { kind: 'bullet'; text: string }
+  | { kind: 'plain'; text: string };
+
+const noisyLinePatterns = [
+  /^repo:/i,
+  /^public url:/i,
+  /^mautic/i,
+  /^form:/i,
+  /^action=https/i,
+  /^export:/i,
+  /^deadline/i,
+  /^status:/i,
+  /^file(name)?:/i,
+];
+
+function isHeading(line: string): boolean {
+  if (line.length > 86) return false;
+  if (/^[A-Z0-9 /&+.'-]{5,}$/.test(line)) return true;
+  return /^(front|back|hero|headline|cta|copy|caption|sponsor line|support copy|carlos\/.+style learning|ready-to-layout|concept)$/i.test(line.replace(/:$/, ''));
+}
+
+function formatCopyText(text: string): FormattedLine[] {
+  return text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line && !noisyLinePatterns.some((pattern) => pattern.test(line)))
+    .map((line) => {
+      const bullet = line.match(/^[-•]\s+(.+)$/);
+      if (bullet) return { kind: 'bullet', text: bullet[1] } as FormattedLine;
+
+      const labeled = line.match(/^([A-Za-z0-9 /&+.'’()#-]{2,64}):\s*(.+)$/);
+      if (labeled) return { kind: 'label', label: labeled[1], value: labeled[2] } as FormattedLine;
+
+      if (isHeading(line)) return { kind: 'heading', text: line.replace(/:$/, '') } as FormattedLine;
+
+      return { kind: 'plain', text: line } as FormattedLine;
+    });
+}
+
+function CopyText({ text, color }: { text: string; color: string }) {
+  const lines = formatCopyText(text);
+
+  return (
+    <div className="mt-4 overflow-hidden rounded-xl border border-border bg-background">
+      <div className="flex items-center gap-2 border-b border-border bg-muted/45 px-4 py-2">
+        <Quote className="size-4" style={{ color }} />
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Messages Used</p>
+      </div>
+      <div className="divide-y divide-border/70">
+        {lines.map((line, index) => {
+          if (line.kind === 'heading') {
+            return (
+              <div key={`${line.text}-${index}`} className="bg-muted/25 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-wide" style={{ color }}>
+                  {line.text}
+                </p>
+              </div>
+            );
+          }
+
+          if (line.kind === 'label') {
+            return (
+              <div key={`${line.label}-${index}`} className="px-4 py-3 text-sm leading-relaxed">
+                <span className="font-bold">{line.label}: </span>
+                <span>{line.value}</span>
+              </div>
+            );
+          }
+
+          if (line.kind === 'bullet') {
+            return (
+              <div key={`${line.text}-${index}`} className="flex gap-3 px-4 py-3 text-sm leading-relaxed">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+                <span>{line.text}</span>
+              </div>
+            );
+          }
+
+          return (
+            <div key={`${line.text}-${index}`} className="px-4 py-3 text-sm leading-relaxed">
+              {line.text}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export function CopyHistoryPageClient({ company }: { company: string }) {
   const [cmdOpen, setCmdOpen] = useState(false);
@@ -88,7 +180,7 @@ export function CopyHistoryPageClient({ company }: { company: string }) {
                   ))}
                 </div>
               </div>
-              <div className="mt-4 whitespace-pre-wrap rounded-xl bg-muted/45 p-4 text-sm leading-relaxed">{entry.text}</div>
+              <CopyText text={entry.text} color={guideline.color} />
             </motion.article>
           ))}
         </div>
