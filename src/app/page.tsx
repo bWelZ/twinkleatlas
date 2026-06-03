@@ -28,6 +28,12 @@ function monthLabel(key: string) {
   return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 }
 
+function eventSortPriority(event: (typeof events)[number]): number {
+  if (event.tags.includes('pinned')) return 0;
+  if (event.tags.includes('evergreen')) return 1;
+  return 2;
+}
+
 export default function DashboardPage() {
   const [cmdOpen, setCmdOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -46,26 +52,31 @@ export default function DashboardPage() {
 
   const filtered = useMemo(() => {
     const referenceDate = new Date();
-    return events.filter((e) => {
-      const status = effectiveEventStatus(e, referenceDate);
-      if (search) {
-        const q = search.toLowerCase();
-        const match =
-          e.title.toLowerCase().includes(q) ||
-          e.organization.toLowerCase().includes(q) ||
-          e.location.toLowerCase().includes(q) ||
-          e.company.toLowerCase().includes(q);
-        if (!match) return false;
-      }
-      if (filterCompany && e.company !== filterCompany) return false;
-      if (filterStatus ? status !== filterStatus : status === 'archived') return false;
-      if (filterMonth) {
-        const d = new Date(e.date + 'T00:00:00');
-        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        if (key !== filterMonth) return false;
-      }
-      return true;
-    });
+    return events
+      .map((event, index) => ({ event, index }))
+      .filter(({ event: e }) => {
+        const status = effectiveEventStatus(e, referenceDate);
+        if (search) {
+          const q = search.toLowerCase();
+          const match =
+            e.title.toLowerCase().includes(q) ||
+            e.organization.toLowerCase().includes(q) ||
+            e.location.toLowerCase().includes(q) ||
+            e.company.toLowerCase().includes(q) ||
+            e.tags.join(' ').toLowerCase().includes(q);
+          if (!match) return false;
+        }
+        if (filterCompany && e.company !== filterCompany) return false;
+        if (filterStatus ? status !== filterStatus : status === 'archived') return false;
+        if (filterMonth) {
+          const d = new Date(e.date + 'T00:00:00');
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+          if (key !== filterMonth) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => eventSortPriority(a.event) - eventSortPriority(b.event) || a.index - b.index)
+      .map(({ event }) => event);
   }, [search, filterCompany, filterStatus, filterMonth]);
 
   const hasFilters = search || filterCompany || filterStatus || filterMonth;

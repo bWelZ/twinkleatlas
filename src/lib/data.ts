@@ -1368,18 +1368,20 @@ New QR pattern: https://play.prek.club/?utm_source={source}&utm_medium={medium}&
 
   {
     id: 'prekclub-invite-your-director',
-    title: 'PreK.Club Invite Your Director Campaign',
+    title: 'PreK.Club Invite Your Director — Evergreen 2026',
     organization: 'PreK.Club',
     date: '2026-01-15',
-    location: 'Evergreen digital campaign',
+    location: 'Evergreen 2026 digital campaign',
     audience: 'Teachers, staff, and childcare program teams who can refer their directors',
-    objective: 'Continue generating PreK.Club leads outside of a fixed event window through the Invite Your Director referral flow',
+    objective: 'Keep PreK.Club lead generation active year-round through the Invite Your Director referral flow',
     company: 'PreK.Club',
-    presence: 'Evergreen landing page and Mautic referral form',
+    presence: 'Pinned evergreen 2026 campaign: landing page, QR/UTM links, and Mautic referral form',
     status: 'in-progress',
     progress: 75,
     coverGradient: 'from-lime-400 to-emerald-700',
-    notes: `This is an evergreen lead-generation campaign, not a fixed conference event.
+    notes: `PINNED / EVERGREEN 2026 GENERAL CAMPAIGN
+
+This is an evergreen lead-generation campaign, not a fixed conference event.
 
 It was originally used around an early-2026 event, but remains active as a reusable referral campaign to keep generating qualified PreK.Club leads.
 
@@ -1388,7 +1390,7 @@ Repo: bWelZ/playprekclub
 Landing: https://play.prek.club/invite-your-director/
 Mautic formId: 11
 Mautic formName: prekclubinviteyourdirector`,
-    tags: ['prekclub', 'campaign', 'evergreen', 'lead-generation', 'referral', 'mautic'],
+    tags: ['prekclub', 'campaign', 'evergreen', '2026-general', 'pinned', 'lead-generation', 'referral', 'mautic'],
     links: [
       { label: 'Invite Your Director Landing', url: 'https://play.prek.club/invite-your-director/' },
       { label: 'Landing Repo', url: 'https://github.com/bWelZ/playprekclub' },

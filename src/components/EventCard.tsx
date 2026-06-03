@@ -15,6 +15,8 @@ interface EventCardProps {
 export function EventCard({ event, index = 0 }: EventCardProps) {
   const companyColor = companyRainbowPalette(event.company);
   const status = effectiveEventStatus(event);
+  const isEvergreen = event.tags.includes('evergreen');
+  const evergreenLabel = event.tags.includes('2026-general') ? 'Evergreen 2026' : 'Evergreen';
 
   const nextDeadline = event.deadlines
     .filter((d) => !d.done)
@@ -35,14 +37,27 @@ export function EventCard({ event, index = 0 }: EventCardProps) {
           <div className="flex-1 relative" style={{ backgroundColor: companyColor.light }}>
             <div className="relative p-5 sm:p-6 flex flex-col gap-5 h-full">
               <div className="flex items-center justify-between gap-4">
-                <EventStatusBadge
-                  status={status}
-                  className="border-0 px-2 py-0.5 text-xs"
-                  style={{
-                    backgroundColor: `color-mix(in srgb, ${companyColor.regular} 35%, transparent)`,
-                    color: companyColor.dark,
-                  }}
-                />
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <EventStatusBadge
+                    status={status}
+                    className="border-0 px-2 py-0.5 text-xs"
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${companyColor.regular} 35%, transparent)`,
+                      color: companyColor.dark,
+                    }}
+                  />
+                  {isEvergreen && (
+                    <span
+                      className="rounded-full px-2 py-0.5 text-xs font-semibold"
+                      style={{
+                        backgroundColor: `color-mix(in srgb, ${companyColor.regular} 70%, white)`,
+                        color: companyColor.dark,
+                      }}
+                    >
+                      {evergreenLabel}
+                    </span>
+                  )}
+                </div>
                 <span
                   className="shrink-0 text-xs font-medium rounded-full px-2 py-0.5"
                   style={{
