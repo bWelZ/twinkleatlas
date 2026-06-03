@@ -8,6 +8,7 @@ import { Sparkles, Moon, Sun, Search, BookOpen, LayoutTemplate, Users, ChevronDo
 import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
 import { useTheme } from '@/components/ThemeProvider';
 import { cn } from '@/lib/utils';
+import { companyPlaybookHref } from '@/lib/playbook-routes';
 
 interface NavigationProps {
   onOpenCommandPalette?: () => void;
@@ -19,7 +20,7 @@ const navLinks: { href: string; label: string; icon: TwinkleIconName }[] = [
   { href: '/timeline', label: 'Timeline', icon: 'calendar' },
 ];
 
-const guidelineCompanies = ['PreK.Club', 'WELS', 'BWELZ'];
+const guidelineCompanies = ['PreK.Club', 'WELS', 'ZipData', 'BWELZ'];
 
 function PlaybookDropdown({ isActive }: { isActive: boolean }) {
   const [open, setOpen] = useState(false);
@@ -72,7 +73,7 @@ function PlaybookDropdown({ isActive }: { isActive: boolean }) {
             {guidelineCompanies.map((company) => (
               <Link
                 key={company}
-                href={`/playbook?company=${encodeURIComponent(company)}`}
+                href={companyPlaybookHref(company)}
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 px-3 py-2 hover:bg-muted transition-colors"
               >

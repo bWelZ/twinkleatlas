@@ -752,14 +752,48 @@ export function EventDetailClient({ id }: { id: string }) {
                                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{headerLine}</p>
                                 )}
                                 {bulletLines.length > 0 && (
-                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                    {bulletLines.map((b, bj) => (
-                                      <div key={bj} className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0" />
-                                        <span className="text-xs text-foreground leading-tight">{b.replace(/^[-·]\s*/, '')}</span>
+                                  (() => {
+                                    const hasUrls = bulletLines.some((b) => b.includes('http://') || b.includes('https://'));
+                                    return (
+                                      <div className={cn(hasUrls ? 'space-y-2' : 'grid grid-cols-2 md:grid-cols-3 gap-2')}>
+                                        {bulletLines.map((b, bj) => {
+                                          const text = b.replace(/^[-·]\s*/, '');
+                                          const urlMatch = text.match(/https?:\/\/\S+/);
+                                          const url = urlMatch?.[0] ?? null;
+                                          const label = url ? text.slice(0, urlMatch!.index).replace(/:\s*$/, '') : null;
+
+                                          return (
+                                            <div
+                                              key={bj}
+                                              className={cn(
+                                                'rounded-lg bg-muted/50 px-3 py-2',
+                                                hasUrls ? 'block' : 'flex items-center gap-2'
+                                              )}
+                                            >
+                                              {url ? (
+                                                <div className="min-w-0">
+                                                  {label && <p className="text-xs font-medium text-foreground mb-1">{label}</p>}
+                                                  <a
+                                                    href={url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="block font-mono text-xs leading-relaxed text-violet-600 dark:text-violet-400 break-all hover:underline"
+                                                  >
+                                                    {url}
+                                                  </a>
+                                                </div>
+                                              ) : (
+                                                <>
+                                                  <div className="w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0" />
+                                                  <span className="text-xs text-foreground leading-tight">{text}</span>
+                                                </>
+                                              )}
+                                            </div>
+                                          );
+                                        })}
                                       </div>
-                                    ))}
-                                  </div>
+                                    );
+                                  })()
                                 )}
                                 {bulletLines.length === 0 && (
                                   <p className="text-base text-muted-foreground leading-relaxed">{block}</p>
