@@ -1449,10 +1449,24 @@ Mautic formName: prekclubinviteyourdirector`,
     objective: 'Coffee Break sponsor ($5,000) — exhibit booth presence, full-color ad in Conference Book, recognition at Opening General Session. Goodwill for WELS + Zipdata technology support.',
     company: 'WELS / Zipdata',
     presence: 'Exhibit booth, Ballroom I (Commercial Exhibit Hall) — Thu & Fri; Coffee Break sponsor signage outside hall',
-    status: 'in-progress',
-    progress: 25,
+    status: 'completed',
+    progress: 100,
     coverGradient: 'from-sky-400 to-cyan-600',
-    notes: `URGENT: Conference Book ad artwork due June 1, 2026. Full color ad, final size 8 1/16" x 10 1/2". Artwork should be sent to Frankie Allen at frankieallen_2000@yahoo.com.
+    notes: `POST-EVENT RECAP (from Heidy, 2026-07-15):
+One Goal Summer Conference gave WELS + Zipdata solid representation, partner conversations, and direct feedback from account holders and stakeholders.
+
+CLASS cycle notes session (Mathew, DEL): DEL does not require a "book" — precise, objective bullet points tied to observed/tallied indicators are enough. Describe what was observed (specific, behavior-based), not judgments ("amazing job") — e.g. "The children were engaged with the teacher and consistently smiling," followed by concrete examples. Rough notes from multiple cycles may be entered during the last cycle if each observation is clearly timestamped to its cycle. Shorthand is allowed and does not need to be standardized statewide — left to each ELC's discretion. Final summary reports should be concise and organized by indicator.
+
+Enhancement ideas surfaced (product/ElevatEd — track in WELS's own product backlog, not here): (1) basic text formatting (bullets, bold, spacing) preserved from notes into the final summary report — Miami currently drafts in Word and loses formatting on entry; (2) personalized shorthand with automatic text expansion, seeded by a DEL default list with per-ELC/assessor customization.
+
+Miami trainer feedback (Pikitin, Discovery Source): ElevatEd portal is not responsive on free/subsidized low-income phones, blocking access to transcripts/certificates. Educators are missing training notifications — a downloadable calendar file (.ics) or SMS reminders could help.
+
+ZipData: strong booth interest and follow-up conversations. Meaningful discussions with ELCs about past security breaches reinforced the relevance of ZipData's data-security offering. Molly Grant is excited about showcasing ZipData at the upcoming AELC Conference as a collaborative effort with ELC partners, focused on data and cybersecurity — see aelc-2026 event.
+
+Reconnected onsite: Fred (Tampa, former partner) and Dana (technical issue resolved on the spot by Ives).
+
+---
+URGENT: Conference Book ad artwork due June 1, 2026. Full color ad, final size 8 1/16" x 10 1/2". Artwork should be sent to Frankie Allen at frankieallen_2000@yahoo.com.
 
 Primary job for this event: create a print-ready full-page Conference Book ad that presents WELS + Zipdata as a practical technology partner for Florida early learning, Head Start, ELC, and provider audiences.
 
@@ -1606,7 +1620,7 @@ Mautic formName: welslandingcapture`,
       { id: 'dl-ogs4',  title: 'Materials shipped to Tampa', date: '2026-06-20', type: 'shipping', done: false },
       { id: 'dl-ogs5',  title: 'Final prep check — all systems go', date: '2026-07-06', type: 'review', done: false },
       { id: 'dl-ogs6',  title: 'One Goal Summer Conference 2026', date: '2026-07-08', type: 'conference', done: false },
-      { id: 'dl-ogs7',  title: 'Post-event recap post', date: '2026-07-14', type: 'other', done: false },
+      { id: 'dl-ogs7',  title: 'Post-event recap post', date: '2026-07-14', type: 'other', done: true },
     ],
     assets: [
       // ── SOCIAL ──────────────────────────────────────────────
@@ -2023,7 +2037,7 @@ Mautic formName: welslandingcapture`,
     date: '2026-11-01',
     location: 'Florida',
     audience: 'ELC of Florida',
-    objective: 'Good will WELS/Zipdata',
+    objective: 'Good will WELS/Zipdata — collaborative ZipData data/cybersecurity showcase with ELC partners',
     company: 'WELS / Zipdata',
     presence: 'Onsite',
     status: 'planning',
@@ -2037,14 +2051,17 @@ af3rr0 should create the repo and retain access.
 Expected landing: https://welsfoundation.org/lp/aelc-2026/
 Form: WELS lead generation
 Mautic formId: 12
-Mautic formName: welslandingcapture`,
-    tags: ['wels', 'zipdata', 'florida', 'early-learning', 'coalitions', 'fall', 'landing-needed', 'bwelz-repo'],
+Mautic formName: welslandingcapture
+
+Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excited about showcasing ZipData at AELC as a collaborative effort with ELC partners, specifically on data and cybersecurity. Real-world ELC security-breach experiences (raised at One Goal) should inform the messaging — protecting sensitive data, strengthening cybersecurity practices, preparing for evolving threats. Keep tone trust-building, not fear-based (see ZipData playbook guideline).`,
+    tags: ['wels', 'zipdata', 'florida', 'early-learning', 'coalitions', 'fall', 'landing-needed', 'bwelz-repo', 'cybersecurity'],
     links: [
       { label: 'Planned Landing Page', url: 'https://welsfoundation.org/lp/aelc-2026/' },
       { label: 'Planned Landing Repo', url: 'https://github.com/bWelZ/aelc-2026' },
     ],
     contacts: [
       { name: 'Abel Ferro', role: 'Repo creator / technical owner', group: 'Internal Team' },
+      { name: 'Molly Grant', role: 'AELC collaborative showcase lead', group: 'AELC' },
     ],
     deadlines: [
       { id: 'dl-aelc0a', title: 'Brand assets received', date: '2026-08-01', type: 'other', done: false },
