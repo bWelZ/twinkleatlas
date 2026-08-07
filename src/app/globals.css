@@ -228,6 +228,28 @@
   --rainbow-6-fg: #f067ab;
 }
 
+/* ── Twinkle CDN component dark-mode patch (Tabs) ─────────────
+   The Navigation/Tabs component (loaded from the Twinkle CDN via
+   TwinkleStyles) reads --tw-color-0/3/4 directly instead of the
+   semantic surface/text tokens, and Twinkle's own dark-mode file
+   only overrides those semantic tokens under [data-mode="dark"]
+   / .tw-dark — selectors this app never sets (we toggle plain
+   .dark). Result: the active tab renders a near-white pill and
+   inactive tabs render near-black text, both illegible on our
+   dark background. Patch the tab-specific vars directly.
+
+   `html.dark` (not `.dark`) so this reliably outranks the CDN's
+   unlayered `:root` block regardless of <link> load order — both
+   are unlayered, so a same-specificity `.dark{}` would only win
+   by being later in the DOM, which isn't guaranteed. ──────────── */
+html.dark {
+  --tw-tabs-border:           color-mix(in srgb, var(--tw-color-brand, #1f35ff) 24%, transparent);
+  --tw-tabs-tab-color:        var(--muted-foreground);
+  --tw-tabs-tab-color-hover:  var(--rainbow-1-fg);
+  --tw-tabs-tab-bg-active:    var(--rainbow-1-bg);
+  --tw-tabs-tab-color-active: var(--rainbow-1-fg);
+}
+
 
 /* ── 4. Base Layer — typography hierarchy ───────────────────── */
 

@@ -20,6 +20,19 @@ const defaultUtmTouchpoints: UtmTouchpoint[] = [
 const buildUtmUrl = (baseUrl: string, campaign: string, source: string, medium: string) =>
   `${baseUrl}?utm_source=${source}&utm_medium=${medium}&utm_campaign=${campaign}`;
 
+const aelcLandingUrl = 'https://welsfoundation.org/lp/aelc-2026/';
+const aelcCampaign = 'aelc_2026';
+const aelcConferenceBookAdQrParams = `utm_source=conference_book_ad, utm_medium=qr, utm_campaign=${aelcCampaign}`;
+
+const aelcOutboundTrackingNotes = `AELC LANDING OUTBOUND UTM PARAMETERS
+
+- Header WELS logo: target WELS home; utm_source=aelc_2026_header; utm_medium=logo_link; utm_campaign=aelc_2026
+- Header ZipData logo: target ZipData home; utm_source=aelc_2026_header; utm_medium=logo_link; utm_campaign=aelc_2026
+- WELS section CTA: target WELS home; utm_source=aelc_2026_what_we_bring; utm_medium=section_cta; utm_campaign=aelc_2026
+- ZipData cybersecurity CTA: target ZipData cybersecurity landing; utm_source=aelc_2026_cybersecurity; utm_medium=section_cta; utm_campaign=aelc_2026
+- Footer WELS link: target WELS home; utm_source=aelc_2026_footer; utm_medium=text_link; utm_campaign=aelc_2026
+- Footer ZipData link: target ZipData home; utm_source=aelc_2026_footer; utm_medium=text_link; utm_campaign=aelc_2026`;
+
 const utmTrackingNotes = (
   baseUrl: string,
   campaign: string,
@@ -382,8 +395,8 @@ export const events: Event[] = [
     objective: 'Present ZipData cybersecurity services to FACE attendees and capture qualified business leads through the event landing page',
     company: 'ZipData.net',
     presence: 'Partner / sponsor landing page and lead capture form',
-    status: 'ready',
-    progress: 70,
+    status: 'completed',
+    progress: 100,
     coverGradient: 'from-emerald-500 to-slate-900',
     notes: `FACE Excellence Awards Luncheon is scheduled for Wednesday, June 3, 2026, 11:00 AM-2:00 PM.
 
@@ -483,8 +496,8 @@ Landing focus:
     objective: 'Reach out to accredited providers in Florida to present a better way to manage their schools enrollments, payments, and communication with parents',
     company: 'PreK.Club',
     presence: 'Onsite',
-    status: 'planning',
-    progress: 45,
+    status: 'completed',
+    progress: 100,
     coverGradient: 'from-blue-400 to-indigo-600',
     notes: `Primary focus: conference sponsorship visibility, provider outreach, and live product demos for PreK.Club.
 
@@ -1211,8 +1224,8 @@ Style notes to reuse:
     objective: 'Increase PreK.Club awareness and engagement through QR-driven swag bag materials distributed to conference educators',
     company: 'PreK.Club',
     presence: 'Swag Bag Sponsor',
-    status: 'planning',
-    progress: 10,
+    status: 'completed',
+    progress: 100,
     coverGradient: 'from-emerald-400 to-teal-600',
     notes: `Swag bag items approved by conference organizer:
 - 5×7 double-sided postcard (600 qty)
@@ -1375,22 +1388,22 @@ New QR pattern: https://play.prek.club/?utm_source={source}&utm_medium={medium}&
     audience: 'Teachers, staff, and childcare program teams who can refer their directors',
     objective: 'Keep PreK.Club lead generation active year-round through the Invite Your Director referral flow',
     company: 'PreK.Club',
-    presence: 'Pinned evergreen 2026 campaign: landing page, QR/UTM links, and Mautic referral form',
-    status: 'in-progress',
-    progress: 75,
+    presence: 'Evergreen 2026 campaign (closed 2026-07-31): landing page, QR/UTM links, and Mautic referral form retained for reference',
+    status: 'completed',
+    progress: 100,
     coverGradient: 'from-lime-400 to-emerald-700',
-    notes: `PINNED / EVERGREEN 2026 GENERAL CAMPAIGN
+    notes: `CLOSED 2026-07-31 — evergreen campaign discontinued.
 
-This is an evergreen lead-generation campaign, not a fixed conference event.
+This was an evergreen lead-generation campaign, not a fixed conference event.
 
-It was originally used around an early-2026 event, but remains active as a reusable referral campaign to keep generating qualified PreK.Club leads.
+It was originally used around an early-2026 event, and remained active as a reusable referral campaign to keep generating qualified PreK.Club leads. Assets below stay live for reference but the campaign is no longer being actively promoted.
 
 Repo owner: bWelZ
 Repo: bWelZ/playprekclub
 Landing: https://play.prek.club/invite-your-director/
 Mautic formId: 11
 Mautic formName: prekclubinviteyourdirector`,
-    tags: ['prekclub', 'campaign', 'evergreen', '2026-general', 'pinned', 'lead-generation', 'referral', 'mautic'],
+    tags: ['prekclub', 'campaign', 'evergreen', '2026-general', 'lead-generation', 'referral', 'mautic'],
     links: [
       { label: 'Invite Your Director Landing', url: 'https://play.prek.club/invite-your-director/' },
       { label: 'Landing Repo', url: 'https://github.com/bWelZ/playprekclub' },
@@ -1402,6 +1415,7 @@ Mautic formName: prekclubinviteyourdirector`,
     deadlines: [
       { id: 'dl-pkc-iyd1', title: 'Campaign landing live', date: '2026-01-15', type: 'design', done: true },
       { id: 'dl-pkc-iyd2', title: 'Evergreen lead follow-up review', date: '2026-06-15', type: 'review', done: false },
+      { id: 'dl-pkc-iyd3', title: 'Campaign closed', date: '2026-07-31', type: 'other', done: true },
     ],
     assets: [
       {
@@ -2032,18 +2046,27 @@ Mautic formName: welslandingcapture`,
 
   {
     id: 'aelc-2026',
-    title: 'AELC Conference',
+    title: 'AELC 2026 Annual Conference: Under the Sea — Deep Dive into Early Learning',
     organization: 'Florida Association of Early Learning Coalitions',
-    date: '2026-11-01',
-    location: 'Florida',
+    date: '2026-11-17',
+    endDate: '2026-11-20',
+    location: 'Hilton Orlando Buena Vista Palace – Disney Springs Area, Orlando, FL',
     audience: 'ELC of Florida',
-    objective: 'Good will WELS/Zipdata — collaborative ZipData data/cybersecurity showcase with ELC partners',
+    objective: 'Gold sponsorship presence — goodwill for WELS (branding pending Carlos confirmation), with potential ZipData data/cybersecurity showcase collaboration with ELC partners',
     company: 'WELS / Zipdata',
-    presence: 'Onsite',
-    status: 'planning',
-    progress: 5,
+    presence: 'Onsite — Gold sponsor package',
+    status: 'in-progress',
+    progress: 55,
     coverGradient: 'from-green-500 to-teal-700',
-    notes: `Client direction: clone a landing repo from one-goal-2026.
+    notes: `URGENT — Gold sponsorship materials are due 2026-08-01 (see deadlines below). Per Heidy Valdes: "Abel here are the specs and due dates for AELC. I think we are doing WELS, unless Carlos wants to promote something else." Confirm WELS vs. Zipdata branding with Carlos before submitting the logo and copy.
+
+Gold sponsorship package includes:
+1. Logo — company logo for conference branding, marketing materials, and event website.
+2. 2 custom social media posts — WELS provides content + preferred publish date; AELC posts on their own channels (separate from WELS's own sponsor announcement posts).
+3. 1 Full Page Program Ad — art/artwork for the conference program.
+4. 4 attendee registrations — submit name, title, and email for each attendee.
+
+Client direction (landing page, separate from the Gold package above): clone a landing repo from one-goal-2026.
 
 Expected repo owner: bWelZ
 Expected repo slug: aelc-2026
@@ -2053,26 +2076,39 @@ Form: WELS lead generation
 Mautic formId: 12
 Mautic formName: welslandingcapture
 
+Current production flow:
+- Full-page conference program ad contains a QR code.
+- QR destination landing: ${aelcLandingUrl}
+- QR UTM parameters: ${aelcConferenceBookAdQrParams}
+- QR resolves to the WELS + ZipData AELC landing page.
+- Landing includes one lead-capture form and a bridge CTA to ZipData cybersecurity: https://zipdata.net/lp/cybersecurity/
+- Screenshot/artwork drop folder for Atlas: public/prints/aelc-2026/
+
 Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excited about showcasing ZipData at AELC as a collaborative effort with ELC partners, specifically on data and cybersecurity. Real-world ELC security-breach experiences (raised at One Goal) should inform the messaging — protecting sensitive data, strengthening cybersecurity practices, preparing for evolving threats. Keep tone trust-building, not fear-based (see ZipData playbook guideline).`,
-    tags: ['wels', 'zipdata', 'florida', 'early-learning', 'coalitions', 'fall', 'landing-needed', 'bwelz-repo', 'cybersecurity'],
+    tags: ['wels', 'zipdata', 'florida', 'early-learning', 'coalitions', 'fall', 'annual-conference', 'landing-live', 'bwelz-repo', 'cybersecurity', 'gold-sponsor', 'orlando'],
     links: [
-      { label: 'Planned Landing Page', url: 'https://welsfoundation.org/lp/aelc-2026/' },
-      { label: 'Planned Landing Repo', url: 'https://github.com/bWelZ/aelc-2026' },
+      { label: 'Live Landing Page', url: aelcLandingUrl },
+      { label: 'ZipData Cybersecurity Landing', url: 'https://zipdata.net/lp/cybersecurity/' },
     ],
     contacts: [
       { name: 'Abel Ferro', role: 'Repo creator / technical owner', group: 'Internal Team' },
+      { name: 'Heidy Valdes', role: 'Sponsorship coordinator', group: 'Internal Team' },
       { name: 'Molly Grant', role: 'AELC collaborative showcase lead', group: 'AELC' },
     ],
     deadlines: [
-      { id: 'dl-aelc0a', title: 'Brand assets received', date: '2026-08-01', type: 'other', done: false },
+      { id: 'dl-aelc-brand',  title: 'Confirm sponsor branding: WELS vs. Zipdata (Carlos)', date: '2026-07-31', type: 'review', done: false },
+      { id: 'dl-aelc0a',      title: 'Logo submitted to AELC', date: '2026-08-01', type: 'design', done: true },
+      { id: 'dl-aelc-social', title: '2 Gold-package social post copy + preferred dates submitted', date: '2026-08-01', type: 'other', done: true },
+      { id: 'dl-aelc-ad',     title: 'Full Page Program Ad art submitted', date: '2026-08-01', type: 'print', done: true },
+      { id: 'dl-aelc-roster', title: 'Attendee registration list (4: name/title/email) submitted', date: '2026-08-01', type: 'other', done: false },
       { id: 'dl-aelc0b', title: 'Design concepts approved', date: '2026-08-15', type: 'design', done: false },
       { id: 'dl-aelc1',  title: 'LinkedIn sponsor post published', date: '2026-08-25', type: 'other', done: false },
       { id: 'dl-aelc2',  title: 'Print files to vendor', date: '2026-09-01', type: 'print', done: false },
       { id: 'dl-aelc3',  title: 'IG / FB pre-event post', date: '2026-09-05', type: 'other', done: false },
-      { id: 'dl-aelc4',  title: 'Materials shipped', date: '2026-10-15', type: 'shipping', done: false },
-      { id: 'dl-aelc5',  title: 'Final prep check — all systems go', date: '2026-10-29', type: 'review', done: false },
-      { id: 'dl-aelc6',  title: 'AELC Conference', date: '2026-11-01', type: 'conference', done: false },
-      { id: 'dl-aelc7',  title: 'Post-event recap post', date: '2026-11-08', type: 'other', done: false },
+      { id: 'dl-aelc4',  title: 'Materials shipped', date: '2026-10-30', type: 'shipping', done: false },
+      { id: 'dl-aelc5',  title: 'Final prep check — all systems go', date: '2026-11-13', type: 'review', done: false },
+      { id: 'dl-aelc6',  title: 'AELC Conference (Nov 17–20)', date: '2026-11-17', type: 'conference', done: false },
+      { id: 'dl-aelc7',  title: 'Post-event recap post', date: '2026-11-24', type: 'other', done: false },
     ],
     assets: [
       // ── SOCIAL ──────────────────────────────────────────────
@@ -2113,26 +2149,39 @@ Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excite
       {
         id: 'a-aelc-d0', title: 'Conference Landing Page',
         type: 'landing', category: 'digital',
-        previewColor: 'bg-teal-500', aspectRatio: '16/9', status: 'pending',
-        externalUrl: 'https://welsfoundation.org/lp/aelc-2026/',
-        notes: 'Planned bWelZ repo cloned from one-goal-2026. Must use WELS lead generation Mautic formId=12, formName=welslandingcapture.',
-        tags: ['digital', 'web', 'landing', 'wels', 'zipdata', 'planned-repo', 'mautic'],
+        previewColor: 'bg-teal-500', aspectRatio: '16/9', status: 'delivered',
+        externalUrl: aelcLandingUrl,
+        notes: `Live WELS + ZipData AELC landing page. Uses one WELS lead generation Mautic form (formId=12, formName=welslandingcapture), routes all primary CTAs to the single form, and includes a bridge CTA to ZipData cybersecurity.
+
+${aelcOutboundTrackingNotes}`,
+        tags: ['digital', 'web', 'landing', 'wels', 'zipdata', 'mautic', 'live'],
         mapPosition: { x: 665, y: 75 },
       },
       {
         id: 'a-aelc-d2', title: 'WELS Lead Generation Form',
         type: 'landing', category: 'digital',
-        previewColor: 'bg-green-500', aspectRatio: '3/2', status: 'pending',
-        notes: 'Use Mautic formId=12, formName=welslandingcapture, action=https://marketing.bwelz.org/form/submit?formId=12.',
-        tags: ['digital', 'form', 'mautic', 'lead-capture'],
+        previewColor: 'bg-green-500', aspectRatio: '3/2', status: 'delivered',
+        notes: 'Live as the single lead-capture form on the AELC landing. Mautic formId=12, formName=welslandingcapture, action=https://marketing.bwelz.org/form/submit?formId=12.',
+        tags: ['digital', 'form', 'mautic', 'lead-capture', 'live'],
         mapPosition: { x: 845, y: 75 },
       },
       {
-        id: 'a-aelc-d1', title: 'QR Code — Conference',
+        id: 'a-aelc-d1', title: 'QR Code — Conference Book Ad',
         type: 'qr', category: 'digital',
-        previewColor: 'bg-slate-600', aspectRatio: '1/1', status: 'pending',
-        notes: utmTrackingNotes('https://welsfoundation.org/lp/aelc-2026/', 'welsfoundation2026'),
-        tags: ['qr', 'digital'],
+        previewColor: 'bg-slate-600', aspectRatio: '1/1', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/qr-aelc-2026.svg',
+        externalUrl: aelcLandingUrl,
+        printFile: {
+          url: '/prints/aelc-2026/qr-aelc-2026.svg',
+          filename: 'qr-aelc-2026.svg',
+          size: '500x500 SVG',
+          thumbnailUrl: '/prints/aelc-2026/qr-aelc-2026.svg',
+        },
+        notes: `This QR is embedded in the full-page conference program ad and sends scanners to the live WELS + ZipData AELC landing page.
+
+QR UTM parameters: ${aelcConferenceBookAdQrParams}`,
+        tags: ['qr', 'digital', 'conference-book-ad', 'utm', 'delivered'],
+        relatedAssets: ['a-aelc-ad1', 'a-aelc-d0'],
         mapPosition: { x: 1025, y: 75 },
       },
 
@@ -2140,25 +2189,47 @@ Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excite
       {
         id: 'a-aelc-b1', title: 'Banner — WELS',
         type: 'banner', category: 'booth',
-        previewColor: 'bg-green-500', aspectRatio: '1/3', status: 'pending',
-        notes: 'Pull-up retractable banner — WELS branding',
+        previewColor: 'bg-green-500', aspectRatio: '1804/1394', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/wels-banner.png',
+        printFile: {
+          url: '/prints/aelc-2026/wels-banner.png',
+          filename: 'wels-banner.png',
+          size: '1804x1394 PNG',
+          thumbnailUrl: '/prints/aelc-2026/wels-banner.png',
+        },
+        notes: 'WELS banner artwork printed and ready for AELC.',
         tags: ['banner', 'print', 'wels', 'booth'],
         mapPosition: { x: 55, y: 470 },
       },
       {
         id: 'a-aelc-b2', title: 'Tablecloth',
         type: 'tablecloth', category: 'booth',
-        previewColor: 'bg-teal-600', aspectRatio: '2/1', status: 'pending',
-        notes: '6ft table throw — WELS or Zipdata branding TBD',
-        tags: ['tablecloth', 'print', 'booth'],
+        previewColor: 'bg-teal-600', aspectRatio: '2608/1448', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/wels-tablecloth.png',
+        printFile: {
+          url: '/prints/aelc-2026/wels-tablecloth.png',
+          filename: 'wels-tablecloth.png',
+          size: '2608x1448 PNG',
+          thumbnailUrl: '/prints/aelc-2026/wels-tablecloth.png',
+        },
+        notes: 'WELS tablecloth artwork printed and ready for AELC.',
+        tags: ['tablecloth', 'print', 'wels', 'booth'],
         mapPosition: { x: 235, y: 470 },
       },
       {
-        id: 'a-aelc-b3', title: 'Ad — Conference',
-        type: 'ad', category: 'booth',
-        previewColor: 'bg-green-300', aspectRatio: '4/3', status: 'pending',
-        notes: 'Conference ad — print or digital format TBD',
-        tags: ['ad', 'print'],
+        id: 'a-aelc-b3', title: 'Mini Banner — ZipData',
+        type: 'banner', category: 'booth',
+        previewColor: 'bg-emerald-700', aspectRatio: '912/1394', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/zipdata-minibanner.png',
+        externalUrl: 'https://zipdata.net/lp/cybersecurity/',
+        printFile: {
+          url: '/prints/aelc-2026/zipdata-minibanner.png',
+          filename: 'zipdata-minibanner.png',
+          size: '912x1394 PNG',
+          thumbnailUrl: '/prints/aelc-2026/zipdata-minibanner.png',
+        },
+        notes: 'ZipData cybersecurity mini banner printed and ready for AELC.',
+        tags: ['banner', 'print', 'zipdata', 'cybersecurity', 'booth'],
         mapPosition: { x: 415, y: 470 },
       },
       {
@@ -2167,7 +2238,7 @@ Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excite
         previewColor: 'bg-teal-300', aspectRatio: '1/1', status: 'pending',
         notes: 'Swag items for 500 attendees — items TBD',
         tags: ['swag', 'giveaway', 'booth'],
-        mapPosition: { x: 235, y: 590 },
+        mapPosition: { x: 55, y: 590 },
       },
 
       // ── CONTENT ──────────────────────────────────────────────
@@ -2186,6 +2257,85 @@ Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excite
         notes: 'Booth talking points — WELS + Zipdata for ELC of Florida audience',
         tags: ['content', 'copy', 'talking-points'],
         mapPosition: { x: 845, y: 470 },
+      },
+      {
+        id: 'a-aelc-l1', title: 'Logo — AELC Submission',
+        type: 'logo', category: 'content',
+        previewColor: 'bg-green-700', aspectRatio: '1348/400', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/wels-logo-horizontal@2x.png',
+        printFile: {
+          url: '/prints/aelc-2026/wels-logo-horizontal@2x.png',
+          filename: 'wels-logo-horizontal@2x.png',
+          size: '1348x400 PNG',
+          thumbnailUrl: '/prints/aelc-2026/wels-logo-horizontal@2x.png',
+        },
+        notes: 'High-res WELS logo submitted for AELC conference branding, marketing materials, and event website.',
+        tags: ['logo', 'brand', 'wels', 'delivered'],
+        mapPosition: { x: 1025, y: 470 },
+      },
+      {
+        id: 'a-aelc-ad1', title: 'Full Page Program Ad',
+        type: 'ad', category: 'content',
+        previewColor: 'bg-green-300', aspectRatio: '8.5/11', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/aelc-2026-ad.png',
+        printFile: {
+          url: '/prints/aelc-2026/aelc-2026-ad.png',
+          filename: 'aelc-2026-ad.png',
+          size: '1244x1610 PNG',
+          thumbnailUrl: '/prints/aelc-2026/aelc-2026-ad.png',
+        },
+        notes: `Gold sponsorship benefit — 1 full-page ad in the AELC conference program. Artwork submitted/delivered.
+
+Known structure:
+- The QR code is placed in this ad.
+- QR destination landing: ${aelcLandingUrl}
+- QR UTM parameters: ${aelcConferenceBookAdQrParams}
+- Landing links onward to ZipData cybersecurity: https://zipdata.net/lp/cybersecurity/
+
+Artwork stored in Atlas: public/prints/aelc-2026/aelc-2026-ad.png`,
+        tags: ['ad', 'print', 'gold-package', 'delivered', 'qr', 'conference-book-ad'],
+        relatedAssets: ['a-aelc-d1', 'a-aelc-d0'],
+        mapPosition: { x: 1205, y: 470 },
+      },
+      {
+        id: 'a-aelc-g1', title: 'Gold Post #1 — Copy for AELC',
+        type: 'social', category: 'content',
+        previewColor: 'bg-amber-600', aspectRatio: '4/5', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/post-1.png',
+        printFile: {
+          url: '/prints/aelc-2026/post-1.png',
+          filename: 'post-1.png',
+          size: '866x1088 PNG',
+          thumbnailUrl: '/prints/aelc-2026/post-1.png',
+        },
+        notes: 'Gold sponsorship benefit — content + preferred publish date for AELC to post on their own channels (distinct from WELS\'s own sponsor announcement posts). Artwork delivered.',
+        tags: ['content', 'copy', 'social', 'gold-package', 'delivered'],
+        mapPosition: { x: 665, y: 590 },
+      },
+      {
+        id: 'a-aelc-g2', title: 'Gold Post #2 — Copy for AELC',
+        type: 'social', category: 'content',
+        previewColor: 'bg-amber-300', aspectRatio: '4/5', status: 'delivered',
+        previewUrl: '/prints/aelc-2026/post-2.png',
+        printFile: {
+          url: '/prints/aelc-2026/post-2.png',
+          filename: 'post-2.png',
+          size: '868x1086 PNG',
+          thumbnailUrl: '/prints/aelc-2026/post-2.png',
+        },
+        notes: 'Gold sponsorship benefit — content + preferred publish date for AELC to post on their own channels (distinct from WELS\'s own sponsor announcement posts). Artwork delivered.',
+        tags: ['content', 'copy', 'social', 'gold-package', 'delivered'],
+        mapPosition: { x: 845, y: 590 },
+      },
+
+      // ── OPERATIONS ───────────────────────────────────────────
+      {
+        id: 'a-aelc-r1', title: 'Attendee Registration List',
+        type: 'other', category: 'operations',
+        previewColor: 'bg-slate-500', aspectRatio: '4/3', status: 'pending',
+        notes: 'Gold sponsorship includes 4 conference registrations. Submit name, title, and email for each attendee. Due 2026-08-01.',
+        tags: ['registration', 'attendees', 'gold-package', 'due-aug1'],
+        mapPosition: { x: 1025, y: 590 },
       },
     ],
   },
