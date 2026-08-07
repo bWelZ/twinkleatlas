@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Moon, Sun, Search, BookOpen, LayoutTemplate, Users, ChevronDown } from 'lucide-react';
+import { Sparkles, Moon, Sun, Search, BookOpen, LayoutTemplate, Users, ChevronDown, LogOut } from 'lucide-react';
 import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
 import { useTheme } from '@/components/ThemeProvider';
 import { cn } from '@/lib/utils';
 import { companyPlaybookHref } from '@/lib/playbook-routes';
+import { logout } from '@/lib/auth';
 
 interface NavigationProps {
   onOpenCommandPalette?: () => void;
@@ -111,6 +112,12 @@ function PlaybookDropdown({ isActive }: { isActive: boolean }) {
 export function Navigation({ onOpenCommandPalette }: NavigationProps) {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
+
+  function handleSignOut() {
+    logout();
+    router.push('/login');
+  }
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -207,6 +214,17 @@ export function Navigation({ onOpenCommandPalette }: NavigationProps) {
           aria-label="Toggle theme"
         >
           {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+        </motion.button>
+
+        {/* Sign out */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleSignOut}
+          className="flex items-center justify-center rounded-lg w-8 h-8 hover:bg-muted transition-colors text-muted-foreground"
+          aria-label="Sign out"
+        >
+          <LogOut className="size-4" />
         </motion.button>
       </div>
     </motion.header>

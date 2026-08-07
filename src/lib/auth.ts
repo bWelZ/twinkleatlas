@@ -1,31 +1,24 @@
-import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 import users from '@/data/users.json';
-import { createSessionToken, verifySessionToken, type AuthUser } from './session';
 
-export type { AuthUser };
-export { createSessionToken };
+const AUTH_KEY = 'atlas_auth';
 
-export async function validateCredentials(username: string, password: string): Promise<AuthUser | null> {
+export async function login(username: string, password: string): Promise<boolean> {
   const user = users.find((u) => u.username === username);
-  if (!user) return null;
+  if (!user) return false;
 
   const passwordMatches = await bcrypt.compare(password, user.passwordHash);
-  if (!passwordMatches) return null;
+  if (!passwordMatches) return false;
 
-  return { id: user.id, username: user.username, name: user.name };
+  localStorage.setItem(AUTH_KEY, 'true');
+  return true;
 }
 
-export async function getSession(): Promise<AuthUser | null> {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get('atlas_session');
-  if (!sessionCookie) return null;
+export function isAuthenticated(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(AUTH_KEY) === 'true';
+}
 
-  const session = await verifySessionToken(sessionCookie.value);
-  if (!session) return null;
-
-  const userExists = users.find((u) => u.id === session.id);
-  if (!userExists) return null;
-
-  return session;
+export function logout(): void {
+  localStorage.removeItem(AUTH_KEY);
 }

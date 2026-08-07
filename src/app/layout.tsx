@@ -3,6 +3,7 @@ import { Nunito, Nunito_Sans, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { TwinkleStyles } from '@/components/TwinkleStyles';
+import { AuthGate } from '@/components/AuthGate';
 
 // Twinkle DS heading + UI font (variable weight 200–1000)
 const nunitoFont = Nunito({
@@ -59,7 +60,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <TwinkleStyles />
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthGate>{children}</AuthGate>
+        </ThemeProvider>
       </body>
     </html>
   );
