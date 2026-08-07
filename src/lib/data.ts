@@ -2052,13 +2052,13 @@ Mautic formName: welslandingcapture`,
     endDate: '2026-11-20',
     location: 'Hilton Orlando Buena Vista Palace – Disney Springs Area, Orlando, FL',
     audience: 'ELC of Florida',
-    objective: 'Gold sponsorship presence — goodwill for WELS (branding pending Carlos confirmation), with potential ZipData data/cybersecurity showcase collaboration with ELC partners',
+    objective: 'Gold sponsorship presence for WELS + ZipData (branding confirmed by Carlos), with ZipData data/cybersecurity showcase collaboration with ELC partners',
     company: 'WELS / Zipdata',
     presence: 'Onsite — Gold sponsor package',
     status: 'in-progress',
     progress: 55,
     coverGradient: 'from-green-500 to-teal-700',
-    notes: `URGENT — Gold sponsorship materials are due 2026-08-01 (see deadlines below). Per Heidy Valdes: "Abel here are the specs and due dates for AELC. I think we are doing WELS, unless Carlos wants to promote something else." Confirm WELS vs. Zipdata branding with Carlos before submitting the logo and copy.
+    notes: `Gold sponsorship materials were due 2026-08-01 (see deadlines below). Per Heidy Valdes: "Abel here are the specs and due dates for AELC. I think we are doing WELS, unless Carlos wants to promote something else." Carlos confirmed WELS + ZipData joint branding.
 
 Gold sponsorship package includes:
 1. Logo — company logo for conference branding, marketing materials, and event website.
@@ -2096,7 +2096,7 @@ Per Heidy's One Goal Summer Conference recap (2026-07-15): Molly Grant is excite
       { name: 'Molly Grant', role: 'AELC collaborative showcase lead', group: 'AELC' },
     ],
     deadlines: [
-      { id: 'dl-aelc-brand',  title: 'Confirm sponsor branding: WELS vs. Zipdata (Carlos)', date: '2026-07-31', type: 'review', done: false },
+      { id: 'dl-aelc-brand',  title: 'Confirm sponsor branding: WELS + Zipdata (Carlos)', date: '2026-07-31', type: 'review', done: true },
       { id: 'dl-aelc0a',      title: 'Logo submitted to AELC', date: '2026-08-01', type: 'design', done: true },
       { id: 'dl-aelc-social', title: '2 Gold-package social post copy + preferred dates submitted', date: '2026-08-01', type: 'other', done: true },
       { id: 'dl-aelc-ad',     title: 'Full Page Program Ad art submitted', date: '2026-08-01', type: 'print', done: true },
