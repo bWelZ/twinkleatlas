@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Moon, Sun, Search, BookOpen, LayoutTemplate, Users, ChevronDown, LogOut } from 'lucide-react';
 import { TwinkleIcon, type TwinkleIconName } from '@/components/ui/TwinkleIcon';
@@ -112,11 +112,10 @@ function PlaybookDropdown({ isActive }: { isActive: boolean }) {
 export function Navigation({ onOpenCommandPalette }: NavigationProps) {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
-  const router = useRouter();
 
   function handleSignOut() {
     logout();
-    router.push('/login');
+    window.location.href = '/login/';
   }
   const [scrolled, setScrolled] = useState(false);
 

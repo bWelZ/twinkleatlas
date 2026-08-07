@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Lock, Sparkles } from 'lucide-react';
 import { login } from '@/lib/auth';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,7 +26,7 @@ export default function LoginPage() {
       }
 
       const from = new URLSearchParams(window.location.search).get('from');
-      router.push(from && from.startsWith('/') ? from : '/');
+      window.location.href = from && from.startsWith('/') ? from : '/';
     } catch {
       setError('Something went wrong. Please try again.');
       setLoading(false);

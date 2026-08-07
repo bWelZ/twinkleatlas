@@ -1,27 +1,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { isAuthenticated } from '@/lib/auth';
+
+const LOGIN_PATH = '/login/';
 
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (pathname === '/login') {
+    const isLoginPage = pathname === '/login' || pathname === LOGIN_PATH;
+    if (isLoginPage) {
       setChecked(true);
       return;
     }
 
     if (!isAuthenticated()) {
-      router.replace(`/login?from=${encodeURIComponent(pathname)}`);
+      window.location.href = `${LOGIN_PATH}?from=${encodeURIComponent(pathname)}`;
       return;
     }
 
     setChecked(true);
-  }, [pathname, router]);
+  }, [pathname]);
 
   if (!checked) return null;
 
